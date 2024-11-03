@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@headlessui/react": "^2.2.0"
+    "@headlessui/react": "^2.2.0",
+    "pro_seminar": "file:"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
