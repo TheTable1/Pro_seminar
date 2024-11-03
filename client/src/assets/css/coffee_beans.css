@@ -1,0 +1,136 @@
+/* การตั้งค่าพื้นฐาน */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #d2a87e;
+    color: #fff;
+  }
+  
+  .App {
+    text-align: center;
+  }
+  
+  /* สไตล์สำหรับแถบเมนู */
+.navbar .menu {
+  list-style   : none;
+  display      : flex;
+  gap          : 30px;
+  margin-bottom: 0px;
+  align-items  : flex-end;
+}
+
+.navbar {
+  display         : flex;
+  justify-content : space-between;
+  /* Space between logo and the right section */
+  align-items     : center;
+  background-color: #5e3b1e;
+  padding         : 10px 20px;
+}
+
+.right-section {
+  display    : flex;
+  align-items: center;
+  gap        : 20px;
+  /* Gap between menu and img */
+}
+  
+  .navbar .logo {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .navbar .menu {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    margin-bottom: 0px;
+    position: relative;
+    align-items: flex-end;
+  }
+  
+  .navbar .menu li {
+    cursor: pointer;
+  }
+  
+  .navbar .menu li.active {
+    font-weight: bold;
+    color: #ffc107;
+  }
+  
+  /* สไตล์สำหรับส่วนเมนูกาแฟ */
+  .menu-section {
+    padding: 2% 5%;
+  }
+  
+  .menu-filters {
+    display: flex;
+    gap: 2%;
+    margin-bottom: 20px;
+  }
+  
+  .menu-filters .filter {
+    background-color: #8b5e34;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: white;
+    border-radius: 25px;
+    width: max-content;
+  }
+  
+  .menu-filters .filter.active {
+    background-color: #ffc107;
+  }
+  
+  .menu-carousel {
+    display: flex;
+    align-items: center;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+  
+  .menu-carousel button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .menu-items {
+    display: flex;
+    overflow: hidden;
+    
+    justify-content:flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  
+  .menu-item {
+    background-color: #8b5e34;
+    width: 200px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+  
+  /* ทำให้ responsive */
+  @media (max-width: 768px) {
+    .menu-items {
+      flex-direction: column;
+    }
+  
+    .navbar .menu {
+      flex-direction: column;
+    }
+  
+    .menu-carousel button {
+      font-size: 18px;
+    }
+  }
+  

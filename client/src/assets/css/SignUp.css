@@ -1,0 +1,15 @@
+.buttonHover{
+    box-sizing: border-box;
+    /*background-color:rgba(98,43,24,0.9);*/
+    background-color:rgba(55,23,11,255);
+    color: white;
+    border: none;
+}
+
+.buttonHover:hover{
+    /* background-color:rgba(55,23,11,255); */
+    background-color:rgba(98,43,24,0.9);
+    color: white;
+    box-sizing: border-box;
+    border-color: none;
+}
