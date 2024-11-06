@@ -78,7 +78,7 @@ function SignUp() {
                                 value={name}
                                 required
                             />
-                            <style jsx>{`
+                            <style>{`
                                 .form-control::placeholder {
                                     color: white; /* กำหนดสีของ placeholder เป็นสีขาว */
                                 }
