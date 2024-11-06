@@ -90,6 +90,7 @@ function CoffeeBeans() {
                   .map((item, index) => (
                     <div
                       key={index}
+                      style={{cursor:"pointer"}}
                       className="sm:p-4 md:p-1 bg-brown rounded-lg shadow-sm text-center text-white font-medium transition duration-200 ease-in-out hover:shadow-lg"
                       onClick={() => handleItemClick(item)}
                     >
