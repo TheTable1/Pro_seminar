@@ -96,7 +96,7 @@ function CoffeeBeans() {
                     >
                       <div className="p-4 bg-brown rounded-lg shadow-sm text-center text-white font-medium transition duration-200 ease-in-out hover:shadow-lg">
                         <img
-                          className=" lg:w-96 lg:h-44 md:w-60 md:h-44"
+                          className=" lg:w-96 lg:h-44 md:w-60 md:h-44 sm:w-60 sm:h-44"
                           style={{ objectFit: "cover" }}
                           src={item.img}
                           alt={item.name}
