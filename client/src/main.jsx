@@ -1,5 +1,4 @@
 import CoffeeBeans from './coffee_beans';
-import Navbar from './navbar'; 
 import WorldCoffee from './worldCoffee';
 import History from './history';
 import GeneCoffee from './geneCoffee';
@@ -7,6 +6,8 @@ import Roasting from './Roasting';
 import Extraction from './extraction';
 import Articles from './articles';
 import Process from './process';
+import SignUp from "./SignUp";
+import Login from "./Login";
 
 
 function App() {
@@ -29,3 +30,6 @@ function App() {
     </BrowserRouter>
   );
 }
+
+
+export default App;
