@@ -5,6 +5,7 @@ import Home from './Home';
 import CoffeeBeans from './coffee_beans';
 import Navbar from './navbar'; 
 import WorldCoffee from './worldCoffee';
+import SimulatorLayout from './simulatorLayout';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/coffee_beans" element={<CoffeeBeans />} />
         <Route path="/navbar" element={<Navbar />} />
         <Route path="/worldCoffee" element={<WorldCoffee />} />
+        <Route path="/simulator" element={<SimulatorLayout />} />
       </Routes>
     </BrowserRouter>
   );
