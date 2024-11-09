@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Navbar from "./navbar";
 import MenuItems from "./menuItems.json";
+import { useNavigate } from "react-router-dom";
 
 function CoffeeBeans() {
   const [activeFilter, setActiveFilter] = useState("กาแฟทั้งหมด");
@@ -8,6 +9,8 @@ function CoffeeBeans() {
   const [searchTerm, setSearchTerm] = useState(""); // State สำหรับการค้นหา
 
   const menuItems = MenuItems;
+
+  const navigate = useNavigate();
 
   const filterButtons = [
     "กาแฟทั้งหมด",
@@ -30,6 +33,9 @@ function CoffeeBeans() {
     setSelectedItem(null);
   };
 
+  const handleTryIt = () =>{
+    navigate('./Simulator');
+  }
   // ฟังก์ชันสำหรับการค้นหา
   const filteredItems = menuItems.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())

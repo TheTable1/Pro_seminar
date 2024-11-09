@@ -1,0 +1,116 @@
+/* ตั้งค่าสไตล์พื้นฐาน */
+body {
+    font-family: 'Georgia', serif;
+    background-color: #fdf7f3;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* ส่วนหัวข้อ */
+  h1, h2 {
+    color: #333;
+    font-weight: bold;
+    text-align: center;
+    margin: 0;
+    padding: 1rem 0;
+  }
+  
+  /* Sidebar - Progress Section */
+  aside {
+    background-color: #e6e2b6;
+    padding: 2rem;
+    width: 250px;
+    height: auto;
+    box-sizing: border-box;
+  }
+  
+  aside h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  aside ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  aside ul li {
+    font-size: 1rem;
+    padding: 0.5rem 0;
+    color: #333;
+    transition: color 0.3s ease, font-weight 0.3s ease;
+  }
+  
+  aside ul li.step-active {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+  
+  /* Main Content - Center Panel */
+  .simulator-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem;
+    background-color: #fdf7f3;
+    flex: 1;
+    height: auto;
+    box-sizing: border-box;
+  }
+  
+  .simulator-content h2 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 2rem;
+  }
+  
+  .simulator-content button {
+    background-color: transparent;
+    border: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .simulator-content button:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Bean Images */
+  .bean-image {
+    width: 120px;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .bean-image:hover {
+    transform: scale(1.2);
+  }
+  
+  /* Right Panel - Step Details */
+  .step-details {
+    background-color: #e6e2b6;
+    padding: 2rem;
+    width: 250px;
+    height: auto;
+    box-sizing: border-box;
+  }
+  
+  .step-details h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+  
+  .step-details p {
+    font-size: 1rem;
+    color: #333;
+  }
+  
