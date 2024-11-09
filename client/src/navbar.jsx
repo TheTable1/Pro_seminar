@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   const [showMenu, setShowMenu] = useState(false);
@@ -37,25 +38,25 @@ export default function Navbar() {
               {showMenu && (
                 <ul className="absolute left-0 z-10 bg-brown shadow-lg mt-2 rounded-md w-48 text-beige text-sm transition duration-300">
                   <li className="p-3 hover:bg-dark-brown transition duration-200">
-                    ประวัติศาสตร์กาแฟ
+                    <Link to="/history">ประวัติศาสตร์กาแฟ</Link>
                   </li>
                   <li className="p-3 hover:bg-dark-brown transition duration-200">
-                    สายพันธุ์กาแฟ
+                    <Link to="/geneCoffee">สายพันธุ์กาแฟ</Link>
                   </li>
                   <li className="p-3 hover:bg-dark-brown transition duration-200">
-                    การคั่วกาแฟอย่างมืออาชีพ
+                    <Link to="/roasting">การคั่วกาแฟอย่างมืออาชีพ</Link>
                   </li>
                   <li className="p-3 hover:bg-dark-brown transition duration-200">
-                    เทคนิคการสกัดกาแฟ
+                    <Link to="/extraction">เทคนิคการสกัดกาแฟ</Link>
                   </li>
                   <li className="p-3 hover:bg-dark-brown transition duration-200">
-                    กระบวนการผลิตกาแฟ
+                    <Link to="/process">กระบวนการผลิตกาแฟ</Link>
                   </li>
                   <li className="p-3 hover:bg-dark-brown transition duration-200">
-                    แผนที่แหล่งผลิตกาแฟโลก
+                    <Link to="/worldCoffee">แผนที่แหล่งผลิตกาแฟโลก</Link>
                   </li>
                   <li className="p-3 hover:bg-dark-brown transition duration-200">
-                    บทความน่ารู้
+                    <Link to="/articles">บทความน่ารู้</Link>
                   </li>
                 </ul>
               )}

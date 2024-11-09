@@ -2,8 +2,9 @@ import React, { useEffect, useRef } from "react";
 import L from "leaflet";
 import "./assets/css/country.css";
 import "leaflet/dist/leaflet.css";
+import Navbar from "./navbar";
 
-function WorldCoffee() {
+function Home() {
   const mapRef = useRef(null); // Use ref to track map instance
   const mapContainerRef = useRef(null); // Ref for the map container (div#map)
 
@@ -205,7 +206,8 @@ function WorldCoffee() {
 
   return (
     <div>
-      <div ref={mapContainerRef} id="map" style={{ height: "500px" }}></div>
+      <Navbar/>
+      <div ref={mapContainerRef} id="map" style={{ height: "500px", zIndex:"-999"}}></div>
       <div id="info"></div>
 
       <div id="search-container">
@@ -221,4 +223,4 @@ function WorldCoffee() {
   );
 }
 
-export default WorldCoffee;
+export default Home;

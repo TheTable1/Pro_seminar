@@ -106,9 +106,6 @@ function CoffeeBeans() {
                         <br />
                         {item.name}
                       </div>
-
-
-
                     </div>
                   ))}
               </div>
