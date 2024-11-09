@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "./navbar";
 
-const HomePage = () => {
+const Home = () => {
   return (
     <div className="bg-[#f3f1ec]">
 
@@ -97,4 +97,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default Home;
