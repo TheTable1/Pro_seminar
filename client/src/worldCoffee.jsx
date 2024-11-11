@@ -206,8 +206,8 @@ function Home() {
 
   return (
     <div>
-      <Navbar/>
-      <div ref={mapContainerRef} id="map" style={{ height: "500px", zIndex:"-999"}}></div>
+      <Navbar />
+      <div ref={mapContainerRef} id="map" style={{ height: "500px" }}></div>
       <div id="info"></div>
 
       <div id="search-container">
