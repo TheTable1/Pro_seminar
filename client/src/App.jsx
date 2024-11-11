@@ -10,7 +10,7 @@ import Process from "./process";
 import SignUp from "./SignUp";
 import Login from "./Login";
 import Home from "./Home";
-import MainSimulator from "./mainsimulator";
+import Simulator from "./simulatorLayout";
 
 function App() {
   return (
@@ -31,7 +31,7 @@ function App() {
 
         <Route path="/coffee_beans" element={<CoffeeBeans />} />
 
-        <Route path="/mainSimulator" element={<MainSimulator />} />
+        <Route path="/simulator" element={<Simulator />} />
 
       </Routes>
     </BrowserRouter>

@@ -34,7 +34,7 @@ function CoffeeBeans() {
   };
 
   const handleTryIt = () =>{
-    navigate('./Simulator');
+    navigate('/simulator');
   }
   // ฟังก์ชันสำหรับการค้นหา
   const filteredItems = menuItems.filter((item) =>
@@ -54,7 +54,7 @@ function CoffeeBeans() {
             <h2 className="text-xl font-bold">{selectedItem.name}</h2>
             <img style={{ width: "350px", height: "250px", objectFit: "cover" }} src={selectedItem.img} alt={selectedItem.name} />
             <p className="mt-2">{selectedItem.description}</p>
-            <button>ลองทำ</button>
+            <button onClick={handleTryIt}>ลองทำ</button>
           </div>
         ) : (
           <section className="bg-white rounded-lg shadow-md transition duration-200 ease-in-out hover:shadow-lg">
