@@ -10,6 +10,7 @@ import Process from "./process";
 import SignUp from "./SignUp";
 import Login from "./Login";
 import Home from "./Home";
+import MainSimulator from "./mainsimulator";
 
 function App() {
   return (
@@ -17,8 +18,8 @@ function App() {
       <Routes>
         <Route path="/register" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
+
         <Route path="/" element={<Home />} />
-        <Route path="/coffee_beans" element={<CoffeeBeans />} />
 
         <Route path="/worldCoffee" element={<WorldCoffee />} />
         <Route path="/history" element={<History />} />
@@ -27,6 +28,11 @@ function App() {
         <Route path="/extraction" element={<Extraction />} />
         <Route path="/process" element={<Process />} />
         <Route path="/articles" element={<Articles />} />
+
+        <Route path="/coffee_beans" element={<CoffeeBeans />} />
+
+        <Route path="/mainSimulator" element={<MainSimulator />} />
+
       </Routes>
     </BrowserRouter>
   );
