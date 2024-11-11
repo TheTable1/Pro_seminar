@@ -41,11 +41,11 @@ const Home = () => {
       </header>
 
       {/* Knowledge Section */}
-      <section className="py-8 px-4 md:px-16 lg:px-32" data-aos="fade-up">
+      <section className="py-8 px-4 md:px-16 lg:px-32 " data-aos="fade-up">
         <h2 className="text-xl font-bold text-center mb-6">
           คลังความรู้ของกาแฟ
         </h2>
-        <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 justify-start">
+        <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 justify-start lg:justify-center">
           {cardData.map((card, index) => (
             <Link
               key={index}
