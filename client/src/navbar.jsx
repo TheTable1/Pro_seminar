@@ -96,25 +96,39 @@ export default function Navbar() {
                 </span>
                 <ul className="ml-4 mt-2 bg-dark-brown shadow-md rounded-md">
                   <li className="p-2 hover:bg-dark-brown transition duration-200">
-                    ประวัติศาสตร์กาแฟ
+                    <Link to="/history" onClick={() => setShowMenu(false)}>
+                      ประวัติศาสตร์กาแฟ
+                    </Link>
                   </li>
                   <li className="p-2 hover:bg-dark-brown transition duration-200">
-                    สายพันธุ์กาแฟ
+                    <Link to="/geneCoffee" onClick={() => setShowMenu(false)}>
+                      สายพันธุ์กาแฟ
+                    </Link>
                   </li>
                   <li className="p-2 hover:bg-dark-brown transition duration-200">
-                    การคั่วกาแฟอย่างมืออาชีพ
+                    <Link to="/roasting" onClick={() => setShowMenu(false)}>
+                      การคั่วกาแฟอย่างมืออาชีพ
+                    </Link>
                   </li>
                   <li className="p-2 hover:bg-dark-brown transition duration-200">
-                    เทคนิคการสกัดกาแฟ
+                    <Link to="/extraction" onClick={() => setShowMenu(false)}>
+                      เทคนิคการสกัดกาแฟ
+                    </Link>
                   </li>
                   <li className="p-2 hover:bg-dark-brown transition duration-200">
-                    กระบวนการผลิตกาแฟ
+                    <Link to="/process" onClick={() => setShowMenu(false)}>
+                      กระบวนการผลิตกาแฟ
+                    </Link>
                   </li>
                   <li className="p-2 hover:bg-dark-brown transition duration-200">
-                    แผนที่แหล่งผลิตกาแฟโลก
+                    <Link to="/worldCoffee" onClick={() => setShowMenu(false)}>
+                      แผนที่แหล่งผลิตกาแฟโลก
+                    </Link>
                   </li>
                   <li className="p-2 hover:bg-dark-brown transition duration-200">
-                    บทความน่ารู้
+                    <Link to="/articles" onClick={() => setShowMenu(false)}>
+                      บทความน่ารู้
+                    </Link>
                   </li>
                 </ul>
               </li>
