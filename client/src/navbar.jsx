@@ -22,7 +22,7 @@ export default function Navbar() {
     <div>
       <header className="bg-dark-brown py-4 px-5 flex justify-between items-center relative">
         <div className="font-bold text-beige text-[5vw] md:text-[1rem] lg:text-[2rem]">
-          Coffee Bean Fusion
+          <Link to="/"> Coffee Bean Fusion </Link>
         </div>
 
         {/* Desktop Menu */}
