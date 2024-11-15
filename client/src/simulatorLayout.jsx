@@ -5,13 +5,12 @@ import RightPanel from './rightpanel';
 import MainSimulator from './mainsimulator';
 import './assets/css/simulator.css';
 
-const SimulatorLayout = () => {
-  const steps = ["Select Coffee Beans", "Select Grinder", "Grind Coffee", "Select Extraction Method", "Complete"];
-  const descriptions = [
-    "Choose the type of coffee beans you want to use.",
-    "Select a grinder to grind your coffee beans.",
-    "Press the button to start grinding the coffee.",
-    "Select the method for extracting the coffee.",
+const SimulatorLayout = ({ menuSteps }) => {
+  // ตรวจสอบว่าได้ menuSteps มาหรือไม่ และกำหนดค่าเริ่มต้น
+  const steps = menuSteps?.map(step => step.title) || ["Default Step 1", "Default Step 2", "Complete"];
+  const descriptions = menuSteps?.map(step => step.description) || [
+    "Default description 1",
+    "Default description 2",
     "Enjoy your coffee!"
   ];
 
@@ -20,17 +19,23 @@ const SimulatorLayout = () => {
   const handleStepComplete = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
+    } else {
+      alert("Simulator complete!");
     }
+  };
+
+  const resetSimulator = () => {
+    setCurrentStep(0);
   };
 
   return (
     <div>
-        <Navbar />
-        <div style={{ display: 'flex', height: '100vh' }}>
-            <Sidebar steps={steps} currentStep={currentStep} />
-            <MainSimulator step={currentStep} onStepComplete={handleStepComplete} />
-            <RightPanel description={descriptions[currentStep]} />
-        </div>
+      <Navbar />
+      <div style={{ display: 'flex', height: '100vh' }}>
+        <Sidebar steps={steps} currentStep={currentStep} onReset={resetSimulator} />
+        <MainSimulator step={currentStep} onStepComplete={handleStepComplete} />
+        <RightPanel description={descriptions[currentStep]} />
+      </div>
     </div>
   );
 };
