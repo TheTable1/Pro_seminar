@@ -4,7 +4,6 @@ import WorldCoffee from "./worldCoffee";
 import History from "./history";
 import GeneCoffee from "./geneCoffee";
 import Roasting from "./Roasting";
-import Extraction from "./extraction";
 import Articles from "./articles";
 import Process from "./process";
 import SignUp from "./SignUp";
@@ -25,7 +24,6 @@ function App() {
         <Route path="/history" element={<History />} />
         <Route path="/geneCoffee" element={<GeneCoffee />} />
         <Route path="/roasting" element={<Roasting />} />
-        <Route path="/extraction" element={<Extraction />} />
         <Route path="/process" element={<Process />} />
         <Route path="/articles" element={<Articles />} />
 

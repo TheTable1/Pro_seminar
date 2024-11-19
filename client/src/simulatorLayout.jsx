@@ -2,42 +2,75 @@ import { useState } from 'react';
 import Navbar from "./navbar";
 import Sidebar from './sidebar';
 import RightPanel from './rightpanel';
-import MainSimulator from './mainsimulator';
+import CoffeeBeanSelection from '/CoffeeBeanSelection';
+import Grinding from '/steps/Grinding';
+import Extraction from '/steps/Extraction';
+import AddIngredients from '/steps/AddIngredients';
+import MenuItems from '/menuItems.json';
 import './assets/css/simulator.css';
 
-const SimulatorLayout = ({ menuSteps }) => {
-  // ตรวจสอบว่าได้ menuSteps มาหรือไม่ และกำหนดค่าเริ่มต้น
-  const steps = menuSteps?.map(step => step.title) || ["Default Step 1", "Default Step 2", "Complete"];
-  const descriptions = menuSteps?.map(step => step.description) || [
-    "Default description 1",
-    "Default description 2",
-    "Enjoy your coffee!"
-  ];
+// กำหนด mapping ของชื่อขั้นตอนกับคอมโพเนนต์
+const stepComponents = {
+  "เลือกเมล็ดกาแฟ": CoffeeBeanSelection,
+  "บดกาแฟ": Grinding,
+  "สกัดกาแฟ": Extraction,
+  "เติมส่วนผสมอื่น": AddIngredients,
+};
 
-  const [currentStep, setCurrentStep] = useState(0);
+const SimulatorLayout = ({MenuItems}) => {
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
-  const handleStepComplete = () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
-    } else {
-      alert("Simulator complete!");
+  // ตรวจสอบว่ามีข้อมูลขั้นตอนหรือไม่
+  const steps = MenuItems.steps || [];
+  const descriptions = MenuItems.descriptions || [];
+  
+  // ดึงขั้นตอนปัจจุบันจาก index
+  const currentStepKey = steps[currentStepIndex] || "";
+  const CurrentStepComponent = stepComponents[currentStepKey] || null;
+
+  const handleNextStep = () => {
+    if (currentStepIndex < steps.length - 1) {
+      setCurrentStepIndex(currentStepIndex + 1);
     }
   };
 
-  const resetSimulator = () => {
-    setCurrentStep(0);
+  const handlePreviousStep = () => {
+    if (currentStepIndex > 0) {
+      setCurrentStepIndex(currentStepIndex - 1);
+    }
   };
+
+
+console.log(MenuItems);
 
   return (
     <div>
       <Navbar />
       <div style={{ display: 'flex', height: '100vh' }}>
-        <Sidebar steps={steps} currentStep={currentStep} onReset={resetSimulator} />
-        <MainSimulator step={currentStep} onStepComplete={handleStepComplete} />
-        <RightPanel description={descriptions[currentStep]} />
+        {/* แถบ Sidebar แสดงขั้นตอนทั้งหมด */}
+        <Sidebar steps={steps} currentStep={currentStepIndex} />
+        
+        {/* พื้นที่หลักสำหรับแสดงซิมมูเลเตอร์ */}
+        <div className="main-simulator">
+          {CurrentStepComponent ? (
+            <CurrentStepComponent
+              onStepComplete={handleNextStep}
+              onStepBack={handlePreviousStep}
+              coffeeData={MenuItems}
+            />
+          ) : (
+            <div className="error-message">
+              <p>ไม่พบขั้นตอนในข้อมูล</p>
+            </div>
+          )}
+        </div>
+        
+        {/* แสดงคำอธิบายของแต่ละขั้นตอน */}
+        <RightPanel description={descriptions[currentStepIndex] || "ไม่มีคำอธิบายสำหรับขั้นตอนนี้"} />
       </div>
     </div>
   );
 };
 
 export default SimulatorLayout;
+
