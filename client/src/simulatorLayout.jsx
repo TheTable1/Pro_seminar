@@ -2,11 +2,11 @@ import { useState } from 'react';
 import Navbar from "./navbar";
 import Sidebar from './sidebar';
 import RightPanel from './rightpanel';
-import CoffeeBeanSelection from '/CoffeeBeanSelection';
-import Grinding from '/steps/Grinding';
-import Extraction from '/steps/Extraction';
-import AddIngredients from '/steps/AddIngredients';
-import MenuItems from '/menuItems.json';
+import CoffeeBeanSelection from './steps/CoffeBeanSelection';
+import Grinding from './steps/Grinding';
+import Extraction from './steps/Extraction';
+import AddIngredients from './steps/AddIngredients';
+import MenuItems from './menuItems.json'; // ใช้ตัวแปรนี้โดยตรง
 import './assets/css/simulator.css';
 
 // กำหนด mapping ของชื่อขั้นตอนกับคอมโพเนนต์
@@ -17,11 +17,11 @@ const stepComponents = {
   "เติมส่วนผสมอื่น": AddIngredients,
 };
 
-const SimulatorLayout = ({MenuItems}) => {
+const SimulatorLayout = () => { // ลบ props ออก
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   // ตรวจสอบว่ามีข้อมูลขั้นตอนหรือไม่
-  const steps = MenuItems.steps || [];
+  const steps = MenuItems.steps || []; // ใช้ MenuItems จากการ import
   const descriptions = MenuItems.descriptions || [];
   
   // ดึงขั้นตอนปัจจุบันจาก index
@@ -40,8 +40,7 @@ const SimulatorLayout = ({MenuItems}) => {
     }
   };
 
-
-console.log(MenuItems);
+  console.log(MenuItems);
 
   return (
     <div>
@@ -73,4 +72,3 @@ console.log(MenuItems);
 };
 
 export default SimulatorLayout;
-
