@@ -3,6 +3,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import Navbar from "./navbar";
 import { Link } from "react-router-dom";
+import Footer from "./footer";
 
 const Home = () => {
   useEffect(() => {
@@ -41,7 +42,7 @@ const Home = () => {
       </header>
 
       {/* Knowledge Section */}
-      <section className="py-8 px-4 md:px-16 lg:px-32 " data-aos="fade-up">
+      <section className="py-8 px-4 md:px-16 lg:px-32" data-aos="fade-up">
         <h2 className="text-xl font-bold text-center mb-6">
           คลังความรู้ของกาแฟ
         </h2>
@@ -50,10 +51,14 @@ const Home = () => {
             <Link
               key={index}
               to={card.path}
-              className="min-w-[200px] sm:w-32 md:w-40 lg:w-48 flex-shrink-0 snap-center text-center"
+              className="min-w-[200px] sm:w-32 md:w-40 lg:w-48 flex-shrink-0 snap-center text-center 
+  transform transition-all duration-300 ease-in-out 
+  hover:scale-110 hover:translate-y-[-10px] hover:shadow-2xl"
               data-aos="fade-up"
-              data-aos-delay={index * 100} // ทำให้การแสดงผลของแต่ละการ์ดมีความหน่วงเวลา
+              data-aos-delay={index * 100}
             >
+              {/* Rest of the code remains the same */}
+
               <img
                 src={`/home${index + 2}.jpg`}
                 alt={card.title}
@@ -115,26 +120,18 @@ const Home = () => {
 
       {/* Quiz Section */}
       <section
-        className="py-8 px-4 md:px-16 lg:px-32 text-center"
+        className="py-8 pb-16 px-4 md:px-16 lg:px-32 text-center bg-[#ffffff]"
         data-aos="fade-up"
       >
         <h2 className="text-xl font-bold">
           คุณกำลังมองหาชนิดของกาแฟที่เหมาะกับคุณอยู่หรือไม่?
         </h2>
         <button className="bg-[#8b4513] text-white px-4 py-2 rounded-md mt-4">
-          มาทำแบบทดสอบ
+          มาทำแบบทดสอบกันเถอะ!!
         </button>
       </section>
 
-      {/* Footer */}
-      <footer
-        className="bg-[#3e2c23] text-white py-6 px-4 text-center"
-        data-aos="fade-up"
-      >
-        <p className="font-semibold text-lg">Coffee Bean Fusion</p>
-        <p>Social Contacts: coffee.bean.fusion@gmail.com | 001-234-5678</p>
-        <p>© Copyright BdevIncodes. All rights reserved.</p>
-      </footer>
+      <Footer />
     </div>
   );
 };

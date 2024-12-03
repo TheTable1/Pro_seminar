@@ -121,7 +121,7 @@ export default function Navbar() {
                     </Link>
                   </li>
                   <li className="p-2 hover:bg-dark-brown transition duration-200">
-                    <Link to="/worldCoffee" onClick={() => setShowMenu(false)}>
+                    <Link  to="/worldCoffee" onClick={() => setShowMenu(false)}>
                       แผนที่แหล่งผลิตกาแฟโลก
                     </Link>
                   </li>

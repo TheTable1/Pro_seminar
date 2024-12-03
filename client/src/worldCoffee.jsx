@@ -1,49 +1,47 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "./assets/css/country.css";
 import "leaflet/dist/leaflet.css";
 import Navbar from "./navbar";
+import Footer from "./footer";
 
 function Home() {
   const mapRef = useRef(null); // Use ref to track map instance
   const mapContainerRef = useRef(null); // Ref for the map container (div#map)
+  const [coffeeData, setCoffeeData] = useState({
+    Vietnam: {
+      description: "Vietnam is the world's largest producer of Robusta coffee.",
+    },
+    Brazil: {
+      description: "Brazil is known for its chocolatey and nutty flavors.",
+    },
+    Ethiopia: {
+      description: "Ethiopian coffee has floral and fruity notes.",
+    },
+    "United States": {
+      description:
+        "Although not a major producer, the U.S. has a growing specialty coffee industry.",
+    },
+    Colombia: {
+      description:
+        "Colombian coffee is known for its balanced acidity and smooth flavor.",
+    },
+    Mexico: {
+      description: "Mexican coffee has a light body with a nutty flavor.",
+    },
+    "Costa Rica": {
+      description:
+        "Costa Rican coffee is known for its bright acidity and full-bodied flavor.",
+    },
+    Honduras: {
+      description: "Honduran coffee has a smooth body with a mild flavor.",
+    },
+  });
 
   useEffect(() => {
     if (mapRef.current !== null) return; // Prevent re-initializing the map
 
-    const coffeeData = {
-      Vietnam: {
-        description:
-          "Vietnam is the world's largest producer of Robusta coffee.",
-      },
-      Brazil: {
-        description: "Brazil is known for its chocolatey and nutty flavors.",
-      },
-      Ethiopia: {
-        description: "Ethiopian coffee has floral and fruity notes.",
-      },
-      "United States": {
-        description:
-          "Although not a major producer, the U.S. has a growing specialty coffee industry.",
-      },
-      Colombia: {
-        description:
-          "Colombian coffee is known for its balanced acidity and smooth flavor.",
-      },
-      Mexico: {
-        description: "Mexican coffee has a light body with a nutty flavor.",
-      },
-      "Costa Rica": {
-        description:
-          "Costa Rican coffee is known for its bright acidity and full-bodied flavor.",
-      },
-      Honduras: {
-        description: "Honduran coffee has a smooth body with a mild flavor.",
-      },
-    };
-
     const map = L.map(mapContainerRef.current).setView([20, 0], 2); // Display world map
-
     mapRef.current = map; // Store map instance in ref
 
     L.tileLayer(
@@ -123,6 +121,9 @@ function Home() {
           },
           onEachFeature: onEachFeature,
         }).addTo(map);
+      })
+      .catch((error) => {
+        console.error("Error loading GeoJSON:", error);
       });
 
     // Search country by name
@@ -202,7 +203,7 @@ function Home() {
         mapRef.current = null;
       }
     };
-  }, []); // Run this effect once when the component mounts
+  }, [coffeeData]); // Run this effect once when the component mounts
 
   return (
     <div>

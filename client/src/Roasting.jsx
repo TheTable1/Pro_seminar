@@ -1,3 +1,4 @@
+import Footer from "./footer";
 import Navbar from "./navbar";
 
 function Roasting () {
@@ -5,6 +6,8 @@ function Roasting () {
         <div>
             <Navbar/>
             <h1>Roasting</h1>
+
+            <Footer/>
         </div>
     );
 }

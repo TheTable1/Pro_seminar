@@ -2,6 +2,7 @@ import { useState } from "react";
 import Navbar from "./navbar";
 import MenuItems from "./menuItems.json";
 import { useNavigate } from "react-router-dom";
+import Footer from "./footer";
 
 function CoffeeBeans() {
   const [activeFilter, setActiveFilter] = useState("กาแฟทั้งหมด");
@@ -52,7 +53,11 @@ function CoffeeBeans() {
               กลับ
             </button>
             <h2 className="text-xl font-bold">{selectedItem.name}</h2>
-            <img style={{ width: "350px", height: "250px", objectFit: "cover" }} src={selectedItem.img} alt={selectedItem.name} />
+            <img
+              style={{ width: "350px", height: "250px", objectFit: "cover" }}
+              src={selectedItem.img}
+              alt={selectedItem.name}
+            />
             <p className="mt-2">{selectedItem.description}</p>
             <button onClick={handleTryIt}>ลองทำ</button>
           </div>
@@ -70,16 +75,16 @@ function CoffeeBeans() {
                 />
               </div>
 
-
               {/* Filter Buttons */}
               <div className="flex flex-wrap justify-center gap-2 md:gap-4 lg:gap-6 mb-6">
                 {filterButtons.map((filter) => (
                   <button
                     key={filter}
-                    className={`px-4 py-2 rounded-full text-sm md:text-base transition duration-200 ease-in-out ${activeFilter === filter
-                      ? "bg-brown text-white"
-                      : "bg-gray-300 text-gray-700 hover:bg-gray-300"
-                      }`}
+                    className={`px-4 py-2 rounded-full text-sm md:text-base transition duration-200 ease-in-out ${
+                      activeFilter === filter
+                        ? "bg-brown text-white"
+                        : "bg-gray-300 text-gray-700 hover:bg-gray-300"
+                    }`}
                     onClick={() => handleFilterChange(filter)}
                   >
                     {filter}
@@ -92,12 +97,13 @@ function CoffeeBeans() {
                 {filteredItems
                   .filter(
                     (item) =>
-                      activeFilter === "กาแฟทั้งหมด" || item.type === activeFilter
+                      activeFilter === "กาแฟทั้งหมด" ||
+                      item.type === activeFilter
                   )
                   .map((item, index) => (
                     <div
                       key={index}
-                      style={{cursor:"pointer"}}
+                      style={{ cursor: "pointer" }}
                       className="sm:p-4 md:p-1 bg-brown rounded-lg shadow-sm text-center text-white font-medium transition duration-200 ease-in-out hover:shadow-lg"
                       onClick={() => handleItemClick(item)}
                     >
@@ -119,6 +125,7 @@ function CoffeeBeans() {
           </section>
         )}
       </main>
+      <Footer />
     </div>
   );
 }

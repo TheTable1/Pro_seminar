@@ -10,6 +10,7 @@ import SignUp from "./SignUp";
 import Login from "./Login";
 import Home from "./Home";
 import Simulator from "./simulatorLayout";
+import Extraction from "./extraction";
 
 function App() {
   return (
@@ -20,11 +21,13 @@ function App() {
 
         <Route path="/" element={<Home />} />
 
-        <Route path="/worldCoffee" element={<WorldCoffee />} />
+        
         <Route path="/history" element={<History />} />
         <Route path="/geneCoffee" element={<GeneCoffee />} />
         <Route path="/roasting" element={<Roasting />} />
+        <Route path="/extraction" element={<Extraction />} />
         <Route path="/process" element={<Process />} />
+        <Route path="/worldCoffee" element={<WorldCoffee />} />
         <Route path="/articles" element={<Articles />} />
 
         <Route path="/coffee_beans" element={<CoffeeBeans />} />

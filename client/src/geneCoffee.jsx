@@ -1,3 +1,4 @@
+import Footer from "./footer";
 import Navbar from "./navbar";
 
 function GeneCoffee (){
@@ -21,6 +22,8 @@ function GeneCoffee (){
           world, with over 100,000 customers and a reputation for providing
           high-quality, ethically sourced coffee.
         </p>
+
+        <Footer />
       </div>
     );
 }

@@ -10,6 +10,7 @@ export default {
         brown: "#4e3629",
         "light-brown": "#7a5647",
         beige: "#FFE2B4",
+        "beige-light": "#fff4e2",
       },
     },
     screens: {
