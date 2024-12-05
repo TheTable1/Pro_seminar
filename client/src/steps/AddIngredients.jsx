@@ -1,12 +1,11 @@
-import Navbar from "../navbar";
-
-function AddIngredients() {
+const AddIngredients = ({ onStepBack }) => {
     return (
-        <div>
-            <Navbar/>
-            <h1>AddIngredients</h1>
-        </div>
+      <div>
+        <h2>เติมส่วนผสมอื่น</h2>
+        <button onClick={onStepBack}>ย้อนกลับ</button>
+      </div>
     );
-}
-
-export default AddIngredients;
+  };
+  
+  export default AddIngredients;
+  

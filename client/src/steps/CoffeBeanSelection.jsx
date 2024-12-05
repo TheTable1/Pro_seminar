@@ -1,12 +1,19 @@
-import Navbar from "../navbar";
+import PropTypes from 'prop-types';
 
-function CoffeBeanSelection() {
+const CoffeeBeanSelection = ({ onStepComplete }) => {
     return (
         <div>
-            <Navbar/>
-            <h1>CoffeBeanSelection</h1>
+            <h2>เลือกเมล็ดกาแฟ</h2>
+            <button onClick={onStepComplete}>Next</button>
         </div>
     );
-}
+};
 
-export default CoffeBeanSelection;
+// เพิ่ม PropTypes สำหรับตรวจสอบชนิดของ props
+CoffeeBeanSelection.propTypes = {
+    onStepComplete: PropTypes.func.isRequired, // onStepComplete ต้องเป็นฟังก์ชันและจำเป็นต้องส่งค่าเข้ามา
+};
+
+export default CoffeeBeanSelection;
+
+  

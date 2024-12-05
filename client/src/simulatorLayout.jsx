@@ -2,10 +2,12 @@ import { useState } from 'react';
 import Navbar from "./navbar";
 import Sidebar from './sidebar';
 import RightPanel from './rightpanel';
+
 import CoffeeBeanSelection from './steps/CoffeBeanSelection';
 import Grinding from './steps/Grinding';
 import Extraction from './steps/Extraction';
 import AddIngredients from './steps/AddIngredients';
+
 import MenuItems from './menuItems.json'; // ใช้ตัวแปรนี้โดยตรง
 import './assets/css/simulator.css';
 
@@ -30,7 +32,8 @@ const SimulatorLayout = () => { // ลบ props ออก
 
   const handleNextStep = () => {
     if (currentStepIndex < steps.length - 1) {
-      setCurrentStepIndex(currentStepIndex + 1);
+      document.querySelector('.main-simulator').classList.add('animate');
+      setTimeout(() => setCurrentStepIndex(currentStepIndex + 1), 300); // Delay เพื่อให้ Animation ทำงาน
     }
   };
 

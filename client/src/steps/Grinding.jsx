@@ -1,12 +1,12 @@
-import Navbar from "../navbar";
-
-function Extraction() {
+const Grinding = ({ onStepComplete, onStepBack }) => {
     return (
-        <div>
-            <Navbar/>
-            <h1>extraction</h1>
-        </div>
+      <div>
+        <h2>บดกาแฟ</h2>
+        <button onClick={onStepBack}>ย้อนกลับ</button>
+        <button onClick={onStepComplete}>ถัดไป</button>
+      </div>
     );
-}
-
-export default Extraction;
+  };
+  
+  export default Grinding;
+  
