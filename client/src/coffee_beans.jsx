@@ -34,9 +34,10 @@ function CoffeeBeans() {
     setSelectedItem(null);
   };
 
-  const handleTryIt = () =>{
-    navigate('/simulator');
-  }
+  const handleTryIt = () => {
+    navigate('/simulator', { state: selectedItem });
+  };
+  
   // ฟังก์ชันสำหรับการค้นหา
   const filteredItems = menuItems.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())

@@ -65,7 +65,7 @@ export default function Navbar() {
               เมล็ดกาแฟ
             </li>
             <li className="cursor-pointer hover:text-light-brown transition duration-300">
-              เมนูกาแฟ
+            <Link to="/coffee_beans">เมนูกาแฟ</Link>
             </li>
             <li className="cursor-pointer hover:text-light-brown transition duration-300">
               ฟีดคอกาแฟ
