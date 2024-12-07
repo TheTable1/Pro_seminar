@@ -88,13 +88,13 @@
 //     onStepComplete(); // ไปยังขั้นตอนถัดไป
 //   };
 
-<<<<<<< HEAD
   return (
     <DndProvider backend={HTML5Backend}>
       <div>
         <h2>เลือกอุปกรณ์และบดกาแฟ</h2>
         {!selectedMachine ? (
           <div>
+            <h3>เลือกเครื่องบดกาแฟ:</h3>
             <button onClick={() => setSelectedMachine("electric")}>
               เครื่องบดไฟฟ้า
             </button>
@@ -120,46 +120,12 @@
     </DndProvider>
   );
 };
-=======
-//   return (
-//     <DndProvider backend={HTML5Backend}>
-//       <div>
-//         <h2>เลือกอุปกรณ์และบดกาแฟ</h2>
-//         {!selectedMachine ? (
-//           <div>
-//             <h3>เลือกเครื่องบดกาแฟ:</h3>
-//             <button onClick={() => setSelectedMachine("electric")}>
-//               เครื่องบดไฟฟ้า
-//             </button>
-//             <button onClick={() => setSelectedMachine("manual")}>
-//               เครื่องบดมือ
-//             </button>
-//           </div>
-//         ) : (
-//           <div>
-//             <h3>ลากเมล็ดกาแฟไปยังเครื่องบด</h3>
-//             <div style={{ display: "flex", justifyContent: "space-around" }}>
-//               <CoffeeBean bean={bean} />
-//               <GrindingMachine
-//                 type={selectedMachine}
-//                 onDrop={handleDrop}
-//               />
-//             </div>
-//             <button onClick={() => setSelectedMachine(null)}>ย้อนกลับ</button>
-//           </div>
-//         )}
-//         <button onClick={onStepBack}>ย้อนกลับ</button>
-//       </div>
-//     </DndProvider>
-//   );
-// };
->>>>>>> c0f0eabb3d15c16d423eaf5948510823ea1a5222
 
-// // เพิ่ม PropTypes สำหรับ Grinding
-// Grinding.propTypes = {
-//   onStepComplete: PropTypes.func.isRequired, // ต้องมี `onStepComplete` เป็นฟังก์ชัน
-//   onStepBack: PropTypes.func.isRequired, // ต้องมี `onStepBack` เป็นฟังก์ชัน
-// };
+// เพิ่ม PropTypes สำหรับ Grinding
+Grinding.propTypes = {
+  onStepComplete: PropTypes.func.isRequired, // ต้องมี `onStepComplete` เป็นฟังก์ชัน
+  onStepBack: PropTypes.func.isRequired, // ต้องมี `onStepBack` เป็นฟังก์ชัน
+};
 
 // export default Grinding;
 
