@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import Navbar from "./navbar";
 import Sidebar from './sidebar';
@@ -19,14 +20,14 @@ const stepComponents = {
   "เติมส่วนผสมอื่น": AddIngredients,
 };
 
-const SimulatorLayout = () => { // ลบ props ออก
+const SimulatorLayout = () => {
+  const location = useLocation(); // ใช้ useLocation เพื่อดึงข้อมูลจาก state
+  const selectedItem = location.state; // ตัวแปรที่เก็บข้อมูลจาก state
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
-  // ตรวจสอบว่ามีข้อมูลขั้นตอนหรือไม่
-  const steps = MenuItems.steps || []; // ใช้ MenuItems จากการ import
-  const descriptions = MenuItems.descriptions || [];
-  
-  // ดึงขั้นตอนปัจจุบันจาก index
+  const steps = selectedItem?.steps || []; // ใช้ steps จาก selectedItem
+  const descriptions = selectedItem?.descriptions || []; // ใช้ descriptions จาก selectedItem
+
   const currentStepKey = steps[currentStepIndex] || "";
   const CurrentStepComponent = stepComponents[currentStepKey] || null;
 
@@ -36,7 +37,6 @@ const SimulatorLayout = () => { // ลบ props ออก
       setTimeout(() => setCurrentStepIndex(currentStepIndex + 1), 300); // Delay เพื่อให้ Animation ทำงาน
     }
   };
-
   const handlePreviousStep = () => {
     if (currentStepIndex > 0) {
       setCurrentStepIndex(currentStepIndex - 1);
@@ -45,6 +45,10 @@ const SimulatorLayout = () => { // ลบ props ออก
 
   console.log(MenuItems);
 
+  const handleBack = () => {
+    navigate(-1); // ใช้ navigate(-1) เพื่อย้อนกลับไปยังหน้าเดิม
+  };
+  
   return (
     <div>
       <Navbar />
@@ -58,15 +62,14 @@ const SimulatorLayout = () => { // ลบ props ออก
             <CurrentStepComponent
               onStepComplete={handleNextStep}
               onStepBack={handlePreviousStep}
-              coffeeData={MenuItems}
+              coffeeData={selectedItem} // ส่งข้อมูลทั้งหมดของ selectedItem
             />
           ) : (
             <div className="error-message">
               <p>ไม่พบขั้นตอนในข้อมูล</p>
             </div>
           )}
-        </div>
-        
+        </div>  
         {/* แสดงคำอธิบายของแต่ละขั้นตอน */}
         <RightPanel description={descriptions[currentStepIndex] || "ไม่มีคำอธิบายสำหรับขั้นตอนนี้"} />
       </div>
