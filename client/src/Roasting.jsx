@@ -50,7 +50,7 @@ const CoffeeInfo = () => {
   return (
     <div>
       <Navbar />
-      <div className="bg-beige-light min-h-screen p-6">
+      <div className="bg-[#f3f1ec] min-h-screen p-6">
         {/* Header Buttons */}
 
         <div className="flex gap-4 mb-6 flex-wrap justify-center">
@@ -61,7 +61,7 @@ const CoffeeInfo = () => {
               className={`w-60 ${
                 selectedRoast === label
                   ? "bg-light-brown text-white"
-                  : "bg-beige"
+                  : "bg-[#e0dcd3]"
               } hover:bg-brown hover:text-white text-dark-brown font-medium py-2 px-4 rounded transition-all`}
             >
               {label}
