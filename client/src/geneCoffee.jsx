@@ -20,7 +20,7 @@ const CoffeeVariety = () => {
           description: "กาแฟอาราบิก้าที่มีกลิ่นหอมมีความเปรี้ยวและหวาน...",
         },
       ],
-      image: "/images/arabica.jpg",
+      image: "/gene/gene1.jpg",
     },
     Robusta: {
       title: "Robusta",
@@ -31,7 +31,7 @@ const CoffeeVariety = () => {
         { name: "Conillon", description: "สายพันธุ์ย่อยที่ปลูกในเขตร้อน..." },
         { name: "SL28", description: "กาแฟที่มีรสชาติที่กลมกล่อม..." },
       ],
-      image: "/images/robusta.jpg",
+      image: "/gene/gene2.jpg",
     },
     Liberica: {
       title: "Liberica",
@@ -41,7 +41,7 @@ const CoffeeVariety = () => {
         { name: "Excelsa", description: "กาแฟที่มีกลิ่นหอมและรสชาติหวาน..." },
         { name: "Liberica 24", description: "กาแฟที่มีกลิ่นหอมยาวนาน..." },
       ],
-      image: "/images/liberica.jpg",
+      image: "/gene/gene3.jpg",
     },
     Excelsa: {
       title: "Excelsa",
@@ -51,7 +51,7 @@ const CoffeeVariety = () => {
         { name: "SL34", description: "กาแฟที่มีกลิ่นหอมและรสชาติเยี่ยมยอด..." },
         { name: "SL28", description: "กาแฟที่มีกลิ่นหอมและรสชาติหวาน..." },
       ],
-      image: "/images/excelsa.jpg",
+      image: "/gene/gene4.jpg",
     },
   };
 
@@ -62,7 +62,7 @@ const CoffeeVariety = () => {
   return (
     <div className="bg-[#fdfcfb] text-gray-800 font-sans">
       {/* ส่วนหัว */}
-      <Navbar/>
+      <Navbar />
 
       <header className="text-center py-6">
         <h1 className="text-2xl md:text-4xl font-bold text-[#5c4033]">
@@ -71,7 +71,7 @@ const CoffeeVariety = () => {
       </header>
 
       {/* ปุ่มเลือกสายพันธุ์หลัก */}
-      <div className="flex justify-center space-x-4 py-4">
+      <div className="flex flex-wrap justify-center pt-4 gap-2">
         {Object.keys(coffeeData).map((variety) => (
           <button
             key={variety}
@@ -81,7 +81,7 @@ const CoffeeVariety = () => {
             }}
             className={`${
               selectedVariety === variety ? "bg-[#d4cbc0]" : "bg-[#e0dcd3]"
-            } px-4 py-2 rounded-lg text-[#5c4033] font-medium shadow-md hover:bg-[#c3b9a8]`}
+            } px-4 py-2 rounded-lg text-[#5c4033] font-medium shadow-md hover:bg-[#c3b9a8] m-2 sm:m-4 md:m-6`}
           >
             {variety}
           </button>
@@ -89,7 +89,7 @@ const CoffeeVariety = () => {
       </div>
 
       {/* ปุ่มเลือกสายพันธุ์ย่อย */}
-      <div className="flex justify-center space-x-4 py-4">
+      <div className="flex flex-wrap justify-center py-4 gap-2">
         {coffeeData[selectedVariety].subVarieties.map((subVariety) => (
           <button
             key={subVariety.name}
@@ -98,7 +98,7 @@ const CoffeeVariety = () => {
               selectedSubVariety === subVariety.name
                 ? "bg-[#d4cbc0]"
                 : "bg-[#e0dcd3]"
-            } px-4 py-2 rounded-lg text-[#5c4033] font-medium shadow-md hover:bg-[#c3b9a8]`}
+            } px-4 py-2 rounded-lg text-[#5c4033] font-medium shadow-md hover:bg-[#c3b9a8] m-2 sm:m-4 md:m-6`}
           >
             {subVariety.name}
           </button>
@@ -141,7 +141,7 @@ const CoffeeVariety = () => {
         )}
       </div>
 
-      <Footer/>
+      <Footer />
     </div>
   );
 };
