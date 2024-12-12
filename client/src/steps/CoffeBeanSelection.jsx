@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 
 const CoffeeBeanSelection = ({ onStepComplete }) => {
     const coffeeBeans = [
-      { id: 1, name: "Arabica", description: "Smooth and flavorful" },
-      { id: 2, name: "Robusta", description: "Strong and bold" },
-      { id: 3, name: "Liberica", description: "Unique and fruity" },
-      { id: 4, name: "Excelsa", description: "Complex and tart" },
+      { id: 1, name: "Arabica", description: "(Smooth and flavorful)" },
+      { id: 2, name: "Robusta", description: "(Strong and bold)" },
+      { id: 3, name: "Liberica", description: "(Unique and fruity)" },
+      { id: 4, name: "Excelsa", description: "(Complex and tart)" },
     ];
     const [selectedBean, setSelectedBean] = useState(null);
     const handleSelectBean = (bean) => {

@@ -6,87 +6,133 @@ import PropTypes from "prop-types";
 // คอมโพเนนต์สำหรับเมล็ดกาแฟที่สามารถลากได้
 const CoffeeBean = ({ bean }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
-     type: "bean", // ระบุประเภทไอเท็มสำหรับ Drag and Drop
-     item: { bean },
-     collect: (monitor) => ({
-      isDragging: monitor.isDragging(), // ตรวจสอบสถานะการลาก
-     }),
-   }));
+    type: "bean",
+    item: { bean },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  }));
 
-   return (
-     <div
-       ref={drag}
-       style={{
-         opacity: isDragging ? 0.5 : 1, // ความโปร่งใสระหว่างลาก
-         padding: "10px",
-         margin: "10px",
-         border: "1px solid #333",
-         borderRadius: "5px",
-         backgroundColor: "lightgoldenrodyellow",
-         cursor: "grab",
-       }}
-     >
-       {bean.name}
-     </div>
-   );
- };
+  return (
+    <div
+      ref={drag}
+      style={{
+        opacity: isDragging ? 0.5 : 1,
+        margin: "20px",
+        padding: "10px",
+        height: "200px",
+        width: "200px",
+        border: "1px solid #333",
+        borderRadius: "5px",
+        backgroundColor: "lightgoldenrodyellow",
+        cursor: "grab",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        fontSize: "16px",
+        fontWeight: "bold",
+        textAlign: "center",
+      }}
+    >
+      {bean.name}
+    </div>
+  );
+};
 
- // เพิ่ม PropTypes สำหรับ CoffeeBean
- CoffeeBean.propTypes = {
-   bean: PropTypes.shape({
-     id: PropTypes.number.isRequired, // ต้องมี `id` เป็นตัวเลข
-     name: PropTypes.string.isRequired, // ต้องมี `name` เป็นข้อความ
-   }).isRequired,
- };
+CoffeeBean.propTypes = {
+  bean: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
- // คอมโพเนนต์สำหรับเครื่องบดกาแฟ
- const GrindingMachine = ({ type, onDrop }) => {
-   const [{ isOver }, drop] = useDrop(() => ({
-     accept: "bean", // ระบุประเภทไอเท็มที่รองรับ
-     drop: (item) => onDrop(item.bean), // เรียกฟังก์ชันเมื่อมีการปล่อยไอเท็ม
-     collect: (monitor) => ({
-       isOver: monitor.isOver(), // ตรวจสอบสถานะการลากไอเท็มเหนือพื้นที่ Drop
-     }),
-   }));
+// คอมโพเนนต์สำหรับตัวเลือกเครื่องบดกาแฟ
+const GrindingMachineOption = ({ type, onSelect }) => {
+  return (
+    <div
+      onClick={() => onSelect(type)}
+      style={{
+        margin: "20px",
+        padding: "10px",
+        height: "200px",
+        width: "200px",
+        border: "1px solid #333",
+        borderRadius: "5px",
+        backgroundColor: "lightgoldenrodyellow",
+        cursor: "pointer",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        fontSize: "16px",
+        fontWeight: "bold",
+        textAlign: "center",
+      }}
+    >
+      {type === "electric" ? "เครื่องบดไฟฟ้า" : "เครื่องบดมือ"}
+    </div>
+  );
+};
 
-   return (
-     <div
-       ref={drop}
-       style={{
-         width: "200px",
-         height: "200px",
-         border: "2px dashed gray",
-         borderRadius: "10px",
-         backgroundColor: isOver ? "lightgreen" : "white", // เปลี่ยนสีเมื่อไอเท็มอยู่ด้านบน
-         display: "flex",
-         justifyContent: "center",
-         alignItems: "center",
-         margin: "20px",
-         cursor: "pointer",
-       }}
-     >
-       {type === "electric"
-         ? "เครื่องบดไฟฟ้า"
-         : "เครื่องบดมือ"}
-     </div>
-   );
- };
+GrindingMachineOption.propTypes = {
+  type: PropTypes.string.isRequired,
+  onSelect: PropTypes.func.isRequired,
+};
 
- // เพิ่ม PropTypes สำหรับ GrindingMachine
- GrindingMachine.propTypes = {
-   type: PropTypes.string.isRequired, // ต้องมี `type` เป็นข้อความ
-   onDrop: PropTypes.func.isRequired, // ต้องมี `onDrop` เป็นฟังก์ชัน
- };
+// คอมโพเนนต์สำหรับเครื่องบดกาแฟ
+const GrindingMachine = ({ type, onDrop }) => {
+  const [{ isOver }, drop] = useDrop(() => ({
+    accept: "bean",
+    drop: (item) => onDrop(item.bean),
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
+  }));
 
- // คอมโพเนนต์หลักสำหรับการบดกาแฟ
- const Grinding = ({ onStepComplete, onStepBack }) => {
-   const [selectedMachine, setSelectedMachine] = useState(null);
-   const [bean] = useState({ id: 1, name: "Arabica" }); // ตัวอย่างเมล็ดกาแฟ
+  return (
+    <div
+      ref={drop}
+      style={{
+        width: "200px",
+        height: "200px",
+        border: "2px dashed gray",
+        borderRadius: "10px",
+        backgroundColor: isOver ? "lightgreen" : "white",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        margin: "20px",
+        cursor: "pointer",
+        fontSize: "16px",
+        fontWeight: "bold",
+        textAlign: "center",
+      }}
+    >
+      {type === "electric" ? "เครื่องบดไฟฟ้า" : "เครื่องบดมือ"}
+    </div>
+  );
+};
 
-   const handleDrop = (bean) => {
-     alert(`คุณได้บดเมล็ดกาแฟ ${bean.name} ด้วย ${selectedMachine}`);
-     onStepComplete(); // ไปยังขั้นตอนถัดไป
-   };
+GrindingMachine.propTypes = {
+  type: PropTypes.string.isRequired,
+  onDrop: PropTypes.func.isRequired,
+};
+
+// คอมโพเนนต์หลักสำหรับการบดกาแฟ
+const Grinding = ({ onStepComplete, onStepBack }) => {
+  const [selectedMachine, setSelectedMachine] = useState(null);
+  const [bean] = useState({ id: 1, name: "Arabica" });
+  const [grindingStatus, setGrindingStatus] = useState("");
+
+  const handleDrop = (bean) => {
+    setGrindingStatus(`กำลังบดเมล็ดกาแฟ ${bean.name}...`);
+    setTimeout(() => {
+      setGrindingStatus(`เมล็ดกาแฟ ${bean.name} บดเสร็จแล้ว!`);
+      setTimeout(() => {
+        setGrindingStatus("");
+        onStepComplete();
+      }, 3000);
+    }, 3000);
+  };
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -95,12 +141,16 @@ const CoffeeBean = ({ bean }) => {
         {!selectedMachine ? (
           <div>
             <h3>เลือกเครื่องบดกาแฟ:</h3>
-            <button onClick={() => setSelectedMachine("electric")}>
-              เครื่องบดไฟฟ้า
-            </button>
-            <button onClick={() => setSelectedMachine("manual")}>
-              เครื่องบดมือ
-            </button>
+            <div style={{ display: "flex", justifyContent: "center", gap: "20px" }}>
+              <GrindingMachineOption
+                type="electric"
+                onSelect={setSelectedMachine}
+              />
+              <GrindingMachineOption
+                type="manual"
+                onSelect={setSelectedMachine}
+              />
+            </div>
           </div>
         ) : (
           <div>
@@ -112,22 +162,23 @@ const CoffeeBean = ({ bean }) => {
                 onDrop={handleDrop}
               />
             </div>
-            <button onClick={() => setSelectedMachine(null)}>ย้อนกลับ</button>
           </div>
         )}
+        {grindingStatus && <p>{grindingStatus}</p>}
         <button onClick={onStepBack}>ย้อนกลับ</button>
       </div>
     </DndProvider>
   );
 };
 
-// เพิ่ม PropTypes สำหรับ Grinding
 Grinding.propTypes = {
-  onStepComplete: PropTypes.func.isRequired, // ต้องมี `onStepComplete` เป็นฟังก์ชัน
-  onStepBack: PropTypes.func.isRequired, // ต้องมี `onStepBack` เป็นฟังก์ชัน
+  onStepComplete: PropTypes.func.isRequired,
+  onStepBack: PropTypes.func.isRequired,
 };
 
 export default Grinding;
+
+
 
 
   

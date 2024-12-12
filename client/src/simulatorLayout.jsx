@@ -6,8 +6,8 @@ import RightPanel from './rightpanel';
 
 import CoffeeBeanSelection from './steps/CoffeBeanSelection';
 import Grinding from './steps/Grinding';
-import Extraction from './steps/Extraction';
-import AddIngredients from './steps/AddIngredients';
+import Extraction from './steps/extraction';
+import FinalStep from './steps/Finalstep';
 
 import MenuItems from './menuItems.json'; // ใช้ตัวแปรนี้โดยตรง
 import './assets/css/simulator.css';
@@ -17,7 +17,7 @@ const stepComponents = {
   "เลือกเมล็ดกาแฟ": CoffeeBeanSelection,
   "บดกาแฟ": Grinding,
   "สกัดกาแฟ": Extraction,
-  "เติมส่วนผสมอื่น": AddIngredients,
+  "เสร็จสิ้น": FinalStep,
 };
 
 const SimulatorLayout = () => {
@@ -45,9 +45,9 @@ const SimulatorLayout = () => {
 
   console.log(MenuItems);
 
-  const handleBack = () => {
-    navigate(-1); // ใช้ navigate(-1) เพื่อย้อนกลับไปยังหน้าเดิม
-  };
+  // const handleBack = () => {
+  //   navigate(-1); // ใช้ navigate(-1) เพื่อย้อนกลับไปยังหน้าเดิม
+  // };
   
   return (
     <div>

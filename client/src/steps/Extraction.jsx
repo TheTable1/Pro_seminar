@@ -3,6 +3,7 @@ import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import PropTypes from "prop-types";
 
+// คอมโพเนนต์สำหรับกาแฟบด
 const GroundCoffee = ({ groundCoffee }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "groundCoffee",
@@ -17,24 +18,71 @@ const GroundCoffee = ({ groundCoffee }) => {
       ref={drag}
       style={{
         opacity: isDragging ? 0.5 : 1,
+        margin: "20px",
         padding: "10px",
-        margin: "10px",
+        height: "200px",
+        width: "200px",
         border: "1px solid #333",
         borderRadius: "5px",
         backgroundColor: "wheat",
         cursor: "grab",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        fontSize: "14px",
+        fontWeight: "bold",
+        textAlign: "center",
       }}
     >
-      {groundCoffee}
+      {groundCoffee || "กรุณาเลือกกาแฟบด"} {/* แสดงข้อความในกรณีไม่มีค่า */}
     </div>
   );
 };
 
-// เพิ่ม PropTypes validation ให้กับ GroundCoffee
 GroundCoffee.propTypes = {
   groundCoffee: PropTypes.string.isRequired,
 };
 
+GroundCoffee.defaultProps = {
+  groundCoffee: "กาแฟบดธรรมดา", // ค่าพื้นฐาน
+};
+
+// คอมโพเนนต์สำหรับตัวเลือกเครื่องสกัดกาแฟ
+const ExtractionMachineOption = ({ machine, onSelect }) => {
+  return (
+    <div
+      onClick={() => onSelect(machine)}
+      style={{
+        margin: "20px",
+        padding: "10px",
+        height: "200px",
+        width: "200px",
+        border: "1px solid #333",
+        borderRadius: "5px",
+        backgroundColor: "lightgoldenrodyellow",
+        cursor: "pointer",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        fontSize: "16px",
+        fontWeight: "bold",
+        textAlign: "center",
+      }}
+    >
+      {machine.name}
+    </div>
+  );
+};
+
+ExtractionMachineOption.propTypes = {
+  machine: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
+  onSelect: PropTypes.func.isRequired,
+};
+
+// คอมโพเนนต์สำหรับเครื่องสกัดกาแฟ
 const ExtractionMachine = ({ type, onDrop }) => {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "groundCoffee",
@@ -57,55 +105,71 @@ const ExtractionMachine = ({ type, onDrop }) => {
         justifyContent: "center",
         alignItems: "center",
         margin: "20px",
+        cursor: "pointer",
+        fontSize: "16px",
+        fontWeight: "bold",
+        textAlign: "center",
       }}
     >
-      {type === "espresso" ? "เครื่องเอสเพรสโซ" : "เครื่องดริป"}
+      {type}
     </div>
   );
 };
 
-// เพิ่ม PropTypes validation ให้กับ ExtractionMachine
 ExtractionMachine.propTypes = {
   type: PropTypes.string.isRequired,
   onDrop: PropTypes.func.isRequired,
 };
 
+// คอมโพเนนต์หลักสำหรับการสกัดกาแฟ
 const Extraction = ({ onStepComplete, onStepBack, groundCoffee }) => {
-  const [selectedDevice, setSelectedDevice] = useState(null);
+  const [selectedMachine, setSelectedMachine] = useState(null);
+  const [machines] = useState([
+    { id: 1, name: "เครื่องเอสเพรสโซ" },
+    { id: 2, name: "เครื่องดริป" },
+  ]);
   const [extractionResult, setExtractionResult] = useState(null);
 
-  const handleDeviceSelect = (device) => {
-    setSelectedDevice(device);
+  const handleMachineSelect = (machine) => {
+    setSelectedMachine(machine);
   };
 
-  const handleDrop = (groundCoffee) => {
+  const handleCoffeeDrop = (groundCoffee) => {
     setExtractionResult(`กำลังสกัดกาแฟจาก: ${groundCoffee}`);
     setTimeout(() => {
-      setExtractionResult(`กาแฟที่สกัดจาก ${groundCoffee} ด้วย ${selectedDevice} พร้อมแล้ว!`);
-      onStepComplete(); // ไปยังขั้นตอนถัดไป
-    }, 3000); // รอ 3 วินาที
+      setExtractionResult(
+        `กาแฟที่สกัดจาก ${groundCoffee} ด้วย ${selectedMachine.name} พร้อมแล้ว!`
+      );
+      onStepComplete();
+    }, 3000);
   };
 
   return (
     <DndProvider backend={HTML5Backend}>
       <div>
         <h2>สกัดกาแฟ</h2>
-        {!selectedDevice ? (
+        {!selectedMachine ? (
           <div>
-            <h3>เลือกอุปกรณ์สำหรับการสกัดกาแฟ:</h3>
-            <button onClick={() => handleDeviceSelect("espresso")}>
-              เครื่องเอสเพรสโซ
-            </button>
-            <button onClick={() => handleDeviceSelect("drip")}>
-              เครื่องดริป
-            </button>
+            <h3>เลือกเครื่องสกัดกาแฟ:</h3>
+            <div style={{ display: "flex", justifyContent: "center", gap: "20px" }}>
+              {machines.map((machine) => (
+                <ExtractionMachineOption
+                  key={machine.id}
+                  machine={machine}
+                  onSelect={handleMachineSelect}
+                />
+              ))}
+            </div>
           </div>
         ) : (
           <div>
             <h3>ลากกาแฟบดไปยังเครื่องสกัดกาแฟ</h3>
             <div style={{ display: "flex", justifyContent: "space-around" }}>
               <GroundCoffee groundCoffee={groundCoffee} />
-              <ExtractionMachine type={selectedDevice} onDrop={handleDrop} />
+              <ExtractionMachine
+                type={selectedMachine.name}
+                onDrop={handleCoffeeDrop}
+              />
             </div>
             {extractionResult && <p>{extractionResult}</p>}
           </div>
@@ -120,14 +184,19 @@ const Extraction = ({ onStepComplete, onStepBack, groundCoffee }) => {
   );
 };
 
-// เพิ่ม PropTypes validation ให้กับ Extraction
 Extraction.propTypes = {
-  onStepComplete: PropTypes.func.isRequired, // ฟังก์ชันเมื่อขั้นตอนสำเร็จ
-  onStepBack: PropTypes.func.isRequired, // ฟังก์ชันเมื่อย้อนกลับ
-  groundCoffee: PropTypes.string.isRequired, // กาแฟบดจากขั้นตอนก่อนหน้า
+  onStepComplete: PropTypes.func.isRequired,
+  onStepBack: PropTypes.func.isRequired,
+  groundCoffee: PropTypes.string.isRequired,
 };
 
 export default Extraction;
+
+
+
+
+
+
 
 
 
