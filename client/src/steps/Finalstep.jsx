@@ -1,19 +1,11 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { useLocation, useNavigate } from "react-router-dom";
 
-// Example coffee menu list
-const coffeeMenus = [
-  { name: "เอสเปรสโซ", description: "กาแฟดำเข้มข้น", image: "espresso.jpg" },
-  { name: "อเมริกาโน่", description: "กาแฟดำผสมน้ำร้อน", image: "americano.jpg" },
-  { name: "ลาเต้", description: "กาแฟผสมนมเนื้อเนียน", image: "latte.jpg" },
-  { name: "คาปูชิโน", description: "กาแฟกับฟองนมนุ่ม", image: "cappuccino.jpg" },
-  { name: "มัคคิอาโต้", description: "กาแฟที่มีฟองนมเล็กน้อย", image: "macchiato.jpg" },
-];
-
-// MenuCard component displays each coffee menu with image and description
+// MenuCard component
 const MenuCard = ({ menu }) => (
   <div style={{ textAlign: "center", padding: "20px" }}>
-    <img src={menu.image} alt={menu.name} style={{ width: "200px", height: "auto" }} />
+    <img src={menu.image || menu.img} alt={menu.name} style={{ width: "200px", height: "auto" }} />
     <h2>{menu.name}</h2>
     <p>{menu.description}</p>
   </div>
@@ -23,20 +15,26 @@ MenuCard.propTypes = {
   menu: PropTypes.shape({
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired,
+    image: PropTypes.string,
+    img: PropTypes.string,
   }).isRequired,
 };
 
-// FinalStep component for displaying the result of the selected coffee menu
-const FinalStep = ({ initialMenuName, onRestart }) => {
+// FinalStep component
+const FinalStep = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [menu, setMenu] = useState(null);
 
   useEffect(() => {
-    if (initialMenuName) {
-      const matchedMenu = coffeeMenus.find((menu) => menu.name === initialMenuName);
-      setMenu(matchedMenu || null);
+    if (location.state) {
+      setMenu(location.state); // รับข้อมูลเมนูจาก state
     }
-  }, [initialMenuName]);
+  }, [location.state]);
+
+  const handleRestart = () => {
+    navigate("/"); // กลับไปยังหน้าหลัก
+  };
 
   return (
     <div style={{ textAlign: "center", padding: "20px" }}>
@@ -44,7 +42,18 @@ const FinalStep = ({ initialMenuName, onRestart }) => {
         <>
           <h1>การทำ {menu.name} เสร็จสิ้น!</h1>
           <MenuCard menu={menu} />
-          <button onClick={onRestart} style={{ marginTop: "20px", padding: "10px 20px" }}>
+          <button
+            onClick={handleRestart}
+            style={{
+              marginTop: "20px",
+              padding: "10px 20px",
+              backgroundColor: "#6c757d",
+              color: "white",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+          >
             ทำใหม่อีกครั้ง
           </button>
         </>
@@ -53,11 +62,6 @@ const FinalStep = ({ initialMenuName, onRestart }) => {
       )}
     </div>
   );
-};
-
-FinalStep.propTypes = {
-  initialMenuName: PropTypes.string.isRequired,
-  onRestart: PropTypes.func.isRequired,
 };
 
 export default FinalStep;

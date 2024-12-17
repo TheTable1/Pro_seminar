@@ -56,6 +56,7 @@ const GrindingMachineOption = ({ type, onSelect }) => {
         padding: "10px",
         height: "200px",
         width: "200px",
+        marginTop: "140px",
         border: "1px solid #333",
         borderRadius: "5px",
         backgroundColor: "lightgoldenrodyellow",
@@ -140,7 +141,6 @@ const Grinding = ({ onStepComplete, onStepBack }) => {
         <h2>เลือกอุปกรณ์และบดกาแฟ</h2>
         {!selectedMachine ? (
           <div>
-            <h3>เลือกเครื่องบดกาแฟ:</h3>
             <div style={{ display: "flex", justifyContent: "center", gap: "20px" }}>
               <GrindingMachineOption
                 type="electric"
@@ -154,7 +154,6 @@ const Grinding = ({ onStepComplete, onStepBack }) => {
           </div>
         ) : (
           <div>
-            <h3>ลากเมล็ดกาแฟไปยังเครื่องบด</h3>
             <div style={{ display: "flex", justifyContent: "space-around" }}>
               <CoffeeBean bean={bean} />
               <GrindingMachine

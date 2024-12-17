@@ -35,8 +35,8 @@ function CoffeeBeans() {
   };
 
   const handleTryIt = () => {
-    navigate('/simulator', { state: selectedItem });
-  };
+    navigate("/simulator", { state: selectedItem }); // ส่งข้อมูล selectedItem ไป FinalStep
+  };  
   
   // ฟังก์ชันสำหรับการค้นหา
   const filteredItems = menuItems.filter((item) =>
