@@ -1,7 +1,13 @@
 import Footer from "./footer";
 import Navbar from "./navbar";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useEffect } from "react";
 
 function Extraction() {
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true }); // Initialize AOS
+  }, []);
   return (
     <div>
       <Navbar />
@@ -19,7 +25,10 @@ function Extraction() {
 
         <div className="p-4 pt-0 lg:p-8 bg-gray-100">
           {/* Moka Pot Section */}
-          <div className="flex flex-col lg:flex-row bg-white shadow-lg rounded-md mb-8 overflow-hidden">
+          <div
+            className="flex flex-col lg:flex-row bg-white shadow-lg rounded-md mb-8 overflow-hidden"
+            data-aos="fade-right"
+          >
             {/* Image */}
             <div className="w-full lg:w-1/2 flex items-center justify-center">
               <img
@@ -50,7 +59,10 @@ function Extraction() {
           </div>
 
           {/* Drip Coffee Section */}
-          <div className="flex flex-col lg:flex-row-reverse bg-white shadow-lg mb-8 rounded-md overflow-hidden">
+          <div
+            className="flex flex-col lg:flex-row-reverse bg-white shadow-lg mb-8 rounded-md overflow-hidden "
+            data-aos="fade-left"
+          >
             {/* Image */}
             <div className="w-full lg:w-1/2 flex items-center justify-center">
               <img
@@ -77,7 +89,10 @@ function Extraction() {
             </div>
           </div>
 
-          <div className="flex flex-col lg:flex-row bg-white shadow-lg rounded-md mb-8 overflow-hidden">
+          <div
+            className="flex flex-col lg:flex-row bg-white shadow-lg rounded-md mb-8 overflow-hidden"
+            data-aos="fade-right"
+          >
             {/* Image */}
             <div className="w-full lg:w-1/2 flex items-center justify-center">
               <img
@@ -112,7 +127,10 @@ function Extraction() {
           </div>
 
           {/* Drip Coffee Section */}
-          <div className="flex flex-col lg:flex-row-reverse bg-white shadow-lg mb-8 rounded-md overflow-hidden">
+          <div
+            className="flex flex-col lg:flex-row-reverse bg-white shadow-lg mb-8 rounded-md overflow-hidden"
+            data-aos="fade-left"
+          >
             {/* Image */}
             <div className="w-full lg:w-1/2 flex items-center justify-center">
               <img
@@ -143,7 +161,10 @@ function Extraction() {
             </div>
           </div>
 
-          <div className="flex flex-col lg:flex-row bg-white shadow-lg rounded-md mb-8 overflow-hidden">
+          <div
+            className="flex flex-col lg:flex-row bg-white shadow-lg rounded-md mb-8 overflow-hidden"
+            data-aos="fade-right"
+          >
             {/* Image */}
             <div className="w-full lg:w-1/2 flex items-center justify-center">
               <img
@@ -169,7 +190,10 @@ function Extraction() {
           </div>
 
           {/* Drip Coffee Section */}
-          <div className="flex flex-col lg:flex-row-reverse bg-white mb-8 shadow-lg rounded-md overflow-hidden">
+          <div
+            className="flex flex-col lg:flex-row-reverse bg-white mb-8 shadow-lg rounded-md overflow-hidden"
+            data-aos="fade-left"
+          >
             {/* Image */}
             <div className="w-full lg:w-1/2 flex items-center justify-center">
               <img
@@ -197,7 +221,10 @@ function Extraction() {
             </div>
           </div>
 
-          <div className="flex flex-col lg:flex-row bg-white shadow-lg rounded-md mb-8 overflow-hidden">
+          <div
+            className="flex flex-col lg:flex-row bg-white shadow-lg rounded-md mb-8 overflow-hidden"
+            data-aos="fade-right"
+          >
             {/* Image */}
             <div className="w-full lg:w-1/2 flex items-center justify-center">
               <img
@@ -231,7 +258,10 @@ function Extraction() {
           </div>
 
           {/* Drip Coffee Section */}
-          <div className="flex flex-col lg:flex-row-reverse bg-white shadow-lg mb-8 rounded-md overflow-hidden">
+          <div
+            className="flex flex-col lg:flex-row-reverse bg-white shadow-lg mb-8 rounded-md overflow-hidden"
+            data-aos="fade-left"
+          >
             {/* Image */}
             <div className="w-full lg:w-1/2 flex items-center justify-center">
               <img
@@ -261,7 +291,10 @@ function Extraction() {
             </div>
           </div>
 
-          <div className="flex flex-col lg:flex-row bg-white shadow-lg rounded-md mb-8 overflow-hidden">
+          <div
+            className="flex flex-col lg:flex-row bg-white shadow-lg rounded-md mb-8 overflow-hidden"
+            data-aos="fade-right"
+          >
             {/* Image */}
             <div className="w-full lg:w-1/2 flex items-center justify-center">
               <img
