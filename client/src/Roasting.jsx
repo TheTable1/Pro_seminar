@@ -1,72 +1,76 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Navbar from "./navbar";
 import Footer from "./footer";
 
 const CoffeeInfo = () => {
   const coffeeData = {
-  "คั่วอ่อน (Light Roast)": {
+    "คั่วอ่อน (Light Roast)": {
       alias: "Cinnamon Roast, New England Roast",
       color: "เมล็ดกาแฟสีอ่อน มักมีสีระหว่างน้ำตาลอ่อนถึงสีน้ำตาลกลาง",
       taste: [
-          "รสชาติที่สดชื่นและเปรี้ยว มักจะมีโน้ตของผลไม้ เช่น เบอร์รี่และกลิ่นดอกไม้",
-          "ความหวานที่น้อยกว่าระดับการคั่วที่สูงขึ้น",
-          "สามารถสะท้อนลักษณะความเป็นธรรมชาติของกาแฟได้ดี",
+        "รสชาติที่สดชื่นและเปรี้ยว มักจะมีโน้ตของผลไม้ เช่น เบอร์รี่และกลิ่นดอกไม้",
+        "ความหวานที่น้อยกว่าระดับการคั่วที่สูงขึ้น",
+        "สามารถสะท้อนลักษณะความเป็นธรรมชาติของกาแฟได้ดี",
       ],
       characteristics: [
-          "ไม่มีน้ำมันบนผิวเมล็ด",
-          "เมล็ดกาแฟจะไม่เกิดการแตก (first crack) ซึ่งเป็นเสียงที่เกิดจากการขยายตัวของเมล็ดกาแฟเมื่อได้รับความร้อน",
-          "เหมาะสำหรับกาแฟที่เน้นคุณภาพเมล็ด เช่น กาแฟพิเศษ (Specialty Coffee)",
-          "เหมาะสำหรับการชงแบบ Pour Over หรือ Aeropress",
+        "ไม่มีน้ำมันบนผิวเมล็ด",
+        "เมล็ดกาแฟจะไม่เกิดการแตก (first crack) ซึ่งเป็นเสียงที่เกิดจากการขยายตัวของเมล็ดกาแฟเมื่อได้รับความร้อน",
+        "เหมาะสำหรับกาแฟที่เน้นคุณภาพเมล็ด เช่น กาแฟพิเศษ (Specialty Coffee)",
+        "เหมาะสำหรับการชงแบบ Pour Over หรือ Aeropress",
       ],
+      img: "/roasting/roasting1.png",
     },
     "คั่วกลาง (Medium Roast)": {
       alias: "City Roast, Breakfast Roast",
       color: "เมล็ดกาแฟมีสีน้ำตาลกลาง",
       taste: [
-          "รสชาติสมดุลระหว่างความเปรี้ยว ความหวาน และความขม",
-          "มักมีโน้ตของช็อกโกแลตและถั่ว",
-          "ยังคงมีความสดชื่นในระดับหนึ่ง แต่รสชาติความคั่วจะเด่นขึ้น",
+        "รสชาติสมดุลระหว่างความเปรี้ยว ความหวาน และความขม",
+        "มักมีโน้ตของช็อกโกแลตและถั่ว",
+        "ยังคงมีความสดชื่นในระดับหนึ่ง แต่รสชาติความคั่วจะเด่นขึ้น",
       ],
       characteristics: [
-          "มีน้ำมันเล็กน้อยบนผิวเมล็ด",
-          "เหมาะสำหรับการชงด้วยวิธีหลากหลาย เช่น Drip, French Press หรือ Espresso",
-          "เหมาะสำหรับการดื่มในแบบที่ไม่มีส่วนผสม เช่น กาแฟดำ",
-          "เป็นที่นิยมในหมู่นักดื่มกาแฟที่ชอบรสชาติกาแฟแบบสมดุล",
+        "มีน้ำมันเล็กน้อยบนผิวเมล็ด",
+        "เหมาะสำหรับการชงด้วยวิธีหลากหลาย เช่น Drip, French Press หรือ Espresso",
+        "เหมาะสำหรับการดื่มในแบบที่ไม่มีส่วนผสม เช่น กาแฟดำ",
+        "เป็นที่นิยมในหมู่นักดื่มกาแฟที่ชอบรสชาติกาแฟแบบสมดุล",
       ],
+      img: "/roasting/roasting2.JPG",
     },
     "คั่วเข้ม (Dark Roast)": {
       alias: "Full City Roast, Vienna Roast",
       color: "เมล็ดกาแฟมีสีน้ำตาลเข้มถึงดำ",
       taste: [
-          "รสชาติขมเข้มข้นและมีความคั่วเด่นชัด",
-          "โน้ตของคาราเมลและช็อกโกแลตเข้ม",
-          "ความเปรี้ยวลดลงแทบหมดไป แต่ความหวานจากการคั่วจะเด่นขึ้น",
+        "รสชาติขมเข้มข้นและมีความคั่วเด่นชัด",
+        "โน้ตของคาราเมลและช็อกโกแลตเข้ม",
+        "ความเปรี้ยวลดลงแทบหมดไป แต่ความหวานจากการคั่วจะเด่นขึ้น",
       ],
       characteristics: [
-          "ผิวเมล็ดมันเนื่องจากมีน้ำมันออกมา",
-          "เหมาะสำหรับการชงกาแฟเอสเปรสโซ และกาแฟที่มีส่วนผสม เช่น ลาเต้หรือคาปูชิโน่",
-          "ให้รสชาติหนักแน่น เหมาะสำหรับผู้ที่ชอบกาแฟเข้มข้น",
-          "บางครั้งจะมีกลิ่นหอมคล้ายควันหรือถ่านเล็กน้อย",
+        "ผิวเมล็ดมันเนื่องจากมีน้ำมันออกมา",
+        "เหมาะสำหรับการชงกาแฟเอสเปรสโซ และกาแฟที่มีส่วนผสม เช่น ลาเต้หรือคาปูชิโน่",
+        "ให้รสชาติหนักแน่น เหมาะสำหรับผู้ที่ชอบกาแฟเข้มข้น",
+        "บางครั้งจะมีกลิ่นหอมคล้ายควันหรือถ่านเล็กน้อย",
       ],
+      img: "/roasting/roasting3.PNG",
     },
     "คั่วเข้มมาก (Very Dark Roast)": {
       alias: "French Roast, Italian Roast",
       color: "เมล็ดกาแฟมีสีน้ำตาลเข้มถึงดำสนิท",
       taste: [
-          "รสชาติขมเข้มข้นมาก เน้นรสคั่วอย่างชัดเจน",
-          "โน้ตของคาราเมลไหม้และความเผ็ดร้อนเล็กน้อยจากการคั่วนาน",
-          "ไม่มีรสชาติผลไม้หรือความเปรี้ยวหลงเหลืออยู่",
+        "รสชาติขมเข้มข้นมาก เน้นรสคั่วอย่างชัดเจน",
+        "โน้ตของคาราเมลไหม้และความเผ็ดร้อนเล็กน้อยจากการคั่วนาน",
+        "ไม่มีรสชาติผลไม้หรือความเปรี้ยวหลงเหลืออยู่",
       ],
       characteristics: [
-          "ผิวเมล็ดมันมากเนื่องจากมีน้ำมันออกมาเยอะ",
-          "เหมาะสำหรับการชงกาแฟเอสเปรสโซแบบเข้มข้น หรือกาแฟแบบอเมริกาโน่",
-          "รสชาติของเมล็ดกาแฟดั้งเดิมจะถูกกลบด้วยรสคั่วที่โดดเด่น",
-          "บางครั้งอาจมีกลิ่นหอมควันไฟที่ชัดเจน",
+        "ผิวเมล็ดมันมากเนื่องจากมีน้ำมันออกมาเยอะ",
+        "เหมาะสำหรับการชงกาแฟเอสเปรสโซแบบเข้มข้น หรือกาแฟแบบอเมริกาโน่",
+        "รสชาติของเมล็ดกาแฟดั้งเดิมจะถูกกลบด้วยรสคั่วที่โดดเด่น",
+        "บางครั้งอาจมีกลิ่นหอมควันไฟที่ชัดเจน",
       ],
+      img: "/roasting/roasting4.PNG",
 
     },
 
-};
+  };
 
 
 
@@ -86,11 +90,10 @@ const CoffeeInfo = () => {
             <button
               key={label}
               onClick={() => setSelectedRoast(label)}
-              className={`w-70 ${
-                selectedRoast === label
-                  ? "bg-light-brown text-white"
-                  : "bg-[#e0dcd3]"
-              } hover:bg-brown hover:text-white text-dark-brown font-medium py-2 px-4 rounded transition-all`}
+              className={`w-70 ${selectedRoast === label
+                ? "bg-light-brown text-white"
+                : "bg-[#e0dcd3]"
+                } hover:bg-brown hover:text-white text-dark-brown font-medium py-2 px-4 rounded transition-all`}
             >
               {label}
             </button>
@@ -106,25 +109,32 @@ const CoffeeInfo = () => {
           {/* Image Section */}
           <div className="flex justify-center mb-6">
             <img
-              src="https://via.placeholder.com/150" // Replace with actual image URL
+              src={data.img}
               alt={`${selectedRoast} Coffee Beans`}
               className="w-40 h-40 object-cover rounded-full border-4 border-light-brown"
             />
+
+
           </div>
 
           {/* Info Section */}
           <div className="text-dark-brown">
-            <p className="mb-2">
-              <span className="font-semibold">ชื่อเรียกอื่น: </span>
-              {data.alias}
-            </p>
-            <p className="mb-2">
-              <span className="font-semibold">สี: </span>
-              {data.color}
-            </p>
+            <ul className="mb-2">
+              <li className="flex items-center mb-2">
+                <img src="/roasting/icon.png" alt="icon" className="w-6 h-6 mr-2" />
+                <span className="font-semibold">ชื่อเรียกอื่น : </span> { data.alias}
+              </li>
+              <li className="flex items-center mb-2">
+                <img src="/roasting/icon.png" alt="icon" className="w-6 h-6 mr-2" />
+                <span className="font-semibold">สี : </span> {data.color}
+              </li>
+            </ul>
 
             <div className="mb-4">
-              <p className="font-semibold">รสชาติ:</p>
+              <p className="font-semibold flex items-center">
+                <img src="/roasting/icon.png" alt="icon" className="w-6 h-6 mr-2" />
+                รสชาติ : 
+              </p>
               <ul className="list-disc list-inside ml-4">
                 {data.taste.map((item, index) => (
                   <li key={index}>{item}</li>
@@ -133,7 +143,10 @@ const CoffeeInfo = () => {
             </div>
 
             <div>
-              <p className="font-semibold">ลักษณะ:</p>
+              <p className="font-semibold flex items-center">
+                <img src="/roasting/icon.png" alt="icon" className="w-6 h-6 mr-2" />
+                ลักษณะ : 
+              </p>
               <ul className="list-disc list-inside ml-4">
                 {data.characteristics.map((item, index) => (
                   <li key={index}>{item}</li>
@@ -141,6 +154,7 @@ const CoffeeInfo = () => {
               </ul>
             </div>
           </div>
+
         </div>
       </div>
       <Footer />
