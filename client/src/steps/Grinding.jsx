@@ -3,7 +3,6 @@ import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import PropTypes from "prop-types";
 
-// คอมโพเนนต์สำหรับเมล็ดกาแฟที่สามารถลากได้
 const CoffeeBean = ({ bean }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "bean",
@@ -20,64 +19,94 @@ const CoffeeBean = ({ bean }) => {
         opacity: isDragging ? 0.5 : 1,
         margin: "20px",
         padding: "10px",
-        height: "200px",
-        width: "200px",
-        border: "1px solid #333",
-        borderRadius: "5px",
-        backgroundColor: "lightgoldenrodyellow",
+        height: "400px",
+        width: "400px",
+        backgroundColor: "white",
         cursor: "grab",
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        fontSize: "16px",
-        fontWeight: "bold",
         textAlign: "center",
+        overflow: "hidden"
       }}
     >
-      {bean.name}
+      {bean ? (
+        <>
+          <img 
+            src={bean.image} 
+            alt={bean.name}
+            style={{
+              width: "300px",
+              height: "300px",
+              objectFit: "cover",
+              borderRadius: "50%",
+              marginBottom: "10px"
+            }}
+          />
+          <div style={{
+            fontSize: "14px",
+            fontWeight: "bold",
+            maxWidth: "80%",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap"
+          }}>
+            {bean.name}
+          </div>
+        </>
+      ) : (
+        <p>ไม่มีข้อมูลเมล็ดกาแฟ</p>
+      )}
     </div>
   );
 };
 
 CoffeeBean.propTypes = {
   bean: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-  }).isRequired,
+    id: PropTypes.number,
+    name: PropTypes.string,
+    image: PropTypes.string,
+  }),
 };
 
-// คอมโพเนนต์สำหรับตัวเลือกเครื่องบดกาแฟ
 const GrindingMachineOption = ({ type, onSelect }) => {
-  // เลือกไฟล์รูปภาพตามประเภทเครื่องบด
-  const imageSrc =
-    type === "electric"
-      ? "/animation/เครื่องบดไฟฟ้า.png"
-      : "/animation/เครื่องบดมือ.png";
+  const imageSrc = type === "electric" ? "/animation/เครื่องบดไฟฟ้า.png" : "/animation/เครื่องบดมือ.png";
+  const machineName = type === "electric" ? "เครื่องบดไฟฟ้า" : "เครื่องบดมือ";
 
   return (
     <div
       onClick={() => onSelect(type)}
       style={{
         margin: "20px",
-        height: "220px",
-        width: "220px",
+        height: "400px",
+        width: "400px",
+        marginTop: "140px",
         borderRadius: "5px",
         cursor: "pointer",
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        boxShadow: "4px 4px 6px rgba(0, 0, 0, 0.1)",
       }}
     >
       <img
-        src={imageSrc} // ใช้รูปภาพเครื่องบด
-        alt={type === "electric" ? "เครื่องบดไฟฟ้า" : "เครื่องบดมือ"}
+        src={imageSrc}
+        alt={machineName}
         style={{
           width: "100%",
-          height: "100%",
-          objectFit: "contain", // ปรับให้ภาพไม่ผิดสัดส่วน
+          height: "400px",
+          objectFit: "contain",
         }}
       />
+      <h3 style={{ 
+        marginTop: "10px",
+        fontSize: "18px",
+        textAlign: "center",
+        color: "#333"
+      }}>
+        {machineName}
+      </h3>
     </div>
   );
 };
@@ -87,54 +116,60 @@ GrindingMachineOption.propTypes = {
   onSelect: PropTypes.func.isRequired,
 };
 
-// คอมโพเนนต์สำหรับเครื่องบดกาแฟ
 const GrindingMachine = ({ type, onDrop }) => {
   const [isGrinding, setIsGrinding] = useState(false);
+  const machineName = type === "electric" ? "เครื่องบดไฟฟ้า" : "เครื่องบดมือ";
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "bean",
     drop: (item) => {
-      setIsGrinding(true); // เริ่มแสดง GIF
-      onDrop(item.bean);   // แจ้งสถานะไปยัง parent
-      setTimeout(() => setIsGrinding(false), 5000); // รีเซ็ตภาพนิ่งหลัง 5 วินาที
+      setIsGrinding(true);
+      onDrop(item.bean);
+      setTimeout(() => setIsGrinding(false), 5000);
     },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
     }),
   }));
 
-  // ไฟล์ภาพที่ใช้
-  const staticImage =
-    type === "electric"
-      ? "/animation/เครื่องบดไฟฟ้า.png"
-      : "/animation/เครื่องบดมือ.png";
-
-  const animatedGif =
-    type === "electric"
-      ? "/animation/เครื่องบดไฟฟ้า.gif"
-      : "/animation/เครื่องบดมือ.gif";
+  const staticImage = type === "electric" ? "/animation/เครื่องบดไฟฟ้า.png" : "/animation/เครื่องบดมือ.png";
+  const animatedGif = type === "electric" ? "/animation/เครื่องบดไฟฟ้า.gif" : "/animation/เครื่องบดมือ.gif";
 
   return (
     <div
-      ref={drop}
       style={{
-        width: "200px",
-        height: "200px",
-        backgroundColor: isOver ? "lightgreen" : "white",
         display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        margin: "20px",
-        cursor: "pointer",
-        overflow: "hidden", // ป้องกันไม่ให้รูปภาพเกินขอบฅ
-        
+        flexDirection: "column",
+        alignItems: "center"
       }}
     >
-      <img
-        src={isGrinding ? animatedGif : staticImage} // เปลี่ยนภาพตามสถานะ
-        alt={type === "electric" ? "เครื่องบดไฟฟ้า" : "เครื่องบดมือ"}
-        style={{ width: "100%", height: "100%", objectFit: "contain" }}
-      />
+      <div
+        ref={drop}
+        style={{
+          width: "400px",
+          height: "400px",
+          backgroundColor: isOver ? "lightgreen" : "white",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          margin: "20px",
+          cursor: "pointer",
+          overflow: "hidden",
+        }}
+      >
+        <img
+          src={isGrinding ? animatedGif : staticImage}
+          alt={machineName}
+          style={{ width: "100%", height: "100%", objectFit: "contain" }}
+        />
+      </div>
+      <h3 style={{ 
+        marginTop: "10px",
+        fontSize: "18px",
+        textAlign: "center",
+        color: "#333"
+      }}>
+      </h3>
     </div>
   );
 };
@@ -144,22 +179,56 @@ GrindingMachine.propTypes = {
   onDrop: PropTypes.func.isRequired,
 };
 
-// คอมโพเนนต์หลักสำหรับการบดกาแฟ
-const Grinding = ({ onStepComplete, onStepBack }) => {
+const GroundCoffeeResult = ({ machineType }) => {
+  const imageSrc = machineType === "electric" ? "/animation/กาแฟบด1.png" : "/animation/กาแฟบด2.png";
+  
+  return (
+    <div style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "400px",
+      width: "400px",
+      margin: "20px auto",
+      marginTop: "120px",
+    }}>
+      <img
+        src={imageSrc}
+        alt="กาแฟบด"
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "contain"
+        }}
+      />
+    </div>
+  );
+};
+
+GroundCoffeeResult.propTypes = {
+  machineType: PropTypes.string.isRequired,
+};
+
+const Grinding = ({ onStepComplete, selectedBean }) => {
   const [selectedMachine, setSelectedMachine] = useState(null);
-  const [bean] = useState({ id: 1, name: "Arabica" });
   const [grindingStatus, setGrindingStatus] = useState("");
+  const [isGrindingComplete, setIsGrindingComplete] = useState(false);
 
   const handleDrop = (bean) => {
-    setGrindingStatus(`กำลังบดเมล็ดกาแฟ ${bean.name}...`);
-    setTimeout(() => {
-      setGrindingStatus(`เมล็ดกาแฟ ${bean.name} บดเสร็จแล้ว!`);
+    if (bean?.name) {
+      setGrindingStatus(`กำลังบดเมล็ดกาแฟ ${bean.name}...`);
       setTimeout(() => {
-        setGrindingStatus("");
-        onStepComplete(); // ไปขั้นถัดไปหลัง 5 วินาที
-      }, 5000); // หน่วงเวลา 5 วินาที
-    }, 3000); // จำลองการบด 3 วินาที
-  };  
+        setGrindingStatus(`เมล็ดกาแฟ ${bean.name} บดเสร็จแล้ว!`);
+        setIsGrindingComplete(true);
+        setTimeout(() => {
+          setGrindingStatus("");
+          onStepComplete();
+        }, 3000);
+      }, 3000);
+    } else {
+      setGrindingStatus("ไม่พบข้อมูลเมล็ดกาแฟ");
+    }
+  };
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -167,7 +236,14 @@ const Grinding = ({ onStepComplete, onStepBack }) => {
         <h2>เลือกอุปกรณ์และบดกาแฟ</h2>
         {!selectedMachine ? (
           <div>
-            <div style={{ display: "flex", justifyContent: "center", gap: "20px" , marginTop: "140px"}}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: "20px",
+                marginTop: "20px",
+              }}
+            >
               <GrindingMachineOption
                 type="electric"
                 onSelect={setSelectedMachine}
@@ -180,17 +256,37 @@ const Grinding = ({ onStepComplete, onStepBack }) => {
           </div>
         ) : (
           <div>
-            <div style={{ display: "flex", justifyContent: "space-around" , marginTop: "140px"}}>
-              <CoffeeBean bean={bean} />
-              <GrindingMachine
-                type={selectedMachine}
-                onDrop={handleDrop}
-              />
-            </div>
+            {!isGrindingComplete ? (
+              <>
+                <h3
+                  style={{
+                    textAlign: 'center',
+                    marginTop: '20px',
+                  }}
+                >
+                  ลากเมล็ดกาแฟไปยังเครื่องบด
+                </h3>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                    marginTop: "120px",
+                  }}
+                >
+                  {selectedBean ? (
+                    <CoffeeBean bean={selectedBean} />
+                  ) : (
+                    <p>กรุณาเลือกเมล็ดกาแฟ</p>
+                  )}
+                  <GrindingMachine type={selectedMachine} onDrop={handleDrop} />
+                </div>
+              </>
+            ) : (
+              <GroundCoffeeResult machineType={selectedMachine} />
+            )}
           </div>
         )}
-        {grindingStatus && <p>{grindingStatus}</p>}
-        <button onClick={onStepBack}>ย้อนกลับ</button>
+        {grindingStatus && <p style={{textAlign:"center"}}>{grindingStatus}</p>}
       </div>
     </DndProvider>
   );
@@ -199,11 +295,10 @@ const Grinding = ({ onStepComplete, onStepBack }) => {
 Grinding.propTypes = {
   onStepComplete: PropTypes.func.isRequired,
   onStepBack: PropTypes.func.isRequired,
+  selectedBean: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+  }),
 };
 
 export default Grinding;
-
-
-
-
-  

@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types'; // นำเข้า PropTypes
 import { FaCoffee, FaBlender, FaMugHot } from 'react-icons/fa';
 
@@ -41,10 +40,11 @@ const Sidebar = ({ steps, currentStep, handleBack }) => {
     </div>
   );
 };
-// กำหนด PropTypes
+// เพิ่ม handleBack ใน PropTypes
 Sidebar.propTypes = {
-  steps: PropTypes.arrayOf(PropTypes.string).isRequired, // ตรวจสอบว่า steps เป็น Array ของ String
-  currentStep: PropTypes.number.isRequired, // ตรวจสอบว่า currentStep เป็น Number
+  steps: PropTypes.arrayOf(PropTypes.string).isRequired,
+  currentStep: PropTypes.number.isRequired,
+  handleBack: PropTypes.func.isRequired // เพิ่มบรรทัดนี้
 };
 
 export default Sidebar;
