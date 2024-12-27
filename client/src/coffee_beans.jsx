@@ -106,8 +106,7 @@ function CoffeeBeans() {
                       key={index}
                       style={{ cursor: "pointer" }}
                       className="sm:p-4 md:p-1 bg-brown rounded-lg shadow-sm text-center text-white font-medium transition duration-200 ease-in-out hover:shadow-lg"
-                      onClick={() => handleItemClick(item)}
-                    >
+                      onClick={() => handleItemClick(item)} >
                       <div className="p-4 bg-brown rounded-lg shadow-sm text-center text-white font-medium transition duration-200 ease-in-out hover:shadow-lg">
                         <img
                           className=" lg:w-96 lg:h-44 md:w-60 md:h-44 sm:w-60 sm:h-44"

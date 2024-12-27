@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Navbar from "./navbar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Footer from "./footer";
 
 const Home = () => {
@@ -22,6 +22,13 @@ const Home = () => {
     { title: "การสกัดกาแฟ", path: "/extraction" },
     { title: "การผลิตกาแฟ", path: "/process" },
   ];
+
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate("/coffee_beans");
+    window.scrollTo({ top: 0, behavior: "smooth" }); // เลื่อนหน้าไปด้านบนอย่างนุ่มนวล
+  };
 
   return (
     <div className="bg-[#f3f1ec]">
@@ -112,7 +119,9 @@ const Home = () => {
             และสำหรับผู้ที่อยากสัมผัสความสดชื่นใหม่ ๆ
             กาแฟที่ผสานผลไม้จะช่วยเพิ่มความพิเศษในทุกจิบ!
           </p>
-          <button className="bg-[#8b4513] text-white px-4 py-2 rounded-md mt-4">
+          <button
+            className="bg-[#8b4513] text-white px-4 py-2 rounded-md mt-4"
+            onClick={handleClick} >
             ค้นหาเมนู
           </button>
         </div>

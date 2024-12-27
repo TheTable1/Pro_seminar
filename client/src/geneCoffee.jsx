@@ -92,7 +92,6 @@ const CoffeeVariety = () => {
 
   return (
     <div className="bg-[#fdfcfb] text-gray-800 font-sans">
-      {/* ส่วนหัว */}
       <Navbar />
 
       <header className="text-center py-6">
@@ -101,50 +100,35 @@ const CoffeeVariety = () => {
         </h1>
       </header>
 
-      {/* ปุ่มเลือกสายพันธุ์หลัก */}
       <div className="flex flex-wrap justify-center pt-4 gap-2">
-        {Object.keys(coffeeData).map((variety) => (
-          <button
-            key={variety}
-            onClick={() => {
-              setSelectedVariety(variety);
-              setSelectedSubVariety(""); // รีเซ็ตสายพันธุ์ย่อย
-            }}
-            className={`${selectedVariety === variety ? "bg-[#d4cbc0]" : "bg-[#e0dcd3]"
-              } px-4 py-2 rounded-lg text-[#5c4033] font-medium shadow-md hover:bg-[#c3b9a8] m-2 sm:m-4 md:m-6`}
-          >
-            {variety}
-          </button>
-        ))}
-      </div>
+  {Object.keys(coffeeData).map((variety) => (
+    <button
+      key={variety}
+      onClick={() => {
+        setSelectedVariety(variety);
+        setSelectedSubVariety("");
+      }}
+      className={`${
+        selectedVariety === variety
+          ? "bg-[#7a5647] text-[#FFE2B4] border-[#4e3629] shadow-lg"
+          : "bg-[#efdfc3] text-[#4e3629] border-[#7a5647]"
+      } px-6 py-2 rounded-lg font-medium shadow-md hover:bg-[#FFE2B4] hover:text-[#4e3629] transition duration-200 border-2`}
+    >
+      {variety}
+    </button>
+  ))}
+</div>
 
-      {/* ปุ่มเลือกสายพันธุ์ย่อย */}
-      <div className="flex flex-wrap justify-center py-4 gap-2">
-        {coffeeData[selectedVariety].subVarieties.map((subVariety) => (
-          <button
-            key={subVariety.name}
-            onClick={() => handleSubVarietyClick(subVariety.name)}
-            className={`${selectedSubVariety === subVariety.name
-                ? "bg-[#d4cbc0]"
-                : "bg-[#e0dcd3]"
-              } px-4 py-2 rounded-lg text-[#5c4033] font-medium shadow-md hover:bg-[#c3b9a8] m-2 sm:m-4 md:m-6`}
-          >
-            {subVariety.name}
-          </button>
-        ))}
-      </div>
 
-      {/* เนื้อหา */}
+
       <div className="px-4 md:px-16 lg:px-32 py-8">
-        {/* ภาพ */}
         <img
           src={coffeeData[selectedVariety].image}
           alt={`${coffeeData[selectedVariety].title} Coffee Beans`}
           className="w-full h-64 md:h-96 object-cover rounded-lg shadow-lg"
         />
 
-        {/* ข้อมูลของสายพันธุ์หลัก */}
-        <div className="bg-white p-6 mt-6 rounded-lg shadow-md">
+        <div className="bg-white p-6 mt-6 rounded-lg shadow-md ">
           <h2 className="text-2xl md:text-3xl font-bold text-center text-[#7b4b29]">
             {coffeeData[selectedVariety].title}
           </h2>
@@ -153,21 +137,29 @@ const CoffeeVariety = () => {
           </p>
         </div>
 
-        {/* ข้อมูลของสายพันธุ์ย่อย */}
-        {selectedSubVariety && (
-          <div className="bg-white p-6 mt-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold text-center text-[#7b4b29]">
-              {selectedSubVariety}
-            </h3>
-            <p className="text-gray-700 text-justify mt-4 leading-7">
-              {
-                coffeeData[selectedVariety].subVarieties.find(
-                  (subVariety) => subVariety.name === selectedSubVariety
-                ).description
-              }
-            </p>
-          </div>
-        )}
+        <h2 className="mt-6 text-xl md:text-2xl font-bold text-center text-[#7b4b29] ">
+           สายพันธุ์ย่อยของ {coffeeData[selectedVariety].title}
+          </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+          {coffeeData[selectedVariety].subVarieties.map((subVariety) => (
+            <div
+              key={subVariety.name}
+              className="bg-white rounded-lg shadow-md p-4 border border-gray-200 cursor-pointer hover:shadow-lg flex flex-col justify-center items-center"
+              onClick={() => handleSubVarietyClick(subVariety.name)}
+            >
+              <h2 className="text-xl font-semibold text-orange-600 text-center">
+                {subVariety.name}
+              </h2>
+              <p className="text-gray-700 text-sm mt-2 text-center">
+                {subVariety.description}
+              </p>
+            </div>
+          ))}
+        </div>
+
+
+
       </div>
 
       <Footer />
