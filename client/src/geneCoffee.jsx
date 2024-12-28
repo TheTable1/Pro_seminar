@@ -4,7 +4,7 @@ import Footer from "./footer";
 
 const CoffeeVariety = () => {
   const [selectedVariety, setSelectedVariety] = useState("Arabica");
-  const [selectedSubVariety, setSelectedSubVariety] = useState("");
+  const [, setSelectedSubVariety] = useState("");
 
   const coffeeData = {
     Arabica: {

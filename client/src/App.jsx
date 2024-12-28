@@ -34,6 +34,7 @@ function App() {
 
         <Route path="/simulator" element={<Simulator />} />
 
+      
       </Routes>
     </BrowserRouter>
   );
