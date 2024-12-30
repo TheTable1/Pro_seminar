@@ -1,40 +1,115 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import L from "leaflet";
 import "./assets/css/country.css";
 import "leaflet/dist/leaflet.css";
 import Navbar from "./navbar";
-import Footer from "./footer";
 
 function Home() {
   const mapRef = useRef(null); // Use ref to track map instance
   const mapContainerRef = useRef(null); // Ref for the map container (div#map)
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const [coffeeData, setCoffeeData] = useState({
-    Vietnam: {
-      description: "Vietnam is the world's largest producer of Robusta coffee.",
-    },
-    Brazil: {
-      description: "Brazil is known for its chocolatey and nutty flavors.",
-    },
-    Ethiopia: {
-      description: "Ethiopian coffee has floral and fruity notes.",
-    },
-    "United States": {
+    Afghanistan: {
       description:
-        "Although not a major producer, the U.S. has a growing specialty coffee industry.",
+        "ไม่ได้เป็นผู้ผลิตกาแฟสำคัญ แต่มีวัฒนธรรมการดื่มชาและเครื่องดื่มที่เกี่ยวข้องมากกว่า",
+      cultivation: "ไม่มีการเพาะปลูกกาแฟในระดับการค้า",
+      specialties: [],
     },
-    Colombia: {
+    Angola: {
       description:
-        "Colombian coffee is known for its balanced acidity and smooth flavor.",
+        "เคยเป็นผู้ผลิตกาแฟรายใหญ่ในทวีปแอฟริกา โดยเฉพาะกาแฟโรบัสต้า",
+      cultivation: "ปลูกในภูมิภาคทางเหนือและตอนกลางของประเทศ",
+      specialties: ["Angolan Robusta Coffee"],
     },
-    Mexico: {
-      description: "Mexican coffee has a light body with a nutty flavor.",
-    },
-    "Costa Rica": {
+    Argentina: {
       description:
-        "Costa Rican coffee is known for its bright acidity and full-bodied flavor.",
+        "ไม่ใช่ประเทศที่ปลูกกาแฟ แต่เป็นผู้บริโภคกาแฟที่สำคัญในภูมิภาค",
+      cultivation: "ไม่มีพื้นที่ปลูกกาแฟในระดับการค้า",
+      specialties: ["Café con leche (กาแฟนม)"],
     },
-    Honduras: {
-      description: "Honduran coffee has a smooth body with a mild flavor.",
+    Australia: {
+      description:
+        "เริ่มมีการเพาะปลูกกาแฟเพิ่มขึ้นในช่วงไม่กี่ปีที่ผ่านมา โดยเฉพาะกาแฟอาราบิก้า",
+      cultivation: "ปลูกในควีนส์แลนด์และนิวเซาท์เวลส์",
+      specialties: ["Australian Arabica Coffee"],
+    },
+    Burundi: {
+      description:
+        "เป็นหนึ่งในผู้ผลิตกาแฟสำคัญของแอฟริกาตะวันออก มีรสชาติเปรี้ยวและซับซ้อน",
+      cultivation: "ปลูกในพื้นที่สูง เช่น Kayanza และ Ngozi",
+      specialties: ["Burundian Specialty Coffee"],
+    },
+    Cameroon: {
+      description:
+        "ปลูกกาแฟทั้งอาราบิก้าและโรบัสต้า โดยมีกาแฟอาราบิก้าคุณภาพสูงจากภูเขา",
+      cultivation: "พื้นที่เพาะปลูกหลักอยู่ในภูมิภาคทางตะวันตก",
+      specialties: ["Cameroonian Arabica Coffee"],
+    },
+    China: {
+      description: "การปลูกกาแฟกำลังเติบโต โดยเฉพาะในมณฑลยูนนาน",
+      cultivation:
+        "พื้นที่หลักอยู่ในมณฑลยูนนาน และปลูกกาแฟอาราบิก้าเป็นส่วนใหญ่",
+      specialties: ["Yunnan Arabica Coffee"],
+    },
+    Congo: {
+      description:
+        "กาแฟจากคองโกมีคุณภาพสูง โดยเฉพาะกาแฟอาราบิก้าจากภูมิภาค Kivu",
+      cultivation: "ปลูกในพื้นที่ทางตะวันออกและใต้ของประเทศ",
+      specialties: ["Congo Kivu Coffee"],
+    },
+    Guatemala: {
+      description: "กาแฟกัวเตมาลามีความเป็นกรดและมีกลิ่นหอมซับซ้อน",
+      cultivation: "ปลูกในพื้นที่ภูเขา เช่น Antigua และ Huehuetenango",
+      specialties: ["Guatemalan Antigua Coffee"],
+    },
+    India: {
+      description:
+        "อินเดียผลิตกาแฟทั้งอาราบิก้าและโรบัสต้า โดยมักใช้ในกาแฟเอสเปรสโซ",
+      cultivation: "พื้นที่เพาะปลูกหลักอยู่ในรัฐคาร์นาทากา เคราลา และทมิฬนาฑู",
+      specialties: ["Monsooned Malabar Coffee"],
+    },
+    Indonesia: {
+      description:
+        "อินโดนีเซียผลิตกาแฟที่หลากหลาย รวมถึงกาแฟจากเกาะบาหลี สุมาตรา และสุลาเวสี",
+      cultivation: "ปลูกในหลายภูมิภาค เช่น สุมาตราและชวา",
+      specialties: ["Kopi Luwak (กาแฟขี้ชะมด)", "Sumatra Mandheling Coffee"],
+    },
+    Jamaica: {
+      description:
+        "ขึ้นชื่อเรื่องกาแฟบลูเมาน์เทนซึ่งเป็นหนึ่งในกาแฟที่มีราคาแพงที่สุดในโลก",
+      cultivation: "ปลูกในพื้นที่ Blue Mountains",
+      specialties: ["Jamaica Blue Mountain Coffee"],
+    },
+    Kenya: {
+      description: "กาแฟเคนยามีชื่อเสียงในเรื่องรสชาติที่สดใสและซับซ้อน",
+      cultivation: "ปลูกในพื้นที่สูง เช่น Mount Kenya",
+      specialties: ["Kenyan AA Coffee"],
+    },
+    Peru: {
+      description: "ผลิตกาแฟออร์แกนิกคุณภาพสูง รสชาติหลากหลาย",
+      cultivation: "ปลูกในเขต Amazon และ Andean",
+      specialties: ["Peruvian Organic Coffee"],
+    },
+    Rwanda: {
+      description: "กาแฟรวันดามีรสชาติที่ซับซ้อนและมีกลิ่นผลไม้",
+      cultivation: "ปลูกในพื้นที่สูง เช่น Lake Kivu",
+      specialties: ["Rwandan Bourbon Coffee"],
+    },
+    Thailand: {
+      description: "ประเทศไทยปลูกกาแฟอาราบิก้าในพื้นที่สูงและโรบัสต้าในภาคใต้",
+      cultivation: "พื้นที่หลักอยู่ในภาคเหนือ เช่น เชียงราย และเชียงใหม่",
+      specialties: ["กาแฟดอยช้าง", "กาแฟดอยตุง"],
+    },
+    Uganda: {
+      description: "เป็นผู้ผลิตกาแฟโรบัสต้ารายใหญ่ที่สุดในแอฟริกา",
+      cultivation: "ปลูกในพื้นที่สูง เช่น Mount Elgon",
+      specialties: ["Ugandan Bugisu Coffee"],
+    },
+    Yemen: {
+      description:
+        "กาแฟเยเมนเป็นกาแฟอาราบิก้าคุณภาพสูงที่ปลูกในพื้นที่ทะเลทราย",
+      cultivation: "ปลูกในพื้นที่สูง เช่น Mocha",
+      specialties: ["Yemeni Mocha Coffee"],
     },
   });
 
@@ -86,13 +161,21 @@ function Home() {
       const countryName = layer.feature.properties.ADMIN;
 
       if (coffeeData[countryName]) {
-        document.getElementById(
-          "info"
-        ).innerHTML = `<h2>${countryName}</h2><p>${coffeeData[countryName].description}</p>`;
+        document.getElementById("info").innerHTML = `
+          <div class="p-6 bg-beige-light border border-brown-superlight rounded-lg shadow-lg">
+            <h2 class="text-2xl font-bold text-brown mb-4">${countryName}</h2>
+            <p class="text-base text-dark-brown mb-2">${coffeeData[countryName].description}</p>
+            <p class="text-base text-brown mb-2">${coffeeData[countryName].cultivation}</p>
+            <p class="text-base text-light-brown">${coffeeData[countryName].specialties}</p>
+          </div>
+
+
+        `;
       } else {
-        document.getElementById(
-          "info"
-        ).innerHTML = `<h2>${countryName}</h2><p>No coffee data available</p>`;
+        document.getElementById("info").innerHTML = `
+          <h2>${countryName}</h2>
+          <p>No coffee data available</p>
+        `;
       }
 
       currentLayer = layer;
@@ -209,7 +292,14 @@ function Home() {
     <div>
       <Navbar />
       <div ref={mapContainerRef} id="map" style={{ height: "500px" }}></div>
-      <div id="info"></div>
+
+      <div id="info" className="info-container">
+        {selectedCountry ? (
+          <></>
+        ) : (
+          <p>Select a country to see coffee details.</p>
+        )}
+      </div>
 
       <div id="search-container">
         <input
