@@ -78,72 +78,99 @@ const CoffeeSimulator = () => {
   
     if (isInWorkspace) {
       setWorkspaceItems((current) => {
-        if (!current.some((i) => i.id === item.id)) {
-          if (currentStep === 0) {
-            // Handle grinding step
-            if (item.id === 'coffee-beans' && !current.some((i) => i.id === 'grinder')) {
-              setMessage('กรุณาลากเครื่องบดมาก่อนเมล็ดกาแฟ!');
-              return current;
-            }
-            if (item.id === 'coffee-beans' && current.some((i) => i.id === 'grinder')) {
-              return current.map((i) =>
-                i.id === 'grinder'
-                  ? { ...i, name: 'เครื่องบดที่มีเมล็ดกาแฟ', state: 'ready-to-grind' }
-                  : i
-              );
-            }
-          } else if (currentStep === 1) {
-            // Handle preparation sequence for drip
-            if (item.id === 'drip-pot' && current.length === 0) {
-              setMessage('โถรองดริปถูกเพิ่มในพื้นที่ดำเนินการ');
-              return [...current, { ...item, state: 'drip-pot' }];
-            }
-            if (item.id === 'drip-stand' && current.some((i) => i.state === 'drip-pot')) {
-              setMessage('ดริปเปอร์ถูกเพิ่มในโถรองดริป');
-              return current.map((i) =>
-                i.state === 'drip-pot'
-                  ? { ...i, name: 'โถรองดริปที่มีดริปเปอร์', state: 'drip-stand' }
-                  : i
-              );
-            }
-            if (item.id === 'paper-filter' && current.some((i) => i.state === 'drip-stand')) {
-              setMessage('กระดาษกรองถูกเพิ่มในดริปเปอร์');
-              return current.map((i) =>
-                i.state === 'drip-stand'
-                  ? { ...i, name: 'โถรองดริปที่มีดริปเปอร์และกระดาษกรอง', state: 'paper-filter' }
-                  : i
-              );
-            }
-            if (item.id === 'kettle' && current.some((i) => i.state === 'paper-filter')) {
-              setMessage('กำลังล้างกระดาษกรอง...');
-              setIsPouring(true);
-              setTimeout(() => {
-                setIsPouring(false);
-                setMessage('ล้างกระดาษกรองเรียบร้อยแล้ว! คลิกที่โถรองดริปเพื่อเทน้ำออก');
-              }, 3000);
-              return current;
-            }
+        let updatedItems = [...current];
+  
+        // ขั้นตอนที่ 1: การบดกาแฟ
+        if (currentStep === 0) {
+          // ลากเครื่องบดเข้าพื้นที่ดำเนินการ
+          if (item.id === 'grinder' && !current.some((i) => i.id === 'grinder')) {
+            updatedItems.push({ ...item, state: 'default' });
+            setMessage('เครื่องบดถูกเพิ่มในพื้นที่ดำเนินการ');
+            return updatedItems;
           }
-          return [...current, { ...item, state: 'default' }];
+  
+          // ลากเมล็ดกาแฟเข้าพื้นที่ดำเนินการ
+          if (item.id === 'coffee-beans' && current.some((i) => i.id === 'grinder')) {
+            updatedItems = current.map((i) =>
+              i.id === 'grinder'
+                ? { ...i, name: 'เครื่องบดที่มีเมล็ดกาแฟ', state: 'ready-to-grind' }
+                : i
+            );
+            setMessage('เมล็ดกาแฟถูกเพิ่มในเครื่องบด');
+            return updatedItems;
+          }
+  
+          // กรณีที่ยังไม่มีเครื่องบด
+          if (item.id === 'coffee-beans' && !current.some((i) => i.id === 'grinder')) {
+            setMessage('กรุณาลากเครื่องบดมาก่อนเมล็ดกาแฟ!');
+            return current;
+          }
         }
-        return current;
+  
+        // ขั้นตอนที่ 2: การเตรียมเครื่องดริป
+        if (currentStep === 1) {
+          if (item.id === 'drip-pot' && !current.some((i) => i.state === 'drip-pot')) {
+            setMessage('โถรองดริปถูกเพิ่มในพื้นที่ดำเนินการ');
+            return [{ ...item, state: 'drip-pot' }];
+          }
+          if (item.id === 'drip-stand' && current.some((i) => i.state === 'drip-pot')) {
+            setMessage('ดริปเปอร์ถูกเพิ่มในโถรองดริป');
+            return current.map((i) =>
+              i.state === 'drip-pot'
+                ? { ...i, name: 'โถรองดริปที่มีดริปเปอร์', state: 'drip-stand' }
+                : i
+            );
+          }
+          if (item.id === 'paper-filter' && current.some((i) => i.state === 'drip-stand')) {
+            setMessage('กระดาษกรองถูกเพิ่มในดริปเปอร์');
+            return current.map((i) =>
+              i.state === 'drip-stand'
+                ? { ...i, name: 'โถรองดริปที่มีดริปเปอร์และกระดาษกรอง', state: 'paper-filter' }
+                : i
+            );
+          }
+          if (item.id === 'kettle' && current.some((i) => i.state === 'paper-filter')) {
+            setMessage('กำลังล้างกระดาษกรอง...');
+            setIsPouring(true);
+  
+            setTimeout(() => {
+              setIsPouring(false);
+              updatedItems = current.map((i) =>
+                i.state === 'paper-filter'
+                  ? { ...i, name: 'โถรองดริปพร้อมสำหรับเทน้ำ', state: 'ready-to-pour' }
+                  : i
+              );
+              setWorkspaceItems(updatedItems);
+              setMessage('ล้างกระดาษกรองเรียบร้อยแล้ว! คลิกเพื่อเทน้ำออก');
+            }, 3000);
+  
+            return current;
+          }
+        }
+        return [...updatedItems, { ...item, state: 'default' }];
       });
   
       setMessage(`เพิ่ม ${item.name} ในพื้นที่ดำเนินการ`);
     } else {
       setMessage('โปรดลากอุปกรณ์ไปยังพื้นที่ดำเนินการ');
     }
-  };
+  };  
   
   const handlePourOut = () => {
-    if (workspaceItems.some((item) => item.state === 'paper-filter')) {
+    if (
+      currentStep === 1 &&
+      workspaceItems.some((item) => item.state === 'paper-filter')
+    ) {
       setMessage('กำลังเทน้ำออกจากโถรองดริป...');
       setTimeout(() => {
         setWorkspaceItems([]);
         handleNextStep();
       }, 3000);
+    } else {
+      setMessage('คุณต้องล้างกระดาษกรองก่อนที่จะเทน้ำออก');
     }
   };
+  
   
   const handleGrind = () => {
     if (workspaceItems.some((item) => item.state === 'ready-to-grind')) {
@@ -206,46 +233,59 @@ const CoffeeSimulator = () => {
           </div>
         </div>
 
-        {/* Center Area - Action area */}
+      {/* Center Area - Action area */}
       <div
         ref={workspaceRef}
         className="col-span-12 sm:col-span-5 bg-gray-200 rounded shadow p-4"
       >
         <h3 className="text-center">พื้นที่สำหรับนำอุปกรณ์ต่างๆ มาดำเนินการ</h3>
         <div className="mt-4 border-dashed border-2 border-gray-400 h-full flex flex-col items-center justify-center">
-          {workspaceItems.map((item) => (
-            <React.Fragment key={item.id}>
+          {workspaceItems.length > 0 &&
+            workspaceItems.map((item) => (
               <motion.div
+                key={item.id}
                 className={`p-4 border border-gray-400 bg-white rounded shadow-sm mt-2 ${
                   item.state === 'ready-to-grind' && !isGrinding ? 'cursor-pointer' : ''
+                } ${item.id === 'kettle' && isPouring ? 'text-blue-500' : ''} ${
+                  item.state === 'ready-to-pour' ? 'cursor-pointer bg-green-200' : ''
                 }`}
                 onClick={
-                  item.state === 'ready-to-grind' && !isGrinding ? handleGrind : undefined
+                  item.state === 'ready-to-grind' && !isGrinding
+                    ? handleGrind
+                    : item.state === 'ready-to-pour'
+                    ? () => {
+                        setMessage('กำลังเทน้ำออก...');
+                        setTimeout(() => {
+                          setWorkspaceItems([]);
+                          handleNextStep();
+                          setMessage('น้ำถูกเทออกเรียบร้อย! ไปยังขั้นตอนถัดไป');
+                        }, 3000);
+                      }
+                    : undefined
                 }
-                whileHover={{ scale: item.state === 'ready-to-grind' && !isGrinding ? 1.1 : 1 }}
+                whileHover={{
+                  scale:
+                    item.state === 'ready-to-grind' && !isGrinding
+                      ? 1.1
+                      : item.state === 'ready-to-pour'
+                      ? 1.05
+                      : 1,
+                }}
               >
-                <span>{item.name}</span>
+                <span>
+                  {item.id === 'kettle' && isPouring
+                    ? 'กำลังเทน้ำ'
+                    : item.state === 'ready-to-pour'
+                    ? 'คลิกเพื่อเทน้ำ'
+                    : item.name}
+                </span>
               </motion.div>
-
-              {item.state === 'paper-filter' && (
-                <motion.div
-                  className={`p-4 border border-gray-400 bg-white rounded shadow-sm mt-2 ${
-                    !isPouring ? 'cursor-pointer' : ''
-                  }`}
-                  onClick={!isPouring ? handlePourOut : undefined}
-                >
-                  <span>{item.name}</span>
-                </motion.div>
-              )}
-            </React.Fragment>
-          ))}
+            ))}
         </div>
       </div>
 
-
-
-        {/* Right Area - Step List */}
-        <div className="col-span-12 sm:col-span-2 bg-gray-200 rounded shadow p-4">
+      {/* Right Area - Step List */}
+      <div className="col-span-12 sm:col-span-2 bg-gray-200 rounded shadow p-4">
           <h3 className="text-center">รายการขั้นตอนต่างๆ</h3>
           <ul className="mt-4 list-none">
             {steps.map((step, index) => (
