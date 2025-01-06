@@ -17,14 +17,15 @@ const CoffeeSimulator = () => {
   const [qteCount, setQteCount] = useState(0); // นับจำนวนการกดใน QTE
   const [isReadyToServe, setIsReadyToServe] = useState(false); // สถานะพร้อมเสิร์ฟ
 
-  const steps = [
+  const [steps, setSteps] = useState([
     {
       id: 'grind',
       name: 'บดเมล็ดกาแฟ',
       description: 'ลากเมล็ดกาแฟและเครื่องบดไปยังพื้นที่ดำเนินการ จากนั้นคลิกเม้าส์และหมุนเพื่อบด',
       equipment: [
-        { id: 'coffee-beans', name: 'เมล็ดกาแฟ', draggable: true },
-        { id: 'grinder', name: 'เครื่องบด', draggable: true },
+        { id: 'coffee-beans', name: 'เมล็ดกาแฟ', draggable: true,image:'/simulator/เมล็ดกาแฟ.png' },
+        { id: 'grinder', name: 'เครื่องบด', draggable: true,image:'/simulator/เครื่องบด(ไม่มีเมล็ด).png' },
+        { id: 'ground-coffee', name: 'กาแฟบด', draggable: true, state: 'hidden',image:'/simulator/กาแฟบด.png' }, // ซ่อนเริ่มต้น
       ],
     },
     {
@@ -32,10 +33,10 @@ const CoffeeSimulator = () => {
       name: 'เตรียมเครื่องดริป',
       description: 'ลากอุปกรณ์ไปยังพื้นที่ดำเนินการตามลำดับ และล้างกระดาษกรองเพื่อลดกลิ่น',
       equipment: [
-        { id: 'drip-stand', name: 'ดริปเปอร์', draggable: true },
-        { id: 'paper-filter', name: 'กระดาษกรอง', draggable: true },
-        { id: 'drip-pot', name: 'โถรองดริป', draggable: true },
-        { id: 'kettle', name: 'กาดริป', draggable: true },
+        { id: 'drip-stand', name: 'ดริปเปอร์', draggable: true,image:'/simulator/ดริปเปอร์.png' },
+        { id: 'paper-filter', name: 'กระดาษกรอง', draggable: true,image:'/simulator/กระดาษกรอง.png' },
+        { id: 'drip-pot', name: 'โถรองดริป', draggable: true,image:'/simulator/โถรอง.png' },
+        { id: 'kettle', name: 'กาดริป', draggable: true,image:'/simulator/กาดริป.png' },
       ],
     },
     {
@@ -43,8 +44,7 @@ const CoffeeSimulator = () => {
       name: 'ดริปกาแฟ',
       description: 'ลากผงกาแฟบดและกาดริปไปยังพื้นที่ดำเนินการ แล้วหมุนเพื่อดริปกาแฟ',
       equipment: [
-        { id: 'ground-coffee', name: 'ผงกาแฟบด', draggable: true },
-        { id: 'kettle', name: 'กาดริป', draggable: true },
+        { id: 'kettle', name: 'กาดริป', draggable: true,image:'/simulator/กาดริป.jpg' },
       ],
     },    
     {
@@ -53,7 +53,7 @@ const CoffeeSimulator = () => {
       description: 'ยินดีด้วย! คุณได้ทำเมนูเอสเพรสโซสำเร็จแล้ว',
       equipment: [] // ไม่แสดงอุปกรณ์ในขั้นตอนนี้
     }    
-  ];
+  ]);
 
   const workspaceRef = useRef(null);
 
@@ -73,8 +73,10 @@ const CoffeeSimulator = () => {
   
       return () => clearInterval(interval); // ล้าง Interval เมื่อออกจากขั้นตอน
     }
-  }, [currentStep, direction]);  
-  
+    
+    // ตั้งข้อความบรรยายขั้นตอน
+    setMessage(steps[currentStep].description);
+  }, [currentStep, direction, steps]);  
 
   const handleDragEnd = (item, event, info) => {
     const workspaceRect = workspaceRef.current?.getBoundingClientRect();
@@ -98,6 +100,25 @@ const CoffeeSimulator = () => {
             return current;
           }
   
+          // ซ่อนกาแฟบดจนกว่าจะถูกลากกลับมายังพื้นที่อุปกรณ์
+          if (item.id === 'ground-coffee' && item.state === 'ready-to-use') {
+            if (current.some((i) => i.id === 'ground-coffee')) {
+              setMessage('ผงกาแฟบดได้ถูกเพิ่มในพื้นที่ดำเนินการแล้ว!');
+              return current;
+            }
+
+            updatedItems.push({
+              id: 'ground-coffee',
+              name: 'ผงกาแฟบด',
+              state: 'in-workspace', // แสดงในพื้นที่ดำเนินการ
+            });
+
+            setMessage('ผงกาแฟบดถูกเพิ่มในพื้นที่ดำเนินการ!');
+
+            // อย่าเรียก `handleNextStep` ในทันที ให้ผู้ใช้ลากกลับไปยังพื้นที่อุปกรณ์
+            return updatedItems;
+          }                  
+          
           // ตรวจสอบเงื่อนไขของการเพิ่มอุปกรณ์
           if (item.id === 'grinder' && !current.some((i) => i.id === 'grinder')) {
             updatedItems.push({ ...item, state: 'default' });
@@ -120,7 +141,6 @@ const CoffeeSimulator = () => {
             setMessage('กรุณาเพิ่มเครื่องบดก่อนเมล็ดกาแฟ!');
             return current;
           }
-  
           setMessage('กรุณาเพิ่มอุปกรณ์ตามลำดับ! เริ่มจากเครื่องบดก่อน');
           return current;
         }
@@ -132,12 +152,14 @@ const CoffeeSimulator = () => {
             setMessage('อุปกรณ์นี้ถูกเพิ่มไปแล้ว!');
             return current;
           }
-  
+        
+          // เพิ่มโถรองดริป
           if (item.id === 'drip-pot' && !current.some((i) => i.state === 'drip-pot')) {
             setMessage('โถรองดริปถูกเพิ่มในพื้นที่ดำเนินการ');
             return [...current, { ...item, state: 'drip-pot' }];
           }
-  
+        
+          // เพิ่มดริปเปอร์
           if (item.id === 'drip-stand' && current.some((i) => i.state === 'drip-pot')) {
             setMessage('ดริปเปอร์ถูกเพิ่มในโถรองดริป');
             return current.map((i) =>
@@ -146,7 +168,8 @@ const CoffeeSimulator = () => {
                 : i
             );
           }
-  
+        
+          // เพิ่มกระดาษกรอง
           if (item.id === 'paper-filter' && current.some((i) => i.state === 'drip-stand')) {
             setMessage('กระดาษกรองถูกเพิ่มในดริปเปอร์');
             return current.map((i) =>
@@ -155,11 +178,12 @@ const CoffeeSimulator = () => {
                 : i
             );
           }
-  
+        
+          // ล้างกระดาษกรอง
           if (item.id === 'kettle' && current.some((i) => i.state === 'paper-filter')) {
             setMessage('กำลังล้างกระดาษกรอง...');
             setIsPouring(true);
-  
+        
             setTimeout(() => {
               setIsPouring(false);
               const updatedItems = current.map((i) =>
@@ -170,10 +194,10 @@ const CoffeeSimulator = () => {
               setWorkspaceItems(updatedItems);
               setMessage('ล้างกระดาษกรองเรียบร้อยแล้ว! คลิกเพื่อเทน้ำออก');
             }, 3000);
-  
+        
             return current;
           }
-  
+        
           setMessage('กรุณาเพิ่มอุปกรณ์ตามลำดับ! เริ่มจากโถรองดริปก่อน');
           return current;
         }
@@ -293,20 +317,63 @@ const CoffeeSimulator = () => {
       setTimeout(() => {
         setIsGrinding(false);
   
+        // ลบ "เครื่องบดที่มีเมล็ดกาแฟ" ออกจากพื้นที่ดำเนินการ
         setWorkspaceItems((current) =>
-          current.map((item) =>
-            item.state === 'ready-to-grind'
-              ? { ...item, name: 'เครื่องบดพร้อมผงกาแฟ', state: 'ground' }
-              : item
+          current.filter((item) => item.id !== 'grinder')
+        );
+  
+        // เพิ่ม "กาแฟบด" ทันทีในพื้นที่อุปกรณ์
+        setWorkspaceItems((current) => [
+          ...current,
+          {
+            id: 'ground-coffee',
+            name: 'กาแฟบด',
+            state: 'ready-to-use',
+            image: '/simulator/กาแฟบด.png', // ใช้ path ของรูปภาพ
+          },
+        ]);
+  
+        // อัปเดตขั้นตอนให้กาแฟบดแสดงในขั้นตอนถัดไป
+        setSteps((prevSteps) =>
+          prevSteps.map((step) =>
+            step.id === 'grind'
+              ? {
+                  ...step,
+                  equipment: step.equipment.map((equip) =>
+                    equip.id === 'ground-coffee'
+                      ? { ...equip, state: 'ready-to-use' } // ให้กาแฟบดพร้อมใช้งาน
+                      : equip
+                  ),
+                }
+              : step
           )
         );
   
         setMessage('เมล็ดกาแฟถูกบดเรียบร้อยแล้ว!');
-        handleNextStep();
+        handleNextStep(); // ดำเนินการไปยังขั้นตอนถัดไป
       }, 3000);
     } else {
       setMessage('กรุณาเพิ่มเครื่องบดและเมล็ดกาแฟก่อนบด');
     }
+  };     
+
+  const getImageByState = (item) => {
+    const imageMap = {
+      "เครื่องบด": "/simulator/เครื่องบด(ไม่มีเมล็ด).png",
+      "เครื่องบดที่มีเมล็ดกาแฟ": "/simulator/เครื่องบด(มีเมล็ด).png",
+      "ผงกาแฟบด": "/simulator/กาแฟบด.png",
+      "โถรองดริป": "/simulator/โถรอง.png",
+      "โถรองดริปที่มีดริปเปอร์": "/simulator/โถรองและดริปเปอร์.png",
+      "โถรองดริปที่มีดริปเปอร์และกระดาษกรอง": "/simulator/เครื่องดริป.png",
+      "โถรองดริปพร้อมสำหรับเทน้ำ": "/simulator/ล้างกระดาษกรอก.png",
+      "โถรองดริปที่มีดริปเปอร์และกระดาษกรองที่ล้างกระดาษแล้ว(พร้อมใส่กาแฟบด)": "/simulator/เครื่องดริป(ล้างกระดาษแล้ว).png",
+      "โถรองดริปที่มีผงกาแฟ": "/simulator/เครื่องดริปที่ล้างกระดาษกรอกแล้วและใส่กาแฟบด.png",
+      "โถรองดริปพร้อมดริปกาแฟ": "/simulator/โถรองดริปพร้อมดริปกาแฟ.png",
+      "เทกาแฟออกจากโถรอง": "/simulator/ดริปกาแฟเสร็จ.png",
+    };
+  
+    // หาก state หรือ name ไม่ตรงกับใน map ให้ใช้ค่าดีฟอลต์
+    return imageMap[item.name] || "/simulator/default.png";
   };  
 
   const handleNextStep = () => {
@@ -320,7 +387,7 @@ const CoffeeSimulator = () => {
       // เพิ่มโถรองดริปสำหรับขั้นตอนที่สาม
       const newItem = {
         id: 'drip-pot-complete',
-        name: 'โถรองดริปที่มีดริปเปอร์และกระดาษกรอง',
+        name: 'โถรองดริปที่มีดริปเปอร์และกระดาษกรองที่ล้างกระดาษแล้ว(พร้อมใส่กาแฟบด)',
         state: 'waiting-for-ground-coffee', // แสดงว่ายังต้องการกาแฟบด
       };
       setWorkspaceItems([newItem]);
@@ -345,8 +412,23 @@ const CoffeeSimulator = () => {
     setIsPouring(false);
     setQteActive(false);
     setIsReadyToServe(false);
-  };
   
+    // รีเซ็ตสถานะของกาแฟบดใน steps กลับไปเป็น hidden
+    setSteps((prevSteps) =>
+      prevSteps.map((step) =>
+        step.id === 'grind'
+          ? {
+              ...step,
+              equipment: step.equipment.map((equip) =>
+                equip.id === 'ground-coffee'
+                  ? { ...equip, state: 'hidden' } // รีเซ็ตเป็นซ่อน
+                  : equip
+              ),
+            }
+          : step
+      )
+    );
+  };  
  
   return (
     <div className="relative w-full h-screen bg-neutral-100">
@@ -361,7 +443,9 @@ const CoffeeSimulator = () => {
           {/* รายการอุปกรณ์ */}
           <div className="mt-4 grid grid-cols-2 gap-4">
             {/* รวมอุปกรณ์จากทุกขั้นตอน */}
-            {Array.from(new Set(steps.flatMap(step => step.equipment.map(equipment => equipment.id)))).map((id) => {
+            {Array.from(new Set(steps.flatMap(step => step.equipment
+            .filter((item) => item.state !== "hidden") // กรองเฉพาะอุปกรณ์ที่ไม่ซ่อน
+            .map(equipment => equipment.id)))).map((id) => {
               // หาข้อมูลของอุปกรณ์จากขั้นตอน
               const equipment = steps
                 .flatMap(step => step.equipment)
@@ -369,14 +453,27 @@ const CoffeeSimulator = () => {
 
               return (
                 <motion.div
-                  key={equipment.id} // กำหนด unique key สำหรับ React
-                  className="border border-gray-400 rounded-lg p-4 bg-white shadow-sm cursor-grab"
-                  drag // เปิดใช้งานการลากวางด้วย Framer Motion
-                  dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }} // จำกัดการลากให้อยู่ในพื้นที่
-                  dragElastic={1} // ความยืดหยุ่นขณะลาก
-                  onDragEnd={(event, info) => handleDragEnd(equipment, event, info)} // ฟังก์ชันเรียกใช้เมื่อการลากสิ้นสุด
+                  key={equipment.id}
+                  className="flex items-center justify-center border border-gray-400 rounded-lg p-4 bg-white shadow-sm cursor-grab"
+                  drag
+                  dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+                  dragElastic={1}
+                  onDragEnd={(event, info) => handleDragEnd(equipment, event, info)}
                 >
-                  <span>{equipment.name}</span>
+                  {/* แสดงรูปภาพแทนข้อความ */}
+                  {equipment.image ? (
+                    <motion.img
+                    src={equipment.image} // ใช้ path ของรูปภาพ
+                    alt={equipment.name}
+                    className="w-60 h-40 object-contain cursor-grab" // เพิ่ม cursor-grab ให้รูปภาพ
+                    drag // เปิดใช้งานการลากเฉพาะที่รูปภาพ
+                    dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }} // จำกัดการลาก
+                    dragElastic={1} // เพิ่มความยืดหยุ่น
+                    onDragEnd={(event, info) => handleDragEnd(equipment, event, info)} // ฟังก์ชันเรียกใช้เมื่อการลากสิ้นสุด
+                    />
+                  ) : (
+                    <span>{equipment.name}</span> // แสดงข้อความหากไม่มีรูป
+                  )}
                 </motion.div>
               );
             })}
@@ -385,106 +482,116 @@ const CoffeeSimulator = () => {
 
         {/* Center Area - Action area */}
         <div ref={workspaceRef} className="col-span-12 sm:col-span-5 bg-gray-200 rounded shadow p-4 flex flex-col">
-          {/* หัวข้อสำหรับพื้นที่ดำเนินการ */}
-          <h3 className="text-center font-semibold text-lg">
-            พื้นที่สำหรับนำอุปกรณ์ต่างๆ มาดำเนินการ
-          </h3>
-          {/* พื้นที่ทำงาน (Workspace) */}
-          <div className="mt-4 border-dashed border-2 border-gray-400 h-full flex flex-col items-center justify-center">
-            {currentStep === 3 ? (
-              // แสดงขั้นตอนที่ 4: ภาพเมนูเอสเพรสโซและปุ่มเริ่มใหม่
-              <div className="flex flex-col items-center">
-                {/* แสดงภาพเมนูเอสเพรสโซ */}
-                <img
-                  src="path_to_espresso_image.jpg" // เปลี่ยนเป็น URL หรือ path ของรูปภาพ
-                  alt="เมนูเอสเพรสโซ"
-                  className="w-40 h-40 object-cover rounded shadow-lg"
-                />
-                {/* ปุ่มสำหรับเริ่มต้นใหม่ */}
-                <button
-                  onClick={handleRestart} // รีเซ็ตซิมมูเลเตอร์
-                  className="mt-4 bg-blue-500 text-white py-2 px-4 rounded shadow hover:bg-blue-700"
-                >
-                  เริ่มต้นใหม่
-                </button>
-              </div>
-            ) : qteActive ? (
-              // QTE แสดงเมื่อ qteActive เป็น true
-              <div className="flex flex-col items-center">
-                {/* QTE Components */}
-                <div className="progress-container relative w-full max-w-lg">
-                  <div className="progress-bar bg-gray-300 w-full h-4 relative overflow-hidden">
-                    <div
-                      className="target-zone bg-green-500 h-full absolute"
-                      style={{ width: "20%", left: "40%" }}
-                    ></div>
-                    <div
-                      className="pointer bg-red-500 h-full w-2 absolute"
-                      style={{ left: `${pointerPosition}%` }}
-                    ></div>
-                  </div>
-                </div>
-                <button
-                  onClick={handleQTEClick}
-                  className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
-                >
-                  คลิกเพื่อดริป
-                </button>
-              </div>
-            ) : isReadyToServe ? (
-              // แสดงปุ่มให้กดเทกาแฟใส่แก้ว
-              <div className="flex flex-col items-center">
-                <button
-                  onClick={handleServe} // เรียกใช้ฟังก์ชัน handleServe
-                  className="bg-purple-500 text-white py-2 px-4 rounded shadow hover:bg-purple-700"
-                >
-                  กดเพื่อเทกาแฟลงแก้ว
-                </button>
-              </div>
-            ) : (
-              // แสดง Workspace Items สำหรับขั้นตอนอื่น ๆ
-              workspaceItems.length > 0 &&
-              workspaceItems.map((item) => (
-                <motion.div
-                  key={item.id}
-                  className={`p-4 border border-gray-400 bg-white rounded shadow-sm mt-2 
-                    ${item.state === "ready-to-grind" && !isGrinding ? "cursor-pointer" : ""}
-                    ${item.id === "kettle" && isPouring ? "text-blue-500" : ""}
-                    ${item.state === "ready-to-drip" ? "cursor-pointer bg-yellow-200" : ""}
-                    ${item.state === "ready-to-pour-out" ? "cursor-pointer bg-green-200" : ""}
-                    ${item.state === "ready-to-brew" ? "cursor-pointer bg-orange-300" : ""}
-                    ${item.state === "ready-to-serve" ? "cursor-pointer bg-purple-300" : ""}
-                  `}
-                  onClick={
-                    item.state === "ready-to-grind" && !isGrinding
-                      ? handleGrind // เรียกฟังก์ชัน handleGrind
-                      : item.state === "ready-to-pour-out"
-                      ? handlePourOut // เรียกฟังก์ชัน handlePourOut
-                      : item.state === "waiting-for-ground-coffee"
-                      ? () => setMessage("โปรดเพิ่มกาแฟบดก่อนดริป")
-                      : item.state === "ready-to-brew"
-                      ? handleQTEClick // เรียก QTE
-                      : item.state === "ready-to-serve"
-                      ? handleServe // กดเพื่อเทกาแฟลงแก้ว
-                      : undefined
-                  }
-                >
-                  <span>
-                    {item.state === "ready-to-drip"
-                      ? "คลิกเพื่อเริ่มดริป"
-                      : item.state === "ready-to-pour-out"
-                      ? "คลิกเพื่อเทน้ำออก"
-                      : item.state === "ready-to-brew"
-                      ? "ดริปกาแฟ"
-                      : item.state === "ready-to-serve"
-                      ? "คลิกเพื่อเทกาแฟลงแก้ว"
-                      : item.name}
-                  </span>
-                </motion.div>
-              ))
-            )}
-          </div>
+        {/* หัวข้อสำหรับพื้นที่ดำเนินการ */}
+        <h3 className="text-center font-semibold text-lg">
+          พื้นที่สำหรับนำอุปกรณ์ต่างๆ มาดำเนินการ
+        </h3>
+        {/*ข้อความบรรยาย*/}
+        <div className="mb-4 text-center text-lg font-semibold text-gray-700">
+            {currentStep === 0 && "ขั้นตอนที่ 1: ลากเครื่องบดและเมล็ดกาแฟไปยังพื้นที่ดำเนินการ และคลิกเพื่อบดกาแฟ"}
+            {currentStep === 1 && "ขั้นตอนที่ 2: ลากอุปกรณ์ทั้งหมดสำหรับการดริปกาแฟไปยังพื้นที่ดำเนินการ (โถรองดริป, ดริปเปอร์, กระดาษกรอง และกาดริป)"}
+            {currentStep === 2 && "ขั้นตอนที่ 3: เพิ่มกาแฟบดลงในโถดริป จากนั้นใช้กาดริปเพื่อเทน้ำและเริ่มดริป"}
+            {currentStep === 3 && "ขั้นตอนที่ 4: กดปุ่มเพื่อเทกาแฟลงแก้ว และเพลิดเพลินกับเอสเพรสโซที่คุณทำเอง"}
         </div>
+        {/* พื้นที่ทำงาน (Workspace) */}
+        <div className="mt-4 border-dashed border-2 border-gray-400 h-full flex flex-col items-center justify-center">
+          {currentStep === 3 ? (
+            // แสดงขั้นตอนที่ 4: ภาพเมนูเอสเพรสโซและปุ่มเริ่มใหม่
+            <div className="flex flex-col items-center">
+              {/* แสดงภาพเมนูเอสเพรสโซ */}
+              <img
+                src="/simulator/เอสเพรสโซ.png" // เปลี่ยนเป็น URL หรือ path ของรูปภาพ
+                alt="เมนูเอสเพรสโซ"
+                className="w-80 h-80 object-cover rounded shadow-lg"
+              />
+              {/* ปุ่มสำหรับเริ่มต้นใหม่ */}
+              <button
+                onClick={handleRestart} // รีเซ็ตซิมมูเลเตอร์
+                className="mt-4 text-white py-2 px-4 bg-blue-700 rounded shadow hover:bg-blue-700"
+              >
+                เริ่มต้นใหม่
+              </button>
+            </div>
+          ) : qteActive ? (
+            // QTE แสดงเมื่อ qteActive เป็น true
+            <div className="flex flex-col items-center">
+              {/* QTE Components */}
+              <div className="progress-container relative w-full max-w-lg">
+                <div className="progress-bar w-full h-4 relative overflow-hidden">
+                  <div
+                    className="target-zone bg-green-500 h-full absolute"
+                    style={{ width: "20%", left: "40%" }}
+                  ></div>
+                  <div
+                    className="pointer bg-red-500 h-full w-2 absolute"
+                    style={{ left: `${pointerPosition}%` }}
+                  ></div>
+                </div>
+              </div>
+              <button
+                onClick={handleQTEClick}
+                className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+              >
+                คลิกเพื่อดริป
+              </button>
+            </div>
+          ) : isReadyToServe ? (
+            // แสดงปุ่มให้กดเทกาแฟใส่แก้ว
+            <div className="flex flex-col items-center">
+              <button
+                onClick={handleServe} // เรียกใช้ฟังก์ชัน handleServe
+                className="bg-purple-500 text-white py-2 px-4 rounded shadow hover:bg-purple-700"
+              >
+                กดเพื่อเทกาแฟลงแก้ว
+              </button>
+            </div>
+          ) : (
+            // แสดง Workspace Items สำหรับขั้นตอนอื่น ๆ
+            workspaceItems.length > 0 &&
+            workspaceItems.map((item) => (
+              <motion.div
+                key={item.id}
+                className={`p-4 border border-gray-400  rounded shadow-sm mt-2 
+                  ${item.state === "ready-to-grind" && !isGrinding ? "cursor-pointer" : ""}
+                  ${item.id === "kettle" && isPouring ? "text-blue-500" : ""}
+                  ${item.state === "ready-to-drip" ? "cursor-pointer bg-yellow-200" : ""}
+                  ${item.state === "ready-to-pour-out" ? "cursor-pointer bg-green-200" : ""}
+                  ${item.state === "ready-to-brew" ? "cursor-pointer bg-orange-300" : ""}
+                  ${item.state === "ready-to-serve" ? "cursor-pointer bg-purple-300" : ""}
+                `}
+                onClick={
+                  item.state === "ready-to-grind" && !isGrinding
+                    ? handleGrind // เรียกฟังก์ชัน handleGrind
+                    : item.state === "ready-to-pour-out"
+                    ? handlePourOut // เรียกฟังก์ชัน handlePourOut
+                    : item.state === "waiting-for-ground-coffee"
+                    ? () => setMessage("โปรดเพิ่มกาแฟบดก่อนดริป")
+                    : item.state === "ready-to-brew"
+                    ? handleQTEClick // เรียก QTE
+                    : item.state === "ready-to-serve"
+                    ? handleServe // กดเพื่อเทกาแฟลงแก้ว
+                    : undefined
+                }
+                style={{
+                  width: "600px", // กำหนดขนาดความกว้าง (ปรับค่าตามต้องการ)
+                  height: "600px", // กำหนดขนาดความสูง (ปรับค่าตามต้องการ)
+                  display: "flex",
+                  justifyContent: "center", // จัดแนวนอน
+                  alignItems: "center", // จัดแนวตั้ง
+                  opacity: item.state === "hidden" ? 0 : 1, // ซ่อนกาแฟบดฅ
+                }}
+              >
+                {/* แสดงภาพแทนข้อความ */}
+                <img
+                  src={getImageByState(item)} // ดึงภาพตาม state หรือ name
+                  alt={item.name} // Alt text สำหรับภาพ
+                  className="w-full h-full object-contain" // เพิ่มสไตล์เพื่อปรับขนาด
+                />
+              </motion.div>
+            ))
+          )}
+        </div>
+      </div>
 
 
         {/* Right Area - Step List */}
