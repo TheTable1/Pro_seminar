@@ -431,17 +431,17 @@ const CoffeeSimulator = () => {
   };  
  
   return (
-    <div className="relative w-full h-screen bg-neutral-100">
+    <div className="relative w-full h-full bg-neutral-100">
       <Navbar />
       {/* Layout */}
-      <div className="grid grid-cols-12 gap-4 w-full h-full pt-5 px-4 sm:px-8">
+      <div className="grid grid-cols-12 gap-4 w-full h-full pt-2 px-4 sm:px-8">
         {/* Left Area - Equipment list */}
-        <div className="col-span-12 sm:col-span-5 bg-gray-200 rounded shadow p-4">
+        <div className="col-span-12 sm:col-span-5 h-screen bg-gray-200 rounded shadow p-2">
           {/* หัวข้อของรายการอุปกรณ์ */}
           <h3 className="text-center">อุปกรณ์ที่ใช้ในเมนูนี้</h3>
 
           {/* รายการอุปกรณ์ */}
-          <div className="mt-4 grid grid-cols-2 gap-4">
+          <div className="mt-4 grid grid-cols-2 gap-2">
             {/* รวมอุปกรณ์จากทุกขั้นตอน */}
             {Array.from(new Set(steps.flatMap(step => step.equipment
             .filter((item) => item.state !== "hidden") // กรองเฉพาะอุปกรณ์ที่ไม่ซ่อน
@@ -459,13 +459,14 @@ const CoffeeSimulator = () => {
                   dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
                   dragElastic={1}
                   onDragEnd={(event, info) => handleDragEnd(equipment, event, info)}
+                  style={{ width: '100%', height: '100%' }} // ทำให้เต็มพื้นที่อุปกรณ์
                 >
                   {/* แสดงรูปภาพแทนข้อความ */}
                   {equipment.image ? (
                     <motion.img
                     src={equipment.image} // ใช้ path ของรูปภาพ
                     alt={equipment.name}
-                    className="w-60 h-40 object-contain cursor-grab" // เพิ่ม cursor-grab ให้รูปภาพ
+                    className="w-20 h-35 object-contain cursor-grab" // เพิ่ม cursor-grab ให้รูปภาพ
                     drag // เปิดใช้งานการลากเฉพาะที่รูปภาพ
                     dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }} // จำกัดการลาก
                     dragElastic={1} // เพิ่มความยืดหยุ่น
@@ -481,7 +482,7 @@ const CoffeeSimulator = () => {
         </div>
 
         {/* Center Area - Action area */}
-        <div ref={workspaceRef} className="col-span-12 sm:col-span-5 bg-gray-200 rounded shadow p-4 flex flex-col">
+        <div ref={workspaceRef} className="col-span-12 sm:col-span-5 h-screen bg-gray-200 rounded shadow p-4 flex flex-col">
         {/* หัวข้อสำหรับพื้นที่ดำเนินการ */}
         <h3 className="text-center font-semibold text-lg">
           พื้นที่สำหรับนำอุปกรณ์ต่างๆ มาดำเนินการ
@@ -595,7 +596,7 @@ const CoffeeSimulator = () => {
 
 
         {/* Right Area - Step List */}
-        <div className="col-span-12 sm:col-span-2 bg-gray-200 rounded shadow p-4 flex flex-col justify-between">
+        <div className="col-span-12 sm:col-span-2 h-screen bg-gray-200 rounded shadow p-4 flex flex-col justify-between">
           {/* หัวข้อรายการขั้นตอน */}
           <h3 className="text-center font-semibold text-lg">รายการขั้นตอนต่างๆ</h3>
 
