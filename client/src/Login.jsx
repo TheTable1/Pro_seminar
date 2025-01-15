@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import "./assets/css/SignUp.css";
-
+import { auth } from './firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -13,14 +14,23 @@ function Login() {
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            console.log("Logged in as:", userCredential.user.email);
+            navigate('/');
+        } catch (error) {
+            console.error("Login error:", error);
+            setErrorMessage("อีเมลหรือรหัสผ่านไม่ถูกต้อง");
+        }
 
         axios.post('http://localhost:3301/login', { email, password })
             .then(result => {
                 console.log(result);
                 if (result.data === "success") {
-                    navigate('/coffee_beans');
+                    navigate('/');
                 } else if (result.data === "the password is incorrect") {
                     setErrorMessage("รหัสผ่านไม่ถูกต้อง");
                     setPassword("");

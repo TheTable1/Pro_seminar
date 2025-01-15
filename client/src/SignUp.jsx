@@ -2,9 +2,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import background from './assets/background1.jpg';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import "./assets/css/SignUp.css";
+import { auth, db } from './firebase';
+import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 
 function SignUp() {
     const [name, setName] = useState("");
@@ -14,51 +16,68 @@ function SignUp() {
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
-        // ตรวจสอบความตรงกันของรหัสผ่านและการยืนยันรหัสผ่าน
+    
+        // ตรวจสอบความตรงกันของรหัสผ่าน
         if (password !== conPassword) {
             setErrorMessage("รหัสผ่านไม่ตรงกัน");
             return;
         }
-
-        // ตรวจสอบเงื่อนไขของรหัสผ่าน: ต้องมีตัวพิมพ์ใหญ่, ตัวพิมพ์เล็ก และตัวเลข
+    
+        // ตรวจสอบรูปแบบของรหัสผ่าน
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
         if (!passwordRegex.test(password)) {
             setErrorMessage("รหัสผ่านต้องประกอบด้วยตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก และตัวเลขอย่างน้อย 8 ตัว");
             return;
         }
+    
+        try {
+            // ตรวจสอบว่าอีเมลนี้เคยถูกใช้หรือไม่
+            const signInMethods = await fetchSignInMethodsForEmail(auth, email);
+            if (signInMethods.length > 0) {
+                setErrorMessage("อีเมลนี้ได้ถูกใช้แล้ว");
+                return;
+            }
+    
+            // สร้างบัญชีผู้ใช้งานใน Firebase Authentication
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
 
-        // ตรวจสอบว่าอีเมลนี้เคยถูกใช้หรือไม่
-        axios.post('http://localhost:3301/check-email', { email })
-            .then(response => {
-                if (response.data.exists) {
-                    setErrorMessage("อีเมลนี้ได้ถูกใช้แล้ว");
-                } else {
-                    // ถ้าอีเมลนี้ยังไม่ถูกใช้ ให้ดำเนินการสมัครสมาชิกต่อไป
-                    axios.post('http://localhost:3301/register', { name, email, password })
-                        .then(result => {
-                            console.log(result);
-                            navigate('/login');
-                        })
-                        .catch(err => console.log(err));
-                }
-            })
-            .catch(err => {
-                console.log(err);
-                setErrorMessage("เกิดข้อผิดพลาดในการตรวจสอบอีเมล");
-        });
+            // นำทางไปยังหน้า Login หลังการดำเนินการเสร็จสิ้น
+            navigate('/login');
+            
+            // บันทึกข้อมูลใน Firestore
+            await setDoc(doc(db, "users", user.uid), {
+                name,
+                email,
+                createdAt: new Date(),
+            });
+    
+        } catch (error) {
+            console.error("Error during registration:", error);
+    
+            if (error.code === "auth/email-already-in-use") {
+                setErrorMessage("อีเมลนี้ได้ถูกใช้แล้ว");
+            } else if (error.code === "auth/invalid-email") {
+                setErrorMessage("อีเมลไม่ถูกต้อง");
+            } else if (error.code === "auth/weak-password") {
+                setErrorMessage("รหัสผ่านอ่อนเกินไป");
+            } else {
+                setErrorMessage("เกิดข้อผิดพลาดในการสมัครสมาชิก: " + error.message);
+            }
+        }
 
     };
-
 
     return (
         <div
             className="container-fluid vh-100 d-flex align-items-center"
             style={{
-                backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center',
-                zIndex: -1
+                backgroundImage: `url(${background})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                zIndex: -1,
             }}
         >
             <div className="row w-100">
@@ -78,16 +97,6 @@ function SignUp() {
                                 value={name}
                                 required
                             />
-                            <style>{`
-                                .form-control::placeholder {
-                                    color: white; /* กำหนดสีของ placeholder เป็นสีขาว */
-                                }
-                        
-                                button:hover{
-                                    background-color: rgba(87,43,27,0.9) ;
-                                }
-                            `}</style>
-
                         </div>
                         <div className="form-group mb-3">
                             <input
@@ -141,7 +150,9 @@ function SignUp() {
                             </button>
                         </div>
                     </form>
-                    <p className="text-white mt-4 mb-1">Already Have an Account? <Link to="/login" className="text-light">Login</Link></p>
+                    <p className="text-white mt-4 mb-1">
+                        Already Have an Account? <Link to="/login" className="text-light">Login</Link>
+                    </p>
                 </div>
             </div>
         </div>
