@@ -111,6 +111,103 @@ function Home() {
       cultivation: "ปลูกในพื้นที่สูง เช่น Mocha",
       specialties: ["Yemeni Mocha Coffee"],
     },
+    Honduras: {
+      description: "เป็นผู้ผลิตกาแฟรายใหญ่ในอเมริกากลาง มีคุณภาพหลากหลาย",
+      cultivation: "ปลูกในพื้นที่สูง เช่น Copán และ Lempira",
+      specialties: ["Honduran SHG Coffee"],
+    },
+    Mexico: {
+      description: "กาแฟเม็กซิโกมีรสชาติหลากหลายและมักปลูกแบบออร์แกนิก",
+      cultivation: "ปลูกในภูมิภาคเชียปัส และเวราครูซ",
+      specialties: ["Mexican Chiapas Coffee"],
+    },
+    Tanzania: {
+      description: "กาแฟแทนซาเนียมีรสชาติสดใส มักมีกลิ่นผลไม้และไวน์",
+      cultivation: "ปลูกในพื้นที่ Mount Kilimanjaro และ Mbeya",
+      specialties: ["Tanzanian Peaberry Coffee"],
+    },
+    IvoryCoast: {
+      description: "เป็นหนึ่งในผู้ผลิตกาแฟโรบัสต้ารายใหญ่ในแอฟริกา",
+      cultivation: "ปลูกในพื้นที่ทางใต้ของประเทศ",
+      specialties: ["Ivorian Robusta Coffee"],
+    },
+    Laos: {
+      description: "ปลูกกาแฟในระดับที่กำลังเติบโต โดยเฉพาะในพื้นที่สูง",
+      cultivation: "พื้นที่เพาะปลูกหลักอยู่ใน Bolaven Plateau",
+      specialties: ["Lao Arabica Coffee"],
+    },
+    Philippines: {
+      description: "ปลูกกาแฟทั้งอาราบิก้า โรบัสต้า เอ็กเซลซ่า และลิเบอริก้า",
+      cultivation: "ปลูกในภูมิภาค Batangas และ Cordillera",
+      specialties: ["Kape Barako"],
+    },
+    PapuaNewGuinea: {
+      description: "กาแฟปาปัวนิวกินีมีรสชาติซับซ้อนและกลิ่นหอมที่โดดเด่น",
+      cultivation: "ปลูกในพื้นที่สูง เช่น Western Highlands",
+      specialties: ["Papua New Guinea Coffee"],
+    },
+    Brazil: {
+      description: "เป็นผู้ผลิตกาแฟรายใหญ่ที่สุดในโลก โดยเฉพาะกาแฟอาราบิก้า",
+      cultivation: "ปลูกในภูมิภาคทางใต้ เช่น Minas Gerais และ São Paulo",
+      specialties: ["Brazilian Santos Coffee"],
+    },
+    Ethiopia: {
+      description: "แหล่งกำเนิดของกาแฟและมีความหลากหลายทางพันธุกรรมสูง",
+      cultivation: "ปลูกในพื้นที่สูง เช่น Sidama และ Yirgacheffe",
+      specialties: ["Ethiopian Yirgacheffe Coffee"],
+    },
+    Vietnam: {
+      description: "ผู้ผลิตกาแฟโรบัสต้ารายใหญ่ที่สุดในโลก",
+      cultivation: "ปลูกในพื้นที่ตอนกลาง เช่น Central Highlands",
+      specialties: ["Vietnamese Egg Coffee", "Cà phê sữa đá"],
+    },
+    Colombia: {
+      description:
+        "กาแฟโคลอมเบียเป็นที่รู้จักในเรื่องความหอมและความเป็นกรดอ่อน",
+      cultivation: "ปลูกในพื้นที่สูง เช่น Antioquia และ Caldas",
+      specialties: ["Colombian Supremo Coffee"],
+    },
+    CostaRica: {
+      description: "กาแฟคอสตาริก้ามีคุณภาพสูงและเน้นการผลิตอาราบิก้า",
+      cultivation: "ปลูกในภูมิภาค Central Valley และ Tarrazú",
+      specialties: ["Costa Rican Tarrazú Coffee"],
+    },
+    Myanmar: {
+      description: "กาแฟพม่ากำลังได้รับความนิยมในตลาดกาแฟพิเศษ",
+      cultivation: "ปลูกในภูมิภาค Shan State",
+      specialties: ["Myanmar Specialty Coffee"],
+    },
+    Turkey: {
+      description: "เป็นที่รู้จักในเรื่องกาแฟตุรกีแบบดั้งเดิม",
+      cultivation: "ไม่ได้ปลูกกาแฟ แต่มีวัฒนธรรมการบริโภคกาแฟที่แข็งแรง",
+      specialties: ["Turkish Coffee"],
+    },
+    Madagascar: {
+      description: "ปลูกกาแฟในระดับเล็กน้อย โดยส่วนใหญ่เป็นโรบัสต้า",
+      cultivation: "ปลูกในพื้นที่ทางเหนือและตะวันออก",
+      specialties: ["Madagascar Robusta Coffee"],
+    },
+    Nepal: {
+      description: "กาแฟเนปาลกำลังเติบโตในตลาดพิเศษ โดยเน้นคุณภาพสูง",
+      cultivation: "ปลูกในพื้นที่สูง เช่น Nuwakot และ Gulmi",
+      specialties: ["Nepalese Specialty Coffee"],
+    },
+    Zimbabwe: {
+      description: "กาแฟซิมบับเวมีรสชาติที่สดใสและสมดุล",
+      cultivation: "ปลูกในพื้นที่ Eastern Highlands",
+      specialties: ["Zimbabwean Arabica Coffee"],
+    },
+    SouthKorea: {
+      description:
+        "ไม่มีการปลูกกาแฟ แต่มีวัฒนธรรมการบริโภคกาแฟที่เติบโตอย่างรวดเร็ว",
+      cultivation: "ไม่มีการเพาะปลูกกาแฟ",
+      specialties: ["Korean Dalgona Coffee"],
+    },
+    SaudiArabia: {
+      description: "ไม่มีการปลูกกาแฟ แต่มีวัฒนธรรมกาแฟแบบดั้งเดิม",
+      cultivation: "ไม่มีการเพาะปลูกกาแฟ",
+      specialties: ["Saudi Arabian Qahwa"],
+    },
   });
 
   useEffect(() => {
@@ -162,12 +259,31 @@ function Home() {
 
       if (coffeeData[countryName]) {
         document.getElementById("info").innerHTML = `
-          <div class="p-6 bg-beige-light border border-brown-superlight rounded-lg shadow-lg">
-            <h2 class="text-2xl font-bold text-brown mb-4">${countryName}</h2>
-            <p class="text-base text-dark-brown mb-2">${coffeeData[countryName].description}</p>
-            <p class="text-base text-brown mb-2">${coffeeData[countryName].cultivation}</p>
-            <p class="text-base text-light-brown">${coffeeData[countryName].specialties}</p>
-          </div>
+          <div class="p-6 bg-[#5c4033] border border-[#d2b48c] rounded-lg shadow-lg">
+  <h2 class="text-2xl font-bold text-[#f5f5dc] mb-4">${countryName}</h2>
+  
+  <!-- ข้อมูลเพิ่มเติม -->
+  <div class="flex items-center text-base text-[#f5f5dc] mb-2">
+    <img src="/world/info.png" alt="info icon" class="w-6 h-6 mr-3" />
+    <b class="mr-2">ข้อมูลเพิ่มเติม:</b>
+    <span>${coffeeData[countryName].description}</span>
+  </div>
+
+  <!-- ภูมิภาคที่ปลูกกาแฟ -->
+  <div class="flex items-center text-base text-[#f5f5dc] mb-2">
+    <img src="/world/map.png" alt="map icon" class="w-6 h-6 mr-3" />
+    <b class="mr-2">ภูมิภาคที่ปลูกกาแฟ:</b>
+    <span>${coffeeData[countryName].cultivation}</span>
+  </div>
+
+  <!-- กาแฟที่มีความโดดเด่น -->
+  <div class="flex items-center text-base text-[#f5f5dc]">
+    <img src="/world/bean.png" alt="bean icon" class="w-6 h-6 mr-3" />
+    <b class="mr-2">กาแฟที่มีความโดดเด่น:</b>
+    <span>${coffeeData[countryName].specialties.join(", ")}</span>
+  </div>
+</div>
+
 
 
         `;
