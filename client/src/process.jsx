@@ -6,18 +6,18 @@ function Process() {
   const [selectedIcon, setSelectedIcon] = useState("cherry");
 
   const icons = [
-    { id: 1, name: "cherry", image: "/path/to/cherry-icon.png", alt: "Cherry", content: "นี่คือขั้นตอนการเก็บเชอร์รี่สุกจากต้นกาแฟ." },
-    { id: 2, name: "roast", image: "/path/to/roast-icon.png", alt: "Roast", content: "การคั่วกาแฟเป็นกระบวนการที่ทำให้กาแฟมีกลิ่นหอม." },
-    { id: 3, name: "process", image: "/path/to/process-icon.png", alt: "Process", content: "ขั้นตอนการแปรรูปกาแฟเพื่อให้ได้เมล็ดที่พร้อมคั่ว." },
-    { id: 4, name: "brew", image: "/path/to/brew-icon.png", alt: "Brew", content: "การชงกาแฟเป็นขั้นตอนสุดท้ายเพื่อให้ได้เครื่องดื่มพร้อมดื่ม." },
+    { id: 1, name: "cherry", image: "/process/process1.png", alt: "การเตรียมเมล็ดกาแฟ", img: "/process/process5.jpg", content: "การเก็บเมล็ดกาแฟเป็นขั้นตอนแรกที่สำคัญต่อคุณภาพของกาแฟในอนาคต โดยทั่วไปจะรอให้ผลกาแฟสุกเต็มที่จนเปลือกผลเปลี่ยนเป็นสีแดงสดหรือเหลือง (ขึ้นอยู่กับสายพันธุ์) ก่อนจะเก็บเกี่ยว ซึ่งสามารถทำได้สองวิธีหลัก ๆ ได้แก่ การเก็บด้วยมือ (Hand Picking) ที่เน้นการเก็บผลเชอร์รี่สุกทีละลูก เพื่อคัดเลือกเฉพาะผลที่มีคุณภาพสูง และ การเก็บด้วยเครื่องจักร (Mechanical Harvesting) ซึ่งเหมาะสำหรับฟาร์มขนาดใหญ่ที่ต้องการความรวดเร็ว อย่างไรก็ตาม วิธีการเก็บที่เหมาะสมจะขึ้นอยู่กับเป้าหมายด้านคุณภาพ รสชาติ และปริมาณของผลผลิต รวมถึงลักษณะภูมิประเทศของพื้นที่ปลูกอีกด้วย" },
+    { id: 2, name: "roast", image: "/process/process2.png", alt: "การคั่วกาแฟ", img: "/process/process6.jpg", content: "เมล็ดกาแฟดิบที่ผ่านกระบวนการแปรรูปและอบแห้งจะถูกนำมาคั่วเพื่อดึงกลิ่นและรสชาติที่ซ่อนอยู่ในเมล็ดออกมา การคั่วเป็นกระบวนการที่ซับซ้อนและต้องการความแม่นยำ โดยเริ่มจากการให้ความร้อนแก่เมล็ดกาแฟในอุณหภูมิที่เหมาะสม ซึ่งส่วนใหญ่จะอยู่ระหว่าง 180-250 องศาเซลเซียส ความร้อนจะกระตุ้นการเปลี่ยนแปลงทางเคมี เช่น การเกิด Maillard Reaction ที่ทำให้เมล็ดกาแฟมีสีน้ำตาลและปลดปล่อยน้ำมันที่ช่วยสร้างกลิ่นหอมออกมา ระดับการคั่วที่แตกต่างกัน เช่น คั่วอ่อน (Light Roast) ที่ยังคงรสชาติเปรี้ยวและกลิ่นเฉพาะของเมล็ดไว้มากที่สุด คั่วกลาง (Medium Roast) ที่ให้สมดุลระหว่างรสเปรี้ยวและขม หรือ คั่วเข้ม (Dark Roast) ที่เน้นความเข้มและกลิ่นที่มีลักษณะไหม้เล็กน้อย ล้วนส่งผลต่อรสชาติของกาแฟเมื่อชง" },
+    { id: 3, name: "process", image: "/process/process3.png", alt: "การบดกาแฟ", img: "/process/process7.jpg", content: "การบดกาแฟเป็นขั้นตอนที่ต้องการความละเอียดและความแม่นยำ เพราะระดับความละเอียดของผงกาแฟส่งผลโดยตรงต่อการสกัดรสชาติในกระบวนการชง การบดสามารถแบ่งออกได้หลายระดับ เช่น บดหยาบ (Coarse Grind) ที่เหมาะสำหรับการชงแบบ French Press หรือ Cold Brew บดปานกลาง (Medium Grind) ที่นิยมใช้สำหรับการดริปหรือเครื่องชงไฟฟ้า และ บดละเอียด (Fine Grind) ที่ใช้กับการชง Espresso ซึ่งต้องการแรงดันสูงในการสกัดกาแฟ นอกจากนี้ การเลือกใช้เครื่องบดคุณภาพสูง เช่น เครื่องบดแบบ Burr Grinder จะช่วยให้ได้ขนาดของผงกาแฟที่สม่ำเสมอ และส่งผลให้รสชาติของกาแฟในถ้วยสมดุลมากยิ่งขึ้น" },
+    { id: 4, name: "brew", image: "/process/process4.png", alt: "การชงกาแฟ", img: "/process/process8.jpg", content: "ขั้นตอนสุดท้ายคือการชงกาแฟ ซึ่งมีวิธีการหลากหลายตามวัฒนธรรมและความนิยม เช่น การชงแบบ Espresso ที่ใช้แรงดันสูงและอุณหภูมิน้ำที่เหมาะสมในการสกัดกาแฟภายในเวลาอันสั้น การดริป (Pour Over) ที่เน้นความพิถีพิถันในการรินน้ำร้อนผ่านผงกาแฟในรูปแบบวงกลม เพื่อควบคุมการสกัดให้ได้รสชาติที่ละเอียดอ่อน การชงแบบ French Press ที่ใช้น้ำร้อนแช่ผงกาแฟในระยะเวลาหนึ่งก่อนกดกรอง การชง Cold Brew ที่ใช้น้ำเย็นแช่กาแฟในระยะเวลานานเพื่อดึงรสชาติที่นุ่มนวลและหวานเป็นธรรมชาติ และวิธีการอื่น ๆ อีกมากมาย โดยการเลือกวิธีการชงที่เหมาะสมกับระดับการบดกาแฟและชนิดของเมล็ด จะช่วยให้ได้รสชาติกาแฟที่ตรงใจผู้ดื่มมากที่สุด" },
   ];
 
   return (
-    <div>
+    <div className="bg-[#f3f1ec]">
 
-    <Navbar/>
+      <Navbar />
 
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto p-6 ">
         {/* Header with icons */}
         <div className="flex justify-center items-center space-x-6 py-6">
           {icons.map((icon) => (
@@ -30,7 +30,7 @@ function Process() {
               <img
                 src={icon.image}
                 alt={icon.alt}
-                className="w-12 h-12 sm:w-10 sm:h-10"
+                className="w-1/2 h-1/2 sm:w-10 sm:h-10"
               />
             </button>
           ))}
@@ -39,19 +39,22 @@ function Process() {
         {/* Content Section */}
         <div className="mt-8 text-center">
           {icons.map(
-            (icon) =>
-              selectedIcon === icon.name && (
-                <div key={icon.id}>
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4">{icon.alt}</h2>
-                  <p className="text-gray-700 max-w-2xl mx-auto">{icon.content}</p>
+            (content) =>
+              selectedIcon === content.name && (
+                <div key={content.id} >
+                  <img src={content.img} className="w-1/2 mx-auto mb-5"></img>
+                  <div className="bg-[#b69788] py-5 mb-3 rounded-2xl" >
+                    <h2 className="text-lg md:text-2xl font-bold mb-4">{content.alt}</h2>
+                    <p className="text-gray-700 max-w-2xl mx-auto">{content.content}</p>
+                  </div>
                 </div>
               )
           )}
         </div>
       </div>
 
-      <Footer/>
-      
+      <Footer />
+
     </div>
   );
 };

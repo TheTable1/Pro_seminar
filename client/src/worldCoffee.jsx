@@ -259,47 +259,39 @@ function Home() {
 
       if (coffeeData[countryName]) {
         document.getElementById("info").innerHTML = `
-<<<<<<< Updated upstream
-          <div class="p-6 bg-[#5c4033] border border-[#d2b48c] rounded-lg shadow-lg">
+<div class="p-6 bg-[#5c4033] border border-[#d2b48c] rounded-lg shadow-lg">
   <h2 class="text-2xl font-bold text-[#f5f5dc] mb-4">${countryName}</h2>
-  
-  <!-- ข้อมูลเพิ่มเติม -->
-  <div class="flex items-center text-base text-[#f5f5dc] mb-2">
-    <img src="/world/info.png" alt="info icon" class="w-6 h-6 mr-3" />
-    <b class="mr-2">ข้อมูลเพิ่มเติม:</b>
-    <span>${coffeeData[countryName].description}</span>
-  </div>
 
-  <!-- ภูมิภาคที่ปลูกกาแฟ -->
-  <div class="flex items-center text-base text-[#f5f5dc] mb-2">
-    <img src="/world/map.png" alt="map icon" class="w-6 h-6 mr-3" />
-    <b class="mr-2">ภูมิภาคที่ปลูกกาแฟ:</b>
-    <span>${coffeeData[countryName].cultivation}</span>
-  </div>
+  <!-- Card container -->
+  <div class="flex flex-wrap gap-4 justify-start">
+    <!-- ข้อมูลเพิ่มเติม -->
+    <div class="bg-[#6b4226] p-4 rounded-md shadow-md border border-[#d2b48c] w-full sm:w-full md:w-[calc(33.333%-16px)]">
+      <div class="flex items-center text-base text-[#f5f5dc] mb-2">
+        <img src="/world/info.png" alt="info icon" class="w-6 h-6 mr-3" />
+        <b class="mr-2">ข้อมูลเพิ่มเติม:</b>
+      </div>
+      <p class="text-[#f5f5dc]">${coffeeData[countryName].description}</p>
+    </div>
 
-  <!-- กาแฟที่มีความโดดเด่น -->
-  <div class="flex items-center text-base text-[#f5f5dc]">
-    <img src="/world/bean.png" alt="bean icon" class="w-6 h-6 mr-3" />
-    <b class="mr-2">กาแฟที่มีความโดดเด่น:</b>
-    <span>${coffeeData[countryName].specialties.join(", ")}</span>
+    <!-- ภูมิภาคที่ปลูกกาแฟ -->
+    <div class="bg-[#6b4226] p-4 rounded-md shadow-md border border-[#d2b48c] w-full sm:w-full md:w-[calc(33.333%-16px)]">
+      <div class="flex items-center text-base text-[#f5f5dc] mb-2">
+        <img src="/world/map.png" alt="map icon" class="w-6 h-6 mr-3" />
+        <b class="mr-2">ภูมิภาคที่ปลูกกาแฟ:</b>
+      </div>
+      <p class="text-[#f5f5dc]">${coffeeData[countryName].cultivation}</p>
+    </div>
+
+    <!-- กาแฟที่มีความโดดเด่น -->
+    <div class="bg-[#6b4226] p-4 rounded-md shadow-md border border-[#d2b48c] w-full sm:w-full md:w-[calc(33.333%-16px)]">
+      <div class="flex items-center text-base text-[#f5f5dc] mb-2">
+        <img src="/world/bean.png" alt="bean icon" class="w-6 h-6 mr-3" />
+        <b class="mr-2">กาแฟที่มีความโดดเด่น:</b>
+      </div>
+      <p class="text-[#f5f5dc]">${coffeeData[countryName].specialties.join(", ")}</p>
+    </div>
   </div>
 </div>
-
-=======
-          <div class="p-6 bg-beige-light border border-brown-superlight rounded-lg shadow-lg">
-            <h2 class="text-2xl font-bold text-brown mb-4">${countryName}</h2>
-            <div>
-              <p class="text-base text-dark-brown mb-2">${coffeeData[countryName].description}</p>
-            </div>
-            <div>
-            <p class="text-base text-dark-brown mb-2">${coffeeData[countryName].cultivation}</p>
-            </div>
-            <div>
-            <p class="text-base text-dark-brown">${coffeeData[countryName].specialties}</p>
-            </div>
-          </div>
->>>>>>> Stashed changes
-
 
         `;
       } else {
