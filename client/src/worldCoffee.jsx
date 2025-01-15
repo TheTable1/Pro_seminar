@@ -259,6 +259,7 @@ function Home() {
 
       if (coffeeData[countryName]) {
         document.getElementById("info").innerHTML = `
+<<<<<<< Updated upstream
           <div class="p-6 bg-[#5c4033] border border-[#d2b48c] rounded-lg shadow-lg">
   <h2 class="text-2xl font-bold text-[#f5f5dc] mb-4">${countryName}</h2>
   
@@ -284,6 +285,20 @@ function Home() {
   </div>
 </div>
 
+=======
+          <div class="p-6 bg-beige-light border border-brown-superlight rounded-lg shadow-lg">
+            <h2 class="text-2xl font-bold text-brown mb-4">${countryName}</h2>
+            <div>
+              <p class="text-base text-dark-brown mb-2">${coffeeData[countryName].description}</p>
+            </div>
+            <div>
+            <p class="text-base text-dark-brown mb-2">${coffeeData[countryName].cultivation}</p>
+            </div>
+            <div>
+            <p class="text-base text-dark-brown">${coffeeData[countryName].specialties}</p>
+            </div>
+          </div>
+>>>>>>> Stashed changes
 
 
         `;

@@ -69,7 +69,7 @@ function Login() {
                                 required
                             />
                         </div>
-                        <style jsx>{`
+                        <style >{`
                                 .form-control::placeholder {
                                     color: white; /* กำหนดสีของ placeholder เป็นสีขาว */
                                 }
@@ -96,7 +96,7 @@ function Login() {
                             > Login</button>
                         </div>
                     </form>
-                    <p className="text-white mt-4 mb-1 ">You don't have an account yet. <Link to="/register" className="text-light ">Register</Link></p>
+                    <p className="text-white mt-4 mb-1 ">You don`&apos;`t have an account yet. <Link to="/register" className="text-light ">Register</Link></p>
                     
                 </div>
             </div>
