@@ -16,6 +16,9 @@ const CoffeeSimulator = () => {
   const [qteActive, setQteActive] = useState(false); // เปิด/ปิด QTE
   const [qteCount, setQteCount] = useState(0); // นับจำนวนการกดใน QTE
   const [isReadyToServe, setIsReadyToServe] = useState(false); // สถานะพร้อมเสิร์ฟ
+  const [dripImage, setDripImage] = useState('/simulator/เครื่องดริปที่ล้างกระดาษกรอกแล้วและใส่กาแฟบด.png'); // ภาพปัจจุบัน
+  const [isGifPlaying, setIsGifPlaying] = useState(false); // ล็อก QTE ขณะ gif เล่น
+
 
   const [steps, setSteps] = useState([
     {
@@ -280,8 +283,12 @@ const CoffeeSimulator = () => {
   };
 
   const handleQTEClick = () => {
+    handleQTEProgress(); // เรียกฟังก์ชัน QTE Progress
     const targetLeft = 40; // ตำแหน่งซ้ายของ target zone
     const targetRight = 60; // ตำแหน่งขวาของ target zone
+
+    if (isGifPlaying) return; // หยุดการทำงานถ้า gif กำลังเล่นอยู่
+    handleQTEProgress(); // เรียกฟังก์ชัน QTE Progress
   
     if (pointerPosition >= targetLeft && pointerPosition <= targetRight) {
       setQteCount((prev) => prev + 1); // เพิ่มจำนวนการกดที่สำเร็จ
@@ -307,6 +314,27 @@ const CoffeeSimulator = () => {
     } else {
       setMessage('ดริปผิดพลาด! โปรดลองใหม่');
     }
+  };  
+  
+  const handleQTEProgress = () => {
+    if (isGifPlaying) return; // หยุดการทำงานถ้า gif กำลังเล่นอยู่
+  
+    setIsGifPlaying(true); // ล็อก QTE
+    setDripImage('/simulator/โถรองดริปพร้อมดริปกาแฟ.png'); // เปลี่ยนเป็น gif
+  
+    setTimeout(() => {
+      setIsGifPlaying(false); // ปลดล็อก QTE
+      setDripImage('/simulator/เครื่องดริปที่ล้างกระดาษกรอกแล้วและใส่กาแฟบด.png'); // กลับไปเป็นภาพนิ่ง
+      setQteCount((prev) => prev + 1); // เพิ่มจำนวนการกดสำเร็จ
+  
+      if (qteCount + 1 === 3) {
+        // ถ้า QTE สำเร็จครบ 3 ครั้ง
+        setDripImage('/simulator/เครื่องดริปที่ล้างกระดาษกรอกแล้วและใส่กาแฟบด.png'); // เปลี่ยนเป็นภาพดริปเสร็จ
+        setQteActive(false); // ปิด QTE
+        setIsReadyToServe(true); // พร้อมสำหรับขั้นตอนสุดท้าย
+        setMessage('QTE เสร็จสิ้น! โปรดเทกาแฟใส่แก้ว');
+      }
+    }, 3000); // เวลา gif 3 วินาที
   };  
   
   const handleGrind = () => {
@@ -412,6 +440,7 @@ const CoffeeSimulator = () => {
     setIsPouring(false);
     setQteActive(false);
     setIsReadyToServe(false);
+    setIsGifPlaying(false); // รีเซ็ตสถานะ gif
   
     // รีเซ็ตสถานะของกาแฟบดใน steps กลับไปเป็น hidden
     setSteps((prevSteps) =>
@@ -430,13 +459,16 @@ const CoffeeSimulator = () => {
     );
   };  
  
+  const navbarHeight = 106; // ความสูงของ Navbar (px)
+ const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสูงของ Simulator
+
   return (
-    <div className="relative w-full h-full bg-neutral-100">
+    <div className="relative ">
       <Navbar />
       {/* Layout */}
-      <div className="grid grid-cols-12 gap-4 w-full h-full pt-2 px-4 sm:px-8">
+      <div className="grid grid-cols-12 gap-4 pt-2 px-4 sm:px-8" style={{ height: simulatorHeight }}>
         {/* Left Area - Equipment list */}
-        <div className="col-span-12 sm:col-span-5 h-screen bg-gray-200 rounded shadow p-2">
+        <div className="col-span-12 sm:col-span-5 h-screen bg-gray-200 rounded shadow p-2"style={{ height: simulatorHeight }}>
           {/* หัวข้อของรายการอุปกรณ์ */}
           <h3 className="text-center">อุปกรณ์ที่ใช้ในเมนูนี้</h3>
 
@@ -454,19 +486,26 @@ const CoffeeSimulator = () => {
               return (
                 <motion.div
                   key={equipment.id}
-                  className="flex items-center justify-center border border-gray-400 rounded-lg p-4 bg-white shadow-sm cursor-grab"
-                  drag
+                  className="flex items-center justify-center rounded-lg cursor-grab"
                   dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
                   dragElastic={1}
                   onDragEnd={(event, info) => handleDragEnd(equipment, event, info)}
-                  style={{ width: '100%', height: '100%' }} // ทำให้เต็มพื้นที่อุปกรณ์
+                  style={{
+                    width: "250px", // ความกว้างพื้นหลัง
+                    height: "160px", // ความสูงพื้นหลัง
+                    padding: "5px", // ระยะขอบภายในพื้นหลัง
+                  }}
                 >
                   {/* แสดงรูปภาพแทนข้อความ */}
                   {equipment.image ? (
                     <motion.img
                     src={equipment.image} // ใช้ path ของรูปภาพ
                     alt={equipment.name}
-                    className="w-20 h-35 object-contain cursor-grab" // เพิ่ม cursor-grab ให้รูปภาพ
+                    className="object-contain cursor-grab" // เพิ่ม cursor-grab ให้รูปภาพ
+                    style={{
+                      width: "100%", // ความกว้างเต็มพื้นหลัง
+                      height: "100%", // ความสูงเต็มพื้นหลัง
+                    }}
                     drag // เปิดใช้งานการลากเฉพาะที่รูปภาพ
                     dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }} // จำกัดการลาก
                     dragElastic={1} // เพิ่มความยืดหยุ่น
@@ -482,23 +521,16 @@ const CoffeeSimulator = () => {
         </div>
 
         {/* Center Area - Action area */}
-        <div ref={workspaceRef} className="col-span-12 sm:col-span-5 h-screen bg-gray-200 rounded shadow p-4 flex flex-col">
+        <div ref={workspaceRef} className="col-span-12 sm:col-span-5 h-screen bg-gray-200 rounded shadow p-4 flex flex-col"style={{ height: simulatorHeight }}>
         {/* หัวข้อสำหรับพื้นที่ดำเนินการ */}
         <h3 className="text-center font-semibold text-lg">
           พื้นที่สำหรับนำอุปกรณ์ต่างๆ มาดำเนินการ
         </h3>
-        {/*ข้อความบรรยาย*/}
-        <div className="mb-4 text-center text-lg font-semibold text-gray-700">
-            {currentStep === 0 && "ขั้นตอนที่ 1: ลากเครื่องบดและเมล็ดกาแฟไปยังพื้นที่ดำเนินการ และคลิกเพื่อบดกาแฟ"}
-            {currentStep === 1 && "ขั้นตอนที่ 2: ลากอุปกรณ์ทั้งหมดสำหรับการดริปกาแฟไปยังพื้นที่ดำเนินการ (โถรองดริป, ดริปเปอร์, กระดาษกรอง และกาดริป)"}
-            {currentStep === 2 && "ขั้นตอนที่ 3: เพิ่มกาแฟบดลงในโถดริป จากนั้นใช้กาดริปเพื่อเทน้ำและเริ่มดริป"}
-            {currentStep === 3 && "ขั้นตอนที่ 4: กดปุ่มเพื่อเทกาแฟลงแก้ว และเพลิดเพลินกับเอสเพรสโซที่คุณทำเอง"}
-        </div>
         {/* พื้นที่ทำงาน (Workspace) */}
-        <div className="mt-4 border-dashed border-2 border-gray-400 h-full flex flex-col items-center justify-center">
+        <div className="mt-4 h-full flex flex-col items-center justify-start" style={{ height: "70%", paddingTop: "50px" }}>
           {currentStep === 3 ? (
             // แสดงขั้นตอนที่ 4: ภาพเมนูเอสเพรสโซและปุ่มเริ่มใหม่
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center mt-4">
               {/* แสดงภาพเมนูเอสเพรสโซ */}
               <img
                 src="/simulator/เอสเพรสโซ.png" // เปลี่ยนเป็น URL หรือ path ของรูปภาพ
@@ -516,9 +548,16 @@ const CoffeeSimulator = () => {
           ) : qteActive ? (
             // QTE แสดงเมื่อ qteActive เป็น true
             <div className="flex flex-col items-center">
+            {/* แสดงภาพเครื่องดริป */}
+              <img
+                src={dripImage}
+                alt="เครื่องดริป"
+                className="w-96 h-96 object-contain mb-4"
+                style={{ marginTop: "25px" }} // เพิ่ม marginTop เพื่อลดความสูง
+              />
               {/* QTE Components */}
               <div className="progress-container relative w-full max-w-lg">
-                <div className="progress-bar w-full h-4 relative overflow-hidden">
+                <div className="progress-bar w-full h-4 relative o verflow-hidden">
                   <div
                     className="target-zone bg-green-500 h-full absolute"
                     style={{ width: "20%", left: "40%" }}
@@ -530,8 +569,11 @@ const CoffeeSimulator = () => {
                 </div>
               </div>
               <button
-                onClick={handleQTEClick}
-                className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+                onClick={handleQTEProgress}
+                disabled={isGifPlaying} // ปิดการใช้งานปุ่มขณะ gif เล่นอยู่
+                className={`mt-4 bg-blue-500 text-white py-2 px-4 rounded ${
+                  isGifPlaying ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'
+                }`}
               >
                 คลิกเพื่อดริป
               </button>
@@ -541,7 +583,8 @@ const CoffeeSimulator = () => {
             <div className="flex flex-col items-center">
               <button
                 onClick={handleServe} // เรียกใช้ฟังก์ชัน handleServe
-                className="bg-purple-500 text-white py-2 px-4 rounded shadow hover:bg-purple-700"
+                className="
+                 text-white py-2 px-4 rounded shadow hover:bg-purple-700"
               >
                 กดเพื่อเทกาแฟลงแก้ว
               </button>
@@ -552,11 +595,11 @@ const CoffeeSimulator = () => {
             workspaceItems.map((item) => (
               <motion.div
                 key={item.id}
-                className={`p-4 border border-gray-400  rounded shadow-sm mt-2 
+                className={`p-4 rounded mt-2 
                   ${item.state === "ready-to-grind" && !isGrinding ? "cursor-pointer" : ""}
                   ${item.id === "kettle" && isPouring ? "text-blue-500" : ""}
                   ${item.state === "ready-to-drip" ? "cursor-pointer bg-yellow-200" : ""}
-                  ${item.state === "ready-to-pour-out" ? "cursor-pointer bg-green-200" : ""}
+                  ${item.state === "ready-to-pour-out" ? "cursor-pointer " : ""}
                   ${item.state === "ready-to-brew" ? "cursor-pointer bg-orange-300" : ""}
                   ${item.state === "ready-to-serve" ? "cursor-pointer bg-purple-300" : ""}
                 `}
@@ -574,8 +617,8 @@ const CoffeeSimulator = () => {
                     : undefined
                 }
                 style={{
-                  width: "600px", // กำหนดขนาดความกว้าง (ปรับค่าตามต้องการ)
-                  height: "600px", // กำหนดขนาดความสูง (ปรับค่าตามต้องการ)
+                  width: "500px", // กำหนดขนาดความกว้าง (ปรับค่าตามต้องการ)
+                  height: "500px", // กำหนดขนาดความสูง (ปรับค่าตามต้องการ)
                   display: "flex",
                   justifyContent: "center", // จัดแนวนอน
                   alignItems: "center", // จัดแนวตั้ง
@@ -596,7 +639,7 @@ const CoffeeSimulator = () => {
 
 
         {/* Right Area - Step List */}
-        <div className="col-span-12 sm:col-span-2 h-screen bg-gray-200 rounded shadow p-4 flex flex-col justify-between">
+        <div className="col-span-12 sm:col-span-2 h-screen bg-gray-200 rounded shadow p-4 flex flex-col justify-between"style={{ height: simulatorHeight }}>
           {/* หัวข้อรายการขั้นตอน */}
           <h3 className="text-center font-semibold text-lg">รายการขั้นตอนต่างๆ</h3>
 
@@ -636,6 +679,20 @@ const CoffeeSimulator = () => {
               ย้อนกลับขั้นตอน
             </button>
           </div>
+        </div>
+        {/* Subtitle Area */}
+        <div
+          className="fixed bottom-8 left-1/2 transform -translate-x-1/2 text-center text-lg font-semibold text-white px-4 py-2 rounded"
+          style={{
+            backgroundColor: "rgba(0, 0, 0, 0.6)", // เพิ่มพื้นหลังโปร่งแสงเพื่อให้อ่านง่าย
+            maxWidth: "90%", // จำกัดความกว้างสูงสุด
+            zIndex: 50, // วางคำบรรยายไว้บนสุด
+          }}
+        >
+          {currentStep === 0 && "ขั้นตอนที่ 1: ลากเครื่องบดและเมล็ดกาแฟไปยังพื้นที่ดำเนินการ และคลิกเพื่อบดกาแฟ"}
+          {currentStep === 1 && "ขั้นตอนที่ 2: ลากอุปกรณ์ทั้งหมดสำหรับการดริปกาแฟไปยังพื้นที่ดำเนินการ (โถรองดริป, ดริปเปอร์, กระดาษกรอง และกาดริป)"}
+          {currentStep === 2 && "ขั้นตอนที่ 3: เพิ่มกาแฟบดลงในโถดริป จากนั้นใช้กาดริปเพื่อเทน้ำและเริ่มดริป"}
+          {currentStep === 3 && "ขั้นตอนที่ 4: กดปุ่มเพื่อเทกาแฟลงแก้ว และเพลิดเพลินกับเอสเพรสโซที่คุณทำเอง"}
         </div>
       </div>
     </div>
