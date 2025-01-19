@@ -264,7 +264,7 @@ const CoffeeSimulator = () => {
         setWorkspaceItems(updatedItems); // อัปเดต workspaceItems
         setMessage('น้ำถูกเทออกเรียบร้อย! พร้อมสำหรับดริป');
         handleNextStep(); // ไปยังขั้นตอนถัดไป
-      }, 3000); // รอ 3 วินาที
+      }, 2000); // รอ 3 วินาที
     } else {
       setMessage('คุณต้องล้างกระดาษกรองก่อนที่จะเทน้ำออก');
     }
@@ -279,42 +279,46 @@ const CoffeeSimulator = () => {
       );
       handleNextStep(); // ไปยังขั้นตอนสุดท้าย
       setMessage('กาแฟพร้อมเสิร์ฟ! ไปยังขั้นตอนสุดท้าย'); // แสดงข้อความเมื่อเทกาแฟเสร็จ
-    }, 3000); // ตั้งเวลา 3 วินาที
+    }, 1000); // ตั้งเวลา 3 วินาที
   };
 
   const handleQTEClick = () => {
-    handleQTEProgress(); // เรียกฟังก์ชัน QTE Progress
     const targetLeft = 40; // ตำแหน่งซ้ายของ target zone
     const targetRight = 60; // ตำแหน่งขวาของ target zone
-
+  
     if (isGifPlaying) return; // หยุดการทำงานถ้า gif กำลังเล่นอยู่
-    handleQTEProgress(); // เรียกฟังก์ชัน QTE Progress
   
+    // ตรวจสอบว่าตำแหน่ง Pointer อยู่ในพื้นที่เป้าหมายหรือไม่
     if (pointerPosition >= targetLeft && pointerPosition <= targetRight) {
-      setQteCount((prev) => prev + 1); // เพิ่มจำนวนการกดที่สำเร็จ
-      setMessage(`ดริปสำเร็จ ${qteCount + 1}/3 ครั้ง`);
+      setQteCount((prevCount) => {
+        const newCount = prevCount + 1; // เพิ่ม QTE count
+        setMessage(`ดริปสำเร็จ ${newCount}/3 ครั้ง`);
   
-      // เช็คว่ากดครบ 3 ครั้งแล้วหรือยัง
-      if (qteCount + 1 === 3) {
-        setQteActive(false); // ปิด QTE
-        setIsReadyToServe(true); // เปิดสถานะพร้อมเสิร์ฟ
-        setQteCount(0); // รีเซ็ตจำนวนการกด
-        setMessage('QTE เสร็จสิ้น! โปรดเทกาแฟใส่แก้ว');
-        
-        setWorkspaceItems((current) =>
-          current.map((item) =>
-            item.id === 'ground-coffee' || item.id === 'kettle'
-              ? { ...item, state: 'ready-to-serve' }
-              : item
-          )
-        );
-        
-        handleNextStep(); // ไปยังขั้นตอนถัดไป
-      }
+        // หากครบ 3 ครั้ง ให้ปิด QTE และเปลี่ยนสถานะ
+        if (newCount === 3) {
+          setQteActive(false); // ปิด QTE
+          setIsReadyToServe(true); // เปิดสถานะพร้อมเสิร์ฟ
+          setQteCount(0); // รีเซ็ต QTE count
+          setMessage('QTE เสร็จสิ้น! โปรดเทกาแฟใส่แก้ว');
+  
+          // อัปเดต workspace items ให้พร้อมสำหรับเสิร์ฟ
+          setWorkspaceItems((current) =>
+            current.map((item) =>
+              item.id === 'ground-coffee' || item.id === 'kettle'
+                ? { ...item, state: 'ready-to-serve' }
+                : item
+            )
+          );
+  
+          handleNextStep(); // ไปยังขั้นตอนถัดไป
+        }
+  
+        return newCount; // อัปเดต QTE count
+      });
     } else {
       setMessage('ดริปผิดพลาด! โปรดลองใหม่');
     }
-  };  
+  };
   
   const handleQTEProgress = () => {
     if (isGifPlaying) return; // หยุดการทำงานถ้า gif กำลังเล่นอยู่
@@ -441,6 +445,7 @@ const CoffeeSimulator = () => {
     setQteActive(false);
     setIsReadyToServe(false);
     setIsGifPlaying(false); // รีเซ็ตสถานะ gif
+    setQteCount(0); // รีเซ็ต QTE count
   
     // รีเซ็ตสถานะของกาแฟบดใน steps กลับไปเป็น hidden
     setSteps((prevSteps) =>
@@ -579,16 +584,15 @@ const CoffeeSimulator = () => {
               </button>
             </div>
           ) : isReadyToServe ? (
-            // แสดงปุ่มให้กดเทกาแฟใส่แก้ว
+              // แสดงภาพแทนปุ่มให้กดเทกาแฟใส่แก้ว
             <div className="flex flex-col items-center">
-              <button
-                onClick={handleServe} // เรียกใช้ฟังก์ชัน handleServe
-                className="
-                 text-white py-2 px-4 rounded shadow hover:bg-purple-700"
-              >
-                กดเพื่อเทกาแฟลงแก้ว
-              </button>
-            </div>
+            <img
+              src="/simulator/ดริปกาแฟเสร็จ.png" // ใส่ path ของรูปภาพที่ต้องการ
+              alt="เทกาแฟลงแก้ว"
+              className="w-96 h-96 object-contain cursor-pointer" // ขนาดภาพและ cursor pointer
+              onClick={handleServe} // เรียกฟังก์ชัน handleServe เมื่อคลิก
+            />
+          </div>
           ) : (
             // แสดง Workspace Items สำหรับขั้นตอนอื่น ๆ
             workspaceItems.length > 0 &&
