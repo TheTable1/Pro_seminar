@@ -48,22 +48,44 @@ function CoffeeBeans() {
       <Navbar />
 
       <main className="lg:p-6 sm:p-0">
+        {/* แสดงรายละเอียดของเมนู */}
         {selectedItem ? (
-          <div className="bg-white rounded-lg shadow-md p-5">
-            <button onClick={handleBack} className="mb-4 text-blue-500">
-              กลับ
-            </button>
-            <h2 className="text-xl font-bold">{selectedItem.name}</h2>
-            <img
-              style={{ width: "350px", height: "250px", objectFit: "cover" }}
-              src={selectedItem.img}
-              alt={selectedItem.name}
-            />
-            <p className="mt-2">{selectedItem.description}</p>
-            <button onClick={handleTryIt}>ลองทำ</button>
+        <div className="bg-white rounded-lg shadow-md p-5">
+          <h2 className="text-3xl font-bold px-4 mb-3">{selectedItem.name}</h2>
+
+          {/* Grid Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* Left Section: Image and Menu Name */}
+            <div className="flex flex-col items-center">
+              <img
+                className="w-4/5 h-auto object-cover rounded-md shadow-lg"
+                src={selectedItem.img}
+                alt={selectedItem.name}
+              />
+            </div>
+
+            {/* Right Section: Steps and Button */}
+            <div className="space-y-6 ">
+              <h2 className="text-3xl font-bold mb-4 text-brown">{selectedItem.name}</h2>
+              <h3 className="font-semibold text-lg text-brown">ขั้นตอนการทำ</h3>
+              <ol className="list-decimal pl-5 space-y-2">
+                {selectedItem.steps.map((step, index) => (
+                  <li key={index} className="text-gray-700">
+                    {step}
+                  </li>
+                ))}
+              </ol>
+              <button
+                onClick={handleTryIt}
+                className="bg-brown text-white px-4 py-2 rounded-3xl hover:bg-light-brown"
+              >
+                ลองทำ
+              </button>
+            </div>
           </div>
+        </div>
         ) : (
-          <section className="bg-white rounded-lg shadow-md transition duration-200 ease-in-out hover:shadow-lg">
+          <section className="bg-white rounded-lg h-full shadow-md transition duration-200 ease-in-out hover:shadow-lg">
             <div className="p-2 md:p-3 lg:p-5">
               {/* Search Bar */}
               <div className="mb-6 flex justify-center">
@@ -109,14 +131,11 @@ function CoffeeBeans() {
                       onClick={() => handleItemClick(item)} >
                       <div className="p-4 bg-brown rounded-lg shadow-sm text-center text-white font-medium transition duration-200 ease-in-out hover:shadow-lg">
                         <img
-                          className=" lg:w-96 lg:h-44 md:w-60 md:h-44 sm:w-60 sm:h-44"
-                          style={{ objectFit: "cover" }}
+                          className="w-full h-40 object-cover rounded-md"
                           src={item.img}
                           alt={item.name}
                         />
-
-                        <br />
-                        {item.name}
+                        <h4 className="mt-2">{item.name}</h4>
                       </div>
                     </div>
                   ))}
