@@ -562,7 +562,7 @@ const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสู
         </div>
 
         {/* Center Area - Action area */}
-        <div ref={workspaceRef} className="col-span-12 sm:col-span-5 h-screen rounded shadow p-4 flex flex-col"style={{ height: simulatorHeight }}>
+        <div ref={workspaceRef} className="col-span-12 sm:col-span-5 h-screen  p-4 flex flex-col"style={{ height: simulatorHeight }}>
         {/* หัวข้อสำหรับพื้นที่ดำเนินการ */}
         <h3 className="text-center font-semibold text-lg">
           พื้นที่สำหรับนำอุปกรณ์ต่างๆ มาดำเนินการ
