@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import CoffeeBeans from "./coffee_beans";
+import CoffeeBean from "./coffee_bean";
+import CoffeeMenu from "./coffee_menu";
 import WorldCoffee from "./worldCoffee";
 import History from "./history";
 import GeneCoffee from "./geneCoffee";
@@ -21,7 +22,6 @@ function App() {
 
         <Route path="/" element={<Home />} />
 
-        
         <Route path="/history" element={<History />} />
         <Route path="/geneCoffee" element={<GeneCoffee />} />
         <Route path="/roasting" element={<Roasting />} />
@@ -30,11 +30,11 @@ function App() {
         <Route path="/worldCoffee" element={<WorldCoffee />} />
         <Route path="/articles" element={<Articles />} />
 
-        <Route path="/coffee_beans" element={<CoffeeBeans />} />
+        <Route path="/coffee_bean" element={<CoffeeBean />} />
+
+        <Route path="/coffee_menu" element={<CoffeeMenu />} />
 
         <Route path="/simulator" element={<Simulator />} />
-
-      
       </Routes>
     </BrowserRouter>
   );

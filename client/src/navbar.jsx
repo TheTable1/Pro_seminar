@@ -62,10 +62,10 @@ export default function Navbar() {
               )}
             </li>
             <li className="cursor-pointer hover:text-light-brown transition duration-300">
-              เมล็ดกาแฟ
+              <Link to="/coffee_bean">เมล็ดกาแฟ</Link>
             </li>
             <li className="cursor-pointer hover:text-light-brown transition duration-300">
-            <Link to="/coffee_beans">เมนูกาแฟ</Link>
+              <Link to="/coffee_menu">เมนูกาแฟ</Link>
             </li>
             <li className="cursor-pointer hover:text-light-brown transition duration-300">
               ฟีดคอกาแฟ
@@ -121,7 +121,7 @@ export default function Navbar() {
                     </Link>
                   </li>
                   <li className="p-2 hover:bg-dark-brown transition duration-200">
-                    <Link  to="/worldCoffee" onClick={() => setShowMenu(false)}>
+                    <Link to="/worldCoffee" onClick={() => setShowMenu(false)}>
                       แผนที่แหล่งผลิตกาแฟโลก
                     </Link>
                   </li>
