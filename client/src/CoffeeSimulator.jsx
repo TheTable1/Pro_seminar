@@ -58,28 +58,63 @@ const CoffeeSimulator = () => {
     }    
   ]);
 
+  const [subtitle, setSubtitle] = useState('');
+
   const workspaceRef = useRef(null);
 
   useEffect(() => {
-    if (currentStep === 2) { // เริ่ม QTE ในขั้นตอนที่ 2
-      const interval = setInterval(() => {
+    let interval;
+    let newMessage = "";
+  
+    if (currentStep === 2 && qteActive) { // เมื่ออยู่ในขั้นตอน QTE (ดริปกาแฟ)
+      newMessage = "คุณต้องกดปุ่มให้ตรงจังหวะเพื่อทำการดริปทั้งหมด 3 ครั้งจึงจะได้เมนูกาแฟที่คุณต้องการ";
+  
+      interval = setInterval(() => {
         setPointerPosition((prev) => {
           let newPosition = prev + direction * 1; // เพิ่มตำแหน่ง Pointer ตามทิศทาง
+  
           if (newPosition <= 0) {
             setDirection(1); // เปลี่ยนทิศทางไปทางขวาเมื่อถึงขอบซ้าย
           } else if (newPosition >= 100) {
             setDirection(-1); // เปลี่ยนทิศทางไปทางซ้ายเมื่อถึงขอบขวา
           }
+  
           return Math.max(0, Math.min(100, newPosition)); // จำกัดตำแหน่งให้อยู่ระหว่าง 0-100
         });
-      }, 10); // อัปเดตตำแหน่งทุก 10ms
+      }, 10); // อัปเดตตำแหน่ง pointer ทุก 10ms
   
-      return () => clearInterval(interval); // ล้าง Interval เมื่อออกจากขั้นตอน
+    } else {
+      // อัปเดตข้อความให้สอดคล้องกับขั้นตอนที่อยู่
+      switch (currentStep) {
+        case 0:
+          newMessage = "ขั้นตอนที่ 1: เริ่มจากการบดกาแฟ โดยการนำเครื่องบดมือไปวางไว้ก่อน จากนั้นนำเมล็ดกาแฟไปใส่ไว้แล้วกดเพื่อบดกาแฟ";
+          break;
+        case 1:
+          newMessage = "ขั้นตอนที่ 2: ทำการเตรียมเครื่องดริป โดยการเพิ่มโถรองดริป ดริปเปอร์ และกระดาษกรอง จากนั้นเทน้ำล้างกระดาษกรอง";
+          break;
+        case 2:
+          newMessage = "ขั้นตอนที่ 3: เริ่มการดริปกาแฟกัน! นำกาแฟที่เราบดไว้มาใส่เครื่องดริปต่อไปนำกาดริปมาเพื่อทำการดริปกาแฟ";
+          break;
+        case 3:
+          newMessage = "ขั้นตอนที่ 4: เสร็จสิ้นการทำเมนูเอสเพรสโซ! คุณสามารถเริ่มต้นทำใหม่อีกรอบได้";
+          break;
+        default:
+          newMessage = steps[currentStep]?.description || "ยินดีต้อนรับเข้าสู่ตัวจำลองการทำกาแฟ!";
+      }
     }
-    
-    // ตั้งข้อความบรรยายขั้นตอน
-    setMessage(steps[currentStep].description);
-  }, [currentStep, direction, steps]);  
+  
+    setMessage(newMessage);
+  
+    return () => {
+      if (interval) clearInterval(interval); // ล้าง Interval เมื่อออกจากขั้นตอน
+    };
+  }, [currentStep, qteActive, direction, steps]);
+  
+  // ✅ ใช้ useEffect แยกต่างหากเพื่ออัปเดต Subtitle Area
+  useEffect(() => {
+    // ใช้ message เป็นแหล่งข้อมูลหลักสำหรับ Subtitle
+    setSubtitle(message);
+  }, [message]);  
 
   const handleDragEnd = (item, event, info) => {
     const workspaceRect = workspaceRef.current?.getBoundingClientRect();
@@ -125,7 +160,7 @@ const CoffeeSimulator = () => {
           // ตรวจสอบเงื่อนไขของการเพิ่มอุปกรณ์
           if (item.id === 'grinder' && !current.some((i) => i.id === 'grinder')) {
             updatedItems.push({ ...item, state: 'default' });
-            setMessage('เครื่องบดถูกเพิ่มในพื้นที่ดำเนินการ');
+            setMessage('เยี่ยมเลย ต่อไปนำเมล็ดกาแฟมาใส่เครื่องบด');
             return updatedItems;
           }
   
@@ -135,7 +170,7 @@ const CoffeeSimulator = () => {
                 ? { ...i, name: 'เครื่องบดที่มีเมล็ดกาแฟ', state: 'ready-to-grind' }
                 : i
             );
-            setMessage('เมล็ดกาแฟถูกเพิ่มในเครื่องบด');
+            setMessage('กดที่เครื่องบดเพื่อบดเมล็ดกาแฟได้เลย');
             return updatedItems;
           }
 
@@ -144,7 +179,7 @@ const CoffeeSimulator = () => {
             setMessage('กรุณาเพิ่มเครื่องบดก่อนเมล็ดกาแฟ!');
             return current;
           }
-          setMessage('กรุณาเพิ่มอุปกรณ์ตามลำดับ! เริ่มจากเครื่องบดก่อน');
+          setMessage('กรุณาเพิ่มอุปกรณ์ตามลำดับ! เริ่มจากเครื่องบดก่อนจากนั้นเป็นเมล็ดกาแฟ');
           return current;
         }
   
@@ -158,13 +193,13 @@ const CoffeeSimulator = () => {
         
           // เพิ่มโถรองดริป
           if (item.id === 'drip-pot' && !current.some((i) => i.state === 'drip-pot')) {
-            setMessage('โถรองดริปถูกเพิ่มในพื้นที่ดำเนินการ');
+            setMessage('ต่อไปเป็นดริปเปอร์');
             return [...current, { ...item, state: 'drip-pot' }];
           }
         
           // เพิ่มดริปเปอร์
           if (item.id === 'drip-stand' && current.some((i) => i.state === 'drip-pot')) {
-            setMessage('ดริปเปอร์ถูกเพิ่มในโถรองดริป');
+            setMessage('ชิ้นสุดท้ายของอุปกรณ์ดริปคือกระดาษกรอก');
             return current.map((i) =>
               i.state === 'drip-pot'
                 ? { ...i, name: 'โถรองดริปที่มีดริปเปอร์', state: 'drip-stand' }
@@ -174,7 +209,7 @@ const CoffeeSimulator = () => {
         
           // เพิ่มกระดาษกรอง
           if (item.id === 'paper-filter' && current.some((i) => i.state === 'drip-stand')) {
-            setMessage('กระดาษกรองถูกเพิ่มในดริปเปอร์');
+            setMessage('ต่อไปเป็นการล้างเครื่องดริป นำกาดริปมาเทใส่กระดาษกรอกได้เลย');
             return current.map((i) =>
               i.state === 'drip-stand'
                 ? { ...i, name: 'โถรองดริปที่มีดริปเปอร์และกระดาษกรอง', state: 'paper-filter' }
@@ -195,7 +230,7 @@ const CoffeeSimulator = () => {
                   : i
               );
               setWorkspaceItems(updatedItems);
-              setMessage('ล้างกระดาษกรองเรียบร้อยแล้ว! คลิกเพื่อเทน้ำออก');
+              setMessage('ล้างกระดาษกรองเรียบร้อยแล้ว! กดที่เครื่องดริปเพื่อเทน้ำออกจากโถ');
             }, 3000);
         
             return current;
@@ -218,7 +253,7 @@ const CoffeeSimulator = () => {
                 ? { ...i, name: 'โถรองดริปที่มีผงกาแฟ', state: 'waiting-for-kettle' }
                 : i
             );
-            setMessage('ผงกาแฟถูกเพิ่มในโถรองดริป!');
+            setMessage('ต่อไปนำกาดริปมาเพื่อทำการดริปกาแฟ');
             return updatedItems;
           }
   
@@ -228,7 +263,7 @@ const CoffeeSimulator = () => {
                 ? { ...i, name: 'โถรองดริปพร้อมดริปกาแฟ', state: 'ready-to-brew' }
                 : i
             );
-            setMessage('กาดริปถูกเพิ่มในโถรองดริป! พร้อมเริ่มดริปกาแฟ');
+            setMessage('คุณต้องกดปุ่มให้ตรงจังหวะเพื่อทำการดริปทั้งหมด 3 ครั้งจึงจะได้เมนูกาแฟที่คุณต้องการ');
 
                 // เปิด QTE เมื่ออุปกรณ์ครบ
             setQteActive(true); // เปิดใช้งาน QTE
@@ -285,40 +320,41 @@ const CoffeeSimulator = () => {
   const handleQTEClick = () => {
     const targetLeft = 40; // ตำแหน่งซ้ายของ target zone
     const targetRight = 60; // ตำแหน่งขวาของ target zone
-  
+
     if (isGifPlaying) return; // หยุดการทำงานถ้า gif กำลังเล่นอยู่
-  
+
     // ตรวจสอบว่าตำแหน่ง Pointer อยู่ในพื้นที่เป้าหมายหรือไม่
     if (pointerPosition >= targetLeft && pointerPosition <= targetRight) {
-      setQteCount((prevCount) => {
-        const newCount = prevCount + 1; // เพิ่ม QTE count
-        setMessage(`ดริปสำเร็จ ${newCount}/3 ครั้ง`);
-  
-        // หากครบ 3 ครั้ง ให้ปิด QTE และเปลี่ยนสถานะ
-        if (newCount === 3) {
+        setQteCount((prevCount) => prevCount + 1); // เพิ่ม QTE count
+    } else {
+        setMessage('ดริปผิดพลาด! โปรดลองใหม่');
+    }
+  };
+
+  // ใช้ useEffect แยกต่างหากเพื่อตรวจสอบ qteCount และอัปเดต message
+  useEffect(() => {
+      if (qteCount > 0 && qteCount < 3) {
+          setMessage(`ดริปสำเร็จ ${qteCount}/3 ครั้ง`);
+      }
+
+      if (qteCount === 3) {
           setQteActive(false); // ปิด QTE
           setIsReadyToServe(true); // เปิดสถานะพร้อมเสิร์ฟ
           setQteCount(0); // รีเซ็ต QTE count
-          setMessage('QTE เสร็จสิ้น! โปรดเทกาแฟใส่แก้ว');
-  
+          setMessage('ดริปกาแฟเสร็จสิ้น! โปรดกดที่โถเพื่อเทกาแฟใส่แก้ว');
+
           // อัปเดต workspace items ให้พร้อมสำหรับเสิร์ฟ
           setWorkspaceItems((current) =>
-            current.map((item) =>
-              item.id === 'ground-coffee' || item.id === 'kettle'
-                ? { ...item, state: 'ready-to-serve' }
-                : item
-            )
+              current.map((item) =>
+                  item.id === 'ground-coffee' || item.id === 'kettle'
+                      ? { ...item, state: 'ready-to-serve' }
+                      : item
+              )
           );
-  
+
           handleNextStep(); // ไปยังขั้นตอนถัดไป
-        }
-  
-        return newCount; // อัปเดต QTE count
-      });
-    } else {
-      setMessage('ดริปผิดพลาด! โปรดลองใหม่');
-    }
-  };
+      }
+  }, [qteCount]);
   
   const handleQTEProgress = () => {
     if (isGifPlaying) return; // หยุดการทำงานถ้า gif กำลังเล่นอยู่
@@ -344,7 +380,7 @@ const CoffeeSimulator = () => {
   const handleGrind = () => {
     if (workspaceItems.some((item) => item.state === 'ready-to-grind')) {
       setIsGrinding(true);
-      setMessage('กำลังบดเมล็ดกาแฟ...');
+      setMessage('กำลังบดเมล็ดกาแฟ...3...2...1...');
   
       setTimeout(() => {
         setIsGrinding(false);
@@ -464,21 +500,21 @@ const CoffeeSimulator = () => {
     );
   };  
  
-  const navbarHeight = 106; // ความสูงของ Navbar (px)
- const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสูงของ Simulator
+const navbarHeight = 106; // ความสูงของ Navbar (px)
+const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสูงของ Simulator
 
   return (
     <div className="relative ">
       <Navbar />
       {/* Layout */}
-      <div className="grid grid-cols-12 gap-4 pt-2 px-4 sm:px-8" style={{ height: simulatorHeight }}>
+      <div className="grid grid-cols-12 gap-4 pt-2 px-4 sm:px-8  bg-cover bg-center bg-no-repeat " style={{ backgroundImage: "url('/bg-sim.jpg')" }}>
         {/* Left Area - Equipment list */}
-        <div className="col-span-12 sm:col-span-5 h-screen bg-gray-200 rounded shadow p-2"style={{ height: simulatorHeight }}>
+        <div className="col-span-12 sm:col-span-5 h-screen p-2"style={{ height: simulatorHeight }}>
           {/* หัวข้อของรายการอุปกรณ์ */}
           <h3 className="text-center">อุปกรณ์ที่ใช้ในเมนูนี้</h3>
 
           {/* รายการอุปกรณ์ */}
-          <div className="mt-4 grid grid-cols-2 gap-2">
+          <div className="mt-4 grid grid-cols-2 gap-2 p-5">
             {/* รวมอุปกรณ์จากทุกขั้นตอน */}
             {Array.from(new Set(steps.flatMap(step => step.equipment
             .filter((item) => item.state !== "hidden") // กรองเฉพาะอุปกรณ์ที่ไม่ซ่อน
@@ -526,7 +562,7 @@ const CoffeeSimulator = () => {
         </div>
 
         {/* Center Area - Action area */}
-        <div ref={workspaceRef} className="col-span-12 sm:col-span-5 h-screen bg-gray-200 rounded shadow p-4 flex flex-col"style={{ height: simulatorHeight }}>
+        <div ref={workspaceRef} className="col-span-12 sm:col-span-5 h-screen rounded shadow p-4 flex flex-col"style={{ height: simulatorHeight }}>
         {/* หัวข้อสำหรับพื้นที่ดำเนินการ */}
         <h3 className="text-center font-semibold text-lg">
           พื้นที่สำหรับนำอุปกรณ์ต่างๆ มาดำเนินการ
@@ -643,7 +679,14 @@ const CoffeeSimulator = () => {
 
 
         {/* Right Area - Step List */}
-        <div className="col-span-12 sm:col-span-2 h-screen bg-gray-200 rounded shadow p-4 flex flex-col justify-between"style={{ height: simulatorHeight }}>
+        <div className="col-span-12 sm:col-span-2 h-screen rounded shadow p-4 flex flex-col justify-between"
+          style={{ 
+            height: simulatorHeight,
+            //backgroundImage: "url('/simulator/list-menu.png')",
+            backgroundSize: "contain", // ให้ภาพพื้นหลังแสดงเต็ม
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}>
           {/* หัวข้อรายการขั้นตอน */}
           <h3 className="text-center font-semibold text-lg">รายการขั้นตอนต่างๆ</h3>
 
@@ -693,10 +736,7 @@ const CoffeeSimulator = () => {
             zIndex: 50, // วางคำบรรยายไว้บนสุด
           }}
         >
-          {currentStep === 0 && "ขั้นตอนที่ 1: ลากเครื่องบดและเมล็ดกาแฟไปยังพื้นที่ดำเนินการ และคลิกเพื่อบดกาแฟ"}
-          {currentStep === 1 && "ขั้นตอนที่ 2: ลากอุปกรณ์ทั้งหมดสำหรับการดริปกาแฟไปยังพื้นที่ดำเนินการ (โถรองดริป, ดริปเปอร์, กระดาษกรอง และกาดริป)"}
-          {currentStep === 2 && "ขั้นตอนที่ 3: เพิ่มกาแฟบดลงในโถดริป จากนั้นใช้กาดริปเพื่อเทน้ำและเริ่มดริป"}
-          {currentStep === 3 && "ขั้นตอนที่ 4: กดปุ่มเพื่อเทกาแฟลงแก้ว และเพลิดเพลินกับเอสเพรสโซที่คุณทำเอง"}
+          {subtitle}
         </div>
       </div>
     </div>

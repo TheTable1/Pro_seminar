@@ -52,9 +52,10 @@ const filteredItems = menuItems.filter(
     <div className="min-h-screen bg-gray-100">
       <Navbar />
 
-      <main className="lg:p-6 sm:p-0">
+      <main className="lg:p-6 sm:p-0 ">
         {/* แสดงรายละเอียดของเมนู */}
         {selectedItem ? (
+<<<<<<< Updated upstream:client/src/coffee_menu.jsx
           <div className="bg-white rounded-lg shadow-md p-5">
             <button
               onClick={handleBack}
@@ -72,6 +73,10 @@ const filteredItems = menuItems.filter(
                   alt={selectedItem.name}
                 />
               </div>
+=======
+        <div className="bg-white rounded-lg shadow-md p-5 h-screen">
+          <h2 className="text-3xl font-bold px-4 mb-3">{selectedItem.name}</h2>
+>>>>>>> Stashed changes:client/src/coffee_beans.jsx
 
               {/* Right Section: Steps and Button */}
               <div className="space-y-6 ">
@@ -116,8 +121,13 @@ const filteredItems = menuItems.filter(
             </div>
           </div>
         ) : (
+<<<<<<< Updated upstream:client/src/coffee_menu.jsx
           <section className="bg-white rounded-lg h-full shadow-md transition duration-200 ease-in-out hover:shadow-lg ">
             <div className="p-2 md:p-3 lg:p-5 pb-5">
+=======
+          <section className="bg-white rounded-lg h-screen shadow-md transition duration-200 ease-in-out hover:shadow-lg">
+            <div className="p-2 md:p-3 lg:p-5">
+>>>>>>> Stashed changes:client/src/coffee_beans.jsx
               {/* Search Bar */}
               <div className="mb-6 flex justify-center">
                 <input
