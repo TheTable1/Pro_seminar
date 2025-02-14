@@ -9,5 +9,126 @@
     "tips": "มอร์นิ่ง กาแฟรสเข้มข้นที่ผสานรสชาติละมุนและความขมเข้ม ของกาแฟอราบิก้าและโรบัสต้าอย่างลงตัว เหมาะสำหรับการปลุกตื่นจากความง่วงเหงา เพิ่มความกระปรี้กระเปร่า ให้คุณพร้อมรับเช้าวันใหม่อย่างสดใส",
     "price": "฿134-150",
     "order": [{"lazada":"https://shorturl.at/4nFS2"},{"shopee": "https://th.shp.ee/UijRcnF"},{"bigc":"https://shorturl.at/Hodec"}]
+  },
+  {
+    "name": "Mae Salong Arabica Coffee Chiang Rai เมล็ดกาแฟคั่ว อราบิก้าแท้",
+    "type": ["กาแฟคั่ว"],
+    "img": "/bean/Hillkoff Mae Salong Arabica.jpg",
+    "details": "เมล็ดกาแฟคั่ว สายพันธุ์อาราบิก้าแท้ 100% จากดอยแม่สลอง จังหวัดเชียงราย ผ่านกระบวนการผลิตคุณภาพสูง เพื่อให้ได้รสชาติที่โดดเด่นเฉพาะตัว มีความหอมกรุ่นกลิ่นโกโก้และเฮเซลนัท เหมาะสำหรับเมนูร้อนและเย็น",
+    "roast": "เมล็ดกาแฟคั่วอ่อน",
+    "tests": "หอมกรุ่นกลิ่นโกโก้และเฮเซลนัท",
+    "tips": "-",
+    "price": "฿160",
+    "order": [{"hillkoff.shop":"https://www.hillkoff.shop/product/171518-158631/hillkoff-mae-salong-arabica-coffee"}]
+  },
+  {
+    "name": " The Coffee Bean มอคค่า",
+    "type": ["กาแฟคั่ว"],
+    "img": "/bean/The Coffee Bean มอคค่า.png",
+    "details": "เมล็ดกาแฟคั่ว สูตรมอคค่า ได้รสอาราบิก้าและโรบัสต้าสไตล์ฝรั่งเศส มีกลิ่นหอมของถั่ว โกโก้ และคาราเมลจางๆ ตอนท้าย จุดเด่นคือ ไม่ได้ผสมช็อกโกแลต เป็นสูตรการคั่วเมล็ดกาแฟเข้มให้ได้รสชาติที่คล้ายกับดาร์กช็อกโกแลตเท่านั้น เหมาะกับเมนูกาแฟดริป เฟรนช์เพรส (French press) แอโร่เพรส (Aero press) ไซฟ่อน (Siphon) หรือเครื่องชงกาแฟอัตโนมัติ (Espresso Machine)",
+    "roast": "เมล็ดกาแฟคั่วเข้ม",
+    "tests": "ขมเข้ม กลิ่นหอมของถั่ว โกโก้ และคาราเมลจางๆ",
+    "tips": "-",
+    "price": "฿160",
+    "order": [{"thecoffeebeanroasting.com":"https://thecoffeebeanroasting.com/mocha-whole-beans-coffee.html"}]
+  },
+  {
+    "name": "Suzuki Coffee ดอยสะเก็ด อาราบิก้า",
+    "type": ["กาแฟคั่ว"],
+    "img": "/bean/Suzuki Coffee ดอยสะเก็ด อาราบิก้า.jpg",
+    "details": "เมล็ดกาแฟคั่ว จากเมล็ดกาแฟอาราบิก้าที่ปลูกบนดอยสะเก็ด พื้นที่โครงการหลวงตีนตก อุทยานแห่งชาติแม่ตะไคร้ จังหวัดเชียงใหม่ โดดเด่นด้วยกลิ่นหอมของดอกไม้ป่าอ่อน ๆ ผสานรสเปรี้ยวของผลไม้ และยังมีความหวานนุ่มเบา ๆ เหมาะชงได้ทั้งเมนูร้อนและเย็น",
+    "roast": "เมล็ดกาแฟคั่วกลาง",
+    "tests": "กลิ่นดอกไม้ป่าอ่อนๆ รสเปรี้ยวของผลไม้หน่อยๆ",
+    "tips": "-",
+    "price": "฿298",
+    "order": [{"suzuki-coffee.com":"https://suzuki-coffee.com/store/coffee/roasted-and-ground/doisaket/"}]
+  },
+  {
+    "name": "Mezzo Roasted Coffee Beans , House Blend",
+    "type": ["กาแฟคั่ว"],
+    "img": "/bean/Mezzo Roasted Coffee Beans , House Blend.jpg",
+    "details": "เมล็ดกาแฟคั่ว Mezzo จากเมล็ดกาแฟอาราบิก้าเกรดพรีเมียม บนเทือกเขาสูงในภาคเหนือของไทย รสชาติผสมผสานระหว่างดาร์กช็อกโกแลตและโกโก้ มีความขมเข้ม เหมาะชงได้ทั้งเมนูร้อน เย็น และปั่น",
+    "roast": "เมล็ดกาแฟคั่วเข้ม",
+    "tests": "เข้มข้น รสชาติดาร์กช็อกโกแลตและโกโก้",
+    "tips": "-",
+    "price": "฿285",
+    "order": [{"mezzo.co":"https://www.mezzo.co/products/roasted-coffee-beans/roasted-coffee-beans-house-blend-250gm-1-219-bag.html"}]
+  },
+  {
+    "name": "Boncafe เอสเปรสโซ",
+    "type": ["กาแฟคั่ว"],
+    "img": "/bean/Boncafe เอสเปรสโซ.jpg",
+    "details": "เมล็ดกาแฟคั่ว Boncafe ผู้ผลิต ส่งออก และจัดจำหน่ายผลิตภัณฑ์ด้านกาแฟที่มีประสบการณ์ยาวนาน จากเมล็ดกาแฟสายพันธุ์อาราบิก้าผสมโรบัสต้า รสเข้ม มีกลิ่นหอมสไตล์อิตาเลียน เหมาะกับคอกาแฟรสเข้ม จะดื่มเป็นเอสเปรสโซชอตหรือกาแฟเย็นก็ได้เช่นกัน",
+    "roast": "เมล็ดกาแฟคั่วเข้ม",
+    "tests": "รสเข้ม มีกลิ่นหอมสไตล์อิตาเลียน ",
+    "tips": "-",
+    "price": "฿220",
+    "order": [{"mezzo.co":"https://www.boncafe.co.th/th/shop//สั่งกาแฟสดออนไลน์คุณภา/กาแฟชนิดเม็ด/กาแฟรีเทล-th/espresso-bean-th/"}]
+  },
+  {
+    "name": "เมล็ดกาแฟคั่ว ดอยช้าง Peaberry Classic",
+    "type": ["กาแฟคั่ว"],
+    "img": "/bean/เมล็ดกาแฟคั่ว ดอยช้าง Peaberry Classic.jpg",
+    "details": "เมล็ดกาแฟคั่ว ดอยช้าง Peaberry Classic หรือกาแฟเมล็ดโทน สายพันธุ์อาราบิก้า โดดเด่นที่รสชาติกลมกล่อมและกลิ่นหอมพิเศษ มีความสดชื่น ชุ่มคอ เหมาะสำหรับการชงทุกรูปแบบ",
+    "roast": "เมล็ดกาแฟคั่วกลาง",
+    "tests": "กลิ่นหอมพิเศษ มีความสดชื่น ชุ่มคอ",
+    "tips": "กาแฟเมล็ดโทนที่ขึ้นชื่อในเรื่องของรสชาติที่กลมกล่อมและกลิ่นที่หอมเป็นพิเศษ นำมาคั่วในระดับกลาง (Medium) เพื่อรักษารสชาติที่เป็นกรดผลไม้เอาไว้ เหมาะสำหรับการชงในทุกรูปแบบ",
+    "price": "฿370",
+    "order": [{"doichaangcoffee":"https://doichaangcoffee.co.th/product/peaberry-classic/"}]
+  },
+  {
+    "name": "แคปซูลกาแฟดอยช้าง",
+    "type": ["กาแฟแคปซูล"],
+    "img": "/bean/แคปซูลกาแฟดอยช้าง.jpg",
+    "details": "กาแฟแคปซูล สูตร Espresso Supreme จากแบรนด์ดอยช้าง ใช้เมล็ดกาแฟสายพันธุ์อาราบิก้าที่ปลูกบริเวณดอยช้าง เหมาะสำหรับผู้ชื่นชอบกาแฟรสเข้มข้น เนื่องจากคั่วในระดับค่อนข้างเข้ม มีกลิ่นหอมคล้ายดาร์กช็อกโกแลตผสมถั่ว",
+    "roast": "เมล็ดกาแฟคั่วกลาง",
+    "tests": "เข้มข้น กลิ่นหอมดาร์กช็อกโกแลตผสมถั่ว",
+    "tips": "-",
+    "price": "฿220 (10 แคปซูล)",
+    "order": [{"doichaangcoffee":"https://doichaangcoffee.co.th/product/capsule-espresso-supreme-nespresso-compatible-capsules/"}]
+  },
+  {
+    "name": "กาแฟแคปซูลดอยตุง",
+    "type": ["กาแฟแคปซูล"],
+    "img": "/bean/กาแฟแคปซูลดอยตุง.jpg",
+    "details": "กาแฟแคปซูลจากแบรนด์ดอยตุง เป็นกาแฟอาราบิก้าแท้ที่ใช้เมล็ดกาแฟจากป่าบนดอยตุง มีให้เลือก 3 รสชาติ ได้แก่ คั่วกลาง รสชาติกลมกล่อม กลิ่นหอมเหมือนน้ำตาลทรายแดง มีรสหวานติดปลายลิ้น, คั่วเข้ม รสชาติเข้มข้นแต่ไม่ขม กลิ่นหอมเหมือนดาร์กช็อกโกแลต และมีสูตรแบล็กซิลค์เบลนด์ เป็นกาแฟดำรสเข้ม สามารถผสมนมหรือครีมเทียมเพิ่มความกลมกล่อมได้ตามชอบ",
+    "roast": "เมล็ดกาแฟคั่วกลาง",
+    "tests": "เข้มข้น รสหวานติดปลายลิ้น",
+    "tips": "-",
+    "price": "฿245 (10 แคปซูล)",
+    "order": [{"shop.doitung.com":"https://shop.doitung.com/product/medium-roasted-capsule-coffee-doitung-brand/"}]
+  },
+  {
+    "name": "กาแฟแคปซูล Punto Italia",
+    "type": ["กาแฟแคปซูล"],
+    "img": "/bean/กาแฟแคปซูล Punto Italia.jpg",
+    "details": "กาแฟแคปซูลสไตล์อิตาลี สายพันธุ์อาราบิก้า จากแหล่งผลิตอเมริกากลางและอเมริกาใต้ มีกลิ่นหอมอ่อน ๆ รสสัมผัสนุ่มนวล เช่น Espresso INTENSO อาราบิก้า 60% กลิ่นเข้มข้นหอมแรง ความเข้มข้นระดับ 10, Espresso SUPERIORE อาราบิก้า 100% คั่วกลาง รสนุ่มละมุน, LUNGO CREMA โรบัสต้า 70% ความเข้มข้น 11 หอมกลิ่นครีมตังเมและกลิ่นคาราเมล นอกจากกาแฟแคปซูลแล้วยังมีชาแคปซูล English Breakfast Tea และช็อกโกแลตมินต์",
+    "roast": "เมล็ดกาแฟคั่วกลาง",
+    "tests": "เข้มข้น รสหวานติดปลายลิ้น",
+    "tips": "-",
+    "price": "฿260 (10 แคปซูล)",
+    "order": [{"lazada":"https://www.lazada.co.th/shop/italian-coffee-service/?path=index.htm&spm=a2o4m.pdp_revamp.seller.1.13f9162eSp0VGL&itemId=3808702515&channelSource=pdp"}]
+  },
+  {
+    "name": "Roast Master Cafe Arabica Coffee LIGHT ROAST Ground Coffee",
+    "type": ["กาแฟคั่วบด"],
+    "img": "/bean/Roast Master Cafe Arabica Coffee LIGHT ROAST Ground Coffee.png",
+    "roast": "เมล็ดกาแฟคั่วอ่อน",
+    "details": "เมล็ดกาแฟคั่วในระดับ Light Roast ทำให้มีความเป็นกรด รสชาติไม่ขม ติดเปรี้ยว และดื่มง่าย ผ่านกรรมวิธีการคั่วอย่างพิถีพิถัน ทำให้ได้กลิ่นหอมของเมล็ดกาแฟอาราบิก้า ผลิตจากเมล็ดกาแฟอาราบิก้าคุณภาพที่คัดสรรมาเป็นอย่างดี สามารถชงได้หลายวิธี ทั้งการชงด้วยเครื่องชงกาแฟแบบดริป หรือการชงด้วย French Press",
+    "tests": "เข้มข้น รสหวานติดปลายลิ้น",
+    "tips": "-",
+    "price": "฿189",
+    "order": [{"lazada":"https://www.lazada.co.th/products/ucc-roast-master-250g-ground-coffee-250-g-i3903010976-s19458252107.html?c=&channelLpJumpArgs=&clickTrackInfo=query%253AUCC%252BRoast%252BMaster%252BGround%252BCoffee%252B%2525E0%2525B8%252581%2525E0%2525B8%2525B2%2525E0%2525B9%252581%2525E0%2525B8%25259F%2525E0%2525B8%252584%2525E0%2525B8%2525B1%2525E0%2525B9%252588%2525E0%2525B8%2525A7%2525E0%2525B8%25259A%2525E0%2525B8%252594%253Bnid%253A3903010976%253Bsrc%253ALazadaMainSrp%253Brn%253A2955e8de0e17fc57e93add5ccdfde462%253Bregion%253Ath%253Bsku%253A3903010976_TH%253Bprice%253A159%253Bclient%253Adesktop%253Bsupplier_id%253A100216623200%253Bbiz_source%253Ah5_pdp%253Bslot%253A1%253Butlog_bucket_id%253A470687%253Basc_category_id%253A14586%253Bitem_id%253A3903010976%253Bsku_id%253A19458252107%253Bshop_id%253A3318750%253BtemplateInfo%253A107882_D_E%2523-1_A3_C%2523&freeshipping=1&fs_ab=2&fuse_fs=&lang=th&location=%E0%B8%89%E0%B8%B0%E0%B9%80%E0%B8%8A%E0%B8%B4%E0%B8%87%E0%B9%80%E0%B8%97%E0%B8%A3%E0%B8%B2&price=159&priceCompare=skuId%3A19458252107%3Bsource%3Alazada-search-voucher%3Bsn%3A2955e8de0e17fc57e93add5ccdfde462%3BoriginPrice%3A15900%3BdisplayPrice%3A15900%3BsinglePromotionId%3A900000044602493%3BsingleToolCode%3ApromPrice%3BvoucherPricePlugin%3A0%3Btimestamp%3A1736320130880&ratingscore=4.972777167947311&request_id=2955e8de0e17fc57e93add5ccdfde462&review=4555&sale=12905&search=1&source=search&spm=a2o4m.searchlist.list.1&stock=1&trafficFrom=17449020_303586&laz_trackid=2:mm_150141143_51502503_2010552501:clkgikv4a1ik1a686i33oa&mkttid=clkgikv4a1ik1a686i33oa"}]
+  },
+  {
+    "name": "The Coffee Bean กาแฟคั่วบด เอสเพรสโซ่",
+    "type": ["กาแฟคั่วบด"],
+    "img": "/bean/The Coffee Bean กาแฟคั่วบด เอสเพรสโซ่.jpeg",
+    "details": "สูตรนี้เป็นกาแฟแบบคั่วเข้ม ซึ่งเหมาะกับผู้ที่ชื่นชอบในรสชาติความขมแบบดาร์กช็อกโกแลต มีกลิ่นหอมคาราเมลอ่อน ๆ โดยสามารถนำไปชงแบบกาแฟดำหรือชงแบบผสมนมก็ได้ ผสมผสานเมล็ดกาแฟโรบัสต้าในสัดส่วนที่มากกว่าอาราบิก้า เพื่อให้มีรสชาติที่เข้มแต่มีกลิ่นหอม สามารถชงได้ทั้งแบบดริป เครื่องชงกาแฟอัตโนมัติ และ French Press",
+    "roast": "เมล็ดกาแฟคั่วเข้ม",
+    "tests": "เข้มข้น รสหวานติดปลายลิ้น",
+    "tips": "-",
+    "price": "฿135",
+    "order": [{"thecoffeebeanroasting":"https://thecoffeebeanroasting.com/espresso-ground-coffee.html?srsltid=AfmBOoqMHkkCz19UgKeQ1dLzSbn__xgP1M56U3uuDMHYvjpHjxhTLOW6"}]
   }
 ]

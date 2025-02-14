@@ -25,8 +25,13 @@ const Home = () => {
 
   const navigate = useNavigate();
 
+  const coffeeClick = () => {
+    navigate("/coffee_bean");
+    window.scrollTo({ top: 0, behavior: "smooth" }); // เลื่อนหน้าไปด้านบนอย่างนุ่มนวล
+  };
+
   const handleClick = () => {
-    navigate("/coffee_beans");
+    navigate("/coffee_menu");
     window.scrollTo({ top: 0, behavior: "smooth" }); // เลื่อนหน้าไปด้านบนอย่างนุ่มนวล
   };
 
@@ -92,7 +97,10 @@ const Home = () => {
           ที่เน้นคุณภาพและกลิ่นรสจากการบดเมล็ดกาแฟสดใหม่
           การเลือกใช้ขึ้นอยู่กับความสะดวกและ ความชอบในรสชาติของแต่ละคน
         </p>
-        <button className="bg-[#8b4513] text-white px-4 py-2 rounded-md">
+        <button
+          className="bg-[#8b4513] text-white px-4 py-2 rounded-md mt-4"
+          onClick={coffeeClick}
+        >
           เพิ่มเติม
         </button>
       </section>
@@ -121,7 +129,8 @@ const Home = () => {
           </p>
           <button
             className="bg-[#8b4513] text-white px-4 py-2 rounded-md mt-4"
-            onClick={handleClick} >
+            onClick={handleClick}
+          >
             ค้นหาเมนู
           </button>
         </div>
