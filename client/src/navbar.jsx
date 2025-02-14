@@ -44,7 +44,7 @@ export default function Navbar() {
                     <Link to="/geneCoffee">สายพันธุ์กาแฟ</Link>
                   </li>
                   <li className="p-3 hover:bg-dark-brown transition duration-200">
-                    <Link to="/roasting">การคั่วกาแฟอย่างมืออาชีพ</Link>
+                    <Link to="/roasting">ระดับของการคั่วกาแฟ</Link>
                   </li>
                   <li className="p-3 hover:bg-dark-brown transition duration-200">
                     <Link to="/extraction">เทคนิคการสกัดกาแฟ</Link>

@@ -331,29 +331,43 @@ const CoffeeSimulator = () => {
     }
   };
 
-  // ใช้ useEffect แยกต่างหากเพื่อตรวจสอบ qteCount และอัปเดต message
   useEffect(() => {
-      if (qteCount > 0 && qteCount < 3) {
-          setMessage(`ดริปสำเร็จ ${qteCount}/3 ครั้ง`);
-      }
+    if (qteCount > 0 && qteCount < 3) {
+        setMessage(`ดริปสำเร็จ ${qteCount}/3 ครั้ง`);
 
-      if (qteCount === 3) {
-          setQteActive(false); // ปิด QTE
-          setIsReadyToServe(true); // เปิดสถานะพร้อมเสิร์ฟ
-          setQteCount(0); // รีเซ็ต QTE count
-          setMessage('ดริปกาแฟเสร็จสิ้น! โปรดกดที่โถเพื่อเทกาแฟใส่แก้ว');
+        // ตั้งเวลาให้ข้อความหายไปหลังจาก 3 วินาที
+        const timeout = setTimeout(() => {
+            setMessage('');
+        }, 3000);
 
-          // อัปเดต workspace items ให้พร้อมสำหรับเสิร์ฟ
-          setWorkspaceItems((current) =>
-              current.map((item) =>
-                  item.id === 'ground-coffee' || item.id === 'kettle'
-                      ? { ...item, state: 'ready-to-serve' }
-                      : item
-              )
-          );
+        return () => clearTimeout(timeout); // ล้าง timeout เมื่อ component ออกจากการ render
+    }
 
-          handleNextStep(); // ไปยังขั้นตอนถัดไป
-      }
+    if (qteCount === 3) {
+        setQteActive(false); // ปิด QTE
+        setIsReadyToServe(true); // เปิดสถานะพร้อมเสิร์ฟ
+        setQteCount(0); // รีเซ็ต QTE count
+
+        setMessage('ดริปกาแฟเสร็จสิ้น! โปรดกดที่โถเพื่อเทกาแฟใส่แก้ว');
+
+        // ตั้งเวลาให้ข้อความหายไปหลังจาก 3 วินาที
+        const timeout = setTimeout(() => {
+            setMessage('');
+        }, 3000);
+
+        // อัปเดต workspace items ให้พร้อมสำหรับเสิร์ฟ
+        setWorkspaceItems((current) =>
+            current.map((item) =>
+                item.id === 'ground-coffee' || item.id === 'kettle'
+                    ? { ...item, state: 'ready-to-serve' }
+                    : item
+            )
+        );
+
+        handleNextStep(); // ไปยังขั้นตอนถัดไป
+
+        return () => clearTimeout(timeout); // ล้าง timeout เมื่อ component ออกจากการ render
+    }
   }, [qteCount]);
   
   const handleQTEProgress = () => {
@@ -506,15 +520,25 @@ const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสู
   return (
     <div className="relative ">
       <Navbar />
+      {/* 🔹 Background Blur Layer */}
+      <div className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: "url('/simulator/bs-sim.jpg')", // เปลี่ยนเป็น path ของพื้นหลัง
+          filter: "blur(8px)", // ปรับระดับความเบลอ
+          zIndex: "-1", // ทำให้เป็นพื้นหลัง
+        }}
+      ></div>
       {/* Layout */}
-      <div className="grid grid-cols-12 gap-4 pt-2 px-4 sm:px-8  bg-cover bg-center bg-no-repeat " style={{ backgroundImage: "url('/bg-sim.jpg')" }}>
+      <div className="grid grid-cols-12 gap-4 pt-2 px-4 sm:px-8 "  
+      style={{
+        height: simulatorHeight,
+      }}>
         {/* Left Area - Equipment list */}
         <div className="col-span-12 sm:col-span-5 h-screen p-2"style={{ height: simulatorHeight }}>
           {/* หัวข้อของรายการอุปกรณ์ */}
-          <h3 className="text-center">อุปกรณ์ที่ใช้ในเมนูนี้</h3>
-
+          <h3 className="text-center font-semibold text-2xl text-amber-900 mt-4 p-2 ">อุปกรณ์ที่ใช้ในเมนูนี้</h3>
           {/* รายการอุปกรณ์ */}
-          <div className="mt-4 grid grid-cols-2 gap-2 p-5">
+          <div className="mt-12 grid grid-cols-2 gap-2 ">
             {/* รวมอุปกรณ์จากทุกขั้นตอน */}
             {Array.from(new Set(steps.flatMap(step => step.equipment
             .filter((item) => item.state !== "hidden") // กรองเฉพาะอุปกรณ์ที่ไม่ซ่อน
@@ -533,11 +557,10 @@ const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสู
                   onDragEnd={(event, info) => handleDragEnd(equipment, event, info)}
                   style={{
                     width: "250px", // ความกว้างพื้นหลัง
-                    height: "160px", // ความสูงพื้นหลัง
-                    padding: "5px", // ระยะขอบภายในพื้นหลัง
+                    height: "170px", // ความสูงพื้นหลัง
                   }}
                 >
-                  {/* แสดงรูปภาพแทนข้อความ */}
+                  {/* แสดงรูปภาพ */}
                   {equipment.image ? (
                     <motion.img
                     src={equipment.image} // ใช้ path ของรูปภาพ
@@ -562,11 +585,9 @@ const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสู
         </div>
 
         {/* Center Area - Action area */}
-        <div ref={workspaceRef} className="col-span-12 sm:col-span-5 h-screen  p-4 flex flex-col"style={{ height: simulatorHeight }}>
+        <div ref={workspaceRef} className="col-span-12 sm:col-span-5 pt-2 px-4 h-screen flex flex-col"style={{ height: simulatorHeight }}>
         {/* หัวข้อสำหรับพื้นที่ดำเนินการ */}
-        <h3 className="text-center font-semibold text-lg">
-          พื้นที่สำหรับนำอุปกรณ์ต่างๆ มาดำเนินการ
-        </h3>
+        <h3 className="text-center font-semibold text-2xl text-amber-900 mt-4">พื้นที่สำหรับนำอุปกรณ์ต่างๆ มาดำเนินการ</h3>
         {/* พื้นที่ทำงาน (Workspace) */}
         <div className="mt-4 h-full flex flex-col items-center justify-start" style={{ height: "70%", paddingTop: "50px" }}>
           {currentStep === 3 ? (
@@ -576,7 +597,7 @@ const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสู
               <img
                 src="/simulator/เอสเพรสโซ.png" // เปลี่ยนเป็น URL หรือ path ของรูปภาพ
                 alt="เมนูเอสเพรสโซ"
-                className="w-80 h-80 object-cover rounded shadow-lg"
+                className="w-80 h-80 object-cover "
               />
               {/* ปุ่มสำหรับเริ่มต้นใหม่ */}
               <button
@@ -597,7 +618,7 @@ const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสู
                 style={{ marginTop: "25px" }} // เพิ่ม marginTop เพื่อลดความสูง
               />
               {/* QTE Components */}
-              <div className="progress-container relative w-full max-w-lg">
+              <div className="progress-container relative w-full max-w-lg mt-8">
                 <div className="progress-bar w-full h-4 relative o verflow-hidden">
                   <div
                     className="target-zone bg-green-500 h-full absolute"
@@ -679,9 +700,11 @@ const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสู
 
 
         {/* Right Area - Step List */}
-        <div className="col-span-12 sm:col-span-2 h-screen rounded shadow p-4 flex flex-col justify-between"
+        <div className="col-span-12 sm:col-span-2 bg-orange-200 rounded shadow p-4 flex flex-col justify-between"
           style={{ 
-            height: simulatorHeight,
+            height: "420px",
+            width: "280px",
+            margin: "auto",
             //backgroundImage: "url('/simulator/list-menu.png')",
             backgroundSize: "contain", // ให้ภาพพื้นหลังแสดงเต็ม
             backgroundPosition: "center",
@@ -696,24 +719,23 @@ const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสู
               <li
                 key={step.id} // กำหนด unique key สำหรับ React
                 className={`flex items-center mt-2 ${
-                  index === currentStep ? 'font-bold text-blue-600' : 'text-gray-800'
+                  index === currentStep ? 'font-bold text-yellow-950' : 'text-gray-800'
                 }`} // ไฮไลต์ขั้นตอนปัจจุบัน
               >
                 <input
                   type="checkbox" // ช่องทำเครื่องหมายสำหรับสถานะเสร็จสิ้น
                   readOnly
                   checked={completedSteps.includes(step.id)} // เช็คว่าขั้นตอนนี้อยู่ในรายการที่เสร็จสิ้นหรือไม่
-                  className="mr-2 accent-blue-600" // สีของช่องทำเครื่องหมาย
+                  className="mr-2 accent-yellow-950" // สีของช่องทำเครื่องหมาย
                 />
                 {step.name} {/* ชื่อขั้นตอน */}
               </li>
             ))}
           </ul>
-
           {/* ปุ่มย้อนกลับขั้นตอน */}
           <div className="mt-4">
             <button
-              className="bg-red-500 text-white w-full py-2 rounded shadow hover:bg-red-700 disabled:opacity-50"
+              className="bg-yellow-900 text-white w-full py-2 rounded shadow hover:bg-yellow-950 disabled:opacity-50"
               disabled={currentStep === 0} // ปิดการใช้งานปุ่มเมื่ออยู่ขั้นตอนแรก
               onClick={() => {
                 if (currentStep > 0) {
@@ -727,6 +749,7 @@ const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสู
             </button>
           </div>
         </div>
+
         {/* Subtitle Area */}
         <div
           className="fixed bottom-8 left-1/2 transform -translate-x-1/2 text-center text-lg font-semibold text-white px-4 py-2 rounded"

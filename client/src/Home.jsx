@@ -133,7 +133,7 @@ const Home = () => {
         data-aos="fade-up"
       >
         <h2 className="text-xl font-bold">
-          คุณกำลังมองหาชนิดของกาแฟที่เหมาะกับคุณอยู่หรือไม่?
+          มาดูกันว่าคุณเป็นคอกาแฟระดับไหนกัน!
         </h2>
         <button className="bg-[#8b4513] text-white px-4 py-2 rounded-md mt-4">
           มาทำแบบทดสอบกันเถอะ!!
