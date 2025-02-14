@@ -10,7 +10,6 @@ function CoffeeBeans() {
   const [searchTerm, setSearchTerm] = useState(""); // State สำหรับการค้นหา
 
   const menuItems = MenuItems;
-
   const navigate = useNavigate();
 
   const filterButtons = [
@@ -36,16 +35,17 @@ function CoffeeBeans() {
   };
 
   const handleTryIt = () => {
-    navigate("/simulator", { state: selectedItem }); // ส่งข้อมูล selectedItem ไป FinalStep
+    navigate("/simulator", { state: selectedItem });
   };
 
-  // ฟังก์ชันสำหรับการค้นหา
+  // ฟังก์ชันสำหรับการค้นหาและการกรอง
   const filteredItems = menuItems.filter(
     (item) =>
-      activeFilter === "กาแฟทั้งหมด" ||
-      (Array.isArray(item.type)
-        ? item.type.includes(activeFilter)
-        : item.type === activeFilter)
+      (activeFilter === "กาแฟทั้งหมด" ||
+        (Array.isArray(item.type)
+          ? item.type.includes(activeFilter)
+          : item.type === activeFilter)) &&
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) // ค้นหาชื่อ
   );
 
   return (
@@ -53,7 +53,6 @@ function CoffeeBeans() {
       <Navbar />
 
       <main className="lg:p-6 sm:p-0">
-        {/* แสดงรายละเอียดของเมนู */}
         {selectedItem ? (
           <div className="bg-white rounded-lg shadow-md p-5">
             <button
@@ -62,9 +61,8 @@ function CoffeeBeans() {
             >
               ย้อนกลับ
             </button>
-            {/* Grid Layout */}
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {/* Left Section: Image and Menu Name */}
               <div className="flex flex-col items-center">
                 <img
                   className="w-4/5 h-auto object-cover rounded-md shadow-lg"
@@ -73,8 +71,7 @@ function CoffeeBeans() {
                 />
               </div>
 
-              {/* Right Section: Steps and Button */}
-              <div className="space-y-6 ">
+              <div className="space-y-6">
                 <h2 className="text-3xl font-bold mb-4 text-brown">
                   {selectedItem.name}
                 </h2>
@@ -118,7 +115,7 @@ function CoffeeBeans() {
             </div>
           </div>
         ) : (
-          <section className="bg-white rounded-lg h-full shadow-md transition duration-200 ease-in-out hover:shadow-lg ">
+          <section className="bg-white rounded-lg h-full shadow-md transition duration-200 ease-in-out hover:shadow-lg">
             <div className="p-2 md:p-3 lg:p-5 pb-5">
               {/* Search Bar */}
               <div className="mb-6 flex justify-center">
@@ -150,29 +147,23 @@ function CoffeeBeans() {
 
               {/* Menu Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 lg:gap-5">
-                {filteredItems
-                  .filter(
-                    (item) =>
-                      activeFilter === "กาแฟทั้งหมด" ||
-                      item.type.includes(activeFilter)
-                  )
-                  .map((item, index) => (
-                    <div
-                      key={index}
-                      style={{ cursor: "pointer" }}
-                      className="sm:p-4 md:p-1 bg-brown rounded-lg shadow-sm text-center text-white font-medium transition duration-200 ease-in-out hover:shadow-lg"
-                      onClick={() => handleItemClick(item)}
-                    >
-                      <div className="p-4 bg-brown rounded-lg shadow-sm text-center text-white font-medium transition duration-200 ease-in-out hover:shadow-lg">
-                        <img
-                          className="w-full h-40 object-cover rounded-md"
-                          src={item.img}
-                          alt={item.name}
-                        />
-                        <h4 className="mt-2">{item.name}</h4>
-                      </div>
+                {filteredItems.map((item, index) => (
+                  <div
+                    key={index}
+                    style={{ cursor: "pointer" }}
+                    className="sm:p-4 md:p-1 bg-brown rounded-lg shadow-sm text-center text-white font-medium transition duration-200 ease-in-out hover:shadow-lg"
+                    onClick={() => handleItemClick(item)}
+                  >
+                    <div className="p-4 bg-brown rounded-lg shadow-sm text-center text-white font-medium transition duration-200 ease-in-out hover:shadow-lg">
+                      <img
+                        className="w-full h-40 object-cover rounded-md"
+                        src={item.img}
+                        alt={item.name}
+                      />
+                      <h4 className="mt-2">{item.name}</h4>
                     </div>
-                  ))}
+                  </div>
+                ))}
               </div>
             </div>
           </section>
