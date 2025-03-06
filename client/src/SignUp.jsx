@@ -1,8 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import background from './assets/background1.jpg';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import "./assets/css/SignUp.css";
 import { auth, db } from './firebase/firebase';
 import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from 'firebase/auth';
@@ -14,6 +13,7 @@ function SignUp() {
     const [password, setPassword] = useState("");
     const [conPassword, setConPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -31,12 +31,15 @@ function SignUp() {
             setErrorMessage("รหัสผ่านต้องประกอบด้วยตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก และตัวเลขอย่างน้อย 8 ตัว");
             return;
         }
+
+        setLoading(true);
     
         try {
             // ตรวจสอบว่าอีเมลนี้เคยถูกใช้หรือไม่
             const signInMethods = await fetchSignInMethodsForEmail(auth, email);
             if (signInMethods.length > 0) {
                 setErrorMessage("อีเมลนี้ได้ถูกใช้แล้ว");
+                setLoading(false);
                 return;
             }
     
@@ -44,8 +47,7 @@ function SignUp() {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // นำทางไปยังหน้า Login หลังการดำเนินการเสร็จสิ้น
-            navigate('/login');
+            console.log("✅ บัญชีผู้ใช้ถูกสร้าง:", user);
             
             // บันทึกข้อมูลใน Firestore
             await setDoc(doc(db, "users", user.uid), {
@@ -53,6 +55,9 @@ function SignUp() {
                 email,
                 createdAt: new Date(),
             });
+
+            // นำทางไปยังหน้า Login หลังการดำเนินการเสร็จสิ้น
+            navigate('/login');
     
         } catch (error) {
             console.error("Error during registration:", error);
@@ -66,6 +71,8 @@ function SignUp() {
             } else {
                 setErrorMessage("เกิดข้อผิดพลาดในการสมัครสมาชิก: " + error.message);
             }
+        }finally {
+            setLoading(false); // ✅ ปิดโหลดเสมอไม่ว่าจะสำเร็จหรือเกิดข้อผิดพลาด
         }
 
     };

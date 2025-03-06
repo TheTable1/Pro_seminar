@@ -26,7 +26,7 @@ function Login() {
             setErrorMessage("อีเมลหรือรหัสผ่านไม่ถูกต้อง");
         }
 
-        axios.post('http://localhost:3301/login', { email, password })
+        axios.post('http://localhost:5173/login', { email, password })
             .then(result => {
                 console.log(result);
                 if (result.data === "success") {

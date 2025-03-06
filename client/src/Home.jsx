@@ -3,33 +3,40 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import Navbar from "./navbar";
 import { Link, useNavigate, useRevalidator } from "react-router-dom";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Footer from "./footer";
 
 const Home = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
+    // ✅ เรียกใช้ AOS Animation
     AOS.init({
-      duration: 1000, // ระยะเวลาในการแสดงผลของอนิเมชั่น (1 วินาที)
-      once: false, // ทำให้อนิเมชั่นเกิดขึ้นหลายครั้ง
-      easing: "ease-in-out", // ใช้การเปลี่ยนแปลงที่ราบรื่น
-      offset: 100, // กำหนดจุดเริ่มต้นของการเลื่อน
+      duration: 1000,
+      once: false,
+      easing: "ease-in-out",
+      offset: 100,
     });
 
     // ✅ ดึงข้อมูลผู้ใช้จาก Firebase Auth
     const auth = getAuth();
-    const currentUser = auth.currentUser;
 
-    if (!currentUser) {
-      console.log("🔴 ผู้ใช้ยังไม่ได้ล็อกอิน");
-      navigate("/login"); // ถ้ายังไม่ได้ล็อกอินให้กลับไปหน้า Login
-    } else {
-      console.log("✅ ข้อมูลผู้ใช้จาก Firebase:", currentUser);
-      setUser(currentUser);
-    }
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        console.log("✅ ผู้ใช้ล็อกอินอยู่:", currentUser);
+        setUser(currentUser);
+      } 
+      setLoading(false); // ✅ ปิดโหลดข้อมูล
+    });
+
+    return () => unsubscribe(); // ✅ Cleanup listener
   }, [navigate]);
+
+  if (loading) {
+    return <div className="text-center mt-10">กำลังโหลด...</div>; 
+  }
 
   const cardData = [
     { title: "ประวัติกาแฟ", path: "/history" },

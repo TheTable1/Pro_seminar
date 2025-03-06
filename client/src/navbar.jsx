@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { auth } from "./firebase/firebase";
+import { signOut, onAuthStateChanged } from "firebase/auth";
 
 export default function Navbar() {
   const [showKnowledgeMenu, setShowKnowledgeMenu] = useState(false);
@@ -10,7 +12,9 @@ export default function Navbar() {
   const knowledgeMenuRef = useRef(null);
   const profileMenuRef = useRef(null);
   const navbarRef = useRef(null);
+  const [user, setUser] = useState(null);
 
+  
   useEffect(() => {
     function handleClickOutside(event) {
       // ถ้าคลิกนอก navbar ให้ปิดเมนู
@@ -35,6 +39,22 @@ export default function Navbar() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    // ✅ ตรวจสอบสถานะการล็อกอินของผู้ใช้
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe();
+  }, []);
+  
+  // ✅ ฟังก์ชัน Logout
+  const handleLogout = async () => {
+    await signOut(auth);
+    setUser(null);
+    setShowProfileMenu(false);
+  };
 
   return (
     <div>
@@ -95,22 +115,30 @@ export default function Navbar() {
               แบบทดสอบ
             </li>
 
-            {/* ไอคอนโปรไฟล์ */}
+            {/* 🔹 เมนูโปรไฟล์ */}
             <li className="relative group" ref={profileMenuRef}>
               <img
-                src="./profile_defualt.jpg" // เปลี่ยนเป็น path ของรูปโปรไฟล์เริ่มต้น
+                src={user?.photoURL || "/profile_defualt.jpg"} // ✅ ใช้รูปโปรไฟล์ของผู้ใช้ ถ้าไม่มีให้ใช้ default
                 alt="Profile"
                 className="w-10 h-10 rounded-full cursor-pointer hover:opacity-80 transition duration-300"
                 onClick={() => setShowProfileMenu((prev) => !prev)}
               />
               {showProfileMenu && (
-                <ul className="absolute right-0 z-10 bg-brown shadow-lg m-2 rounded-md w-48 text-beige text-sm transition duration-300">
-                  <li className="p-3 hover:bg-dark-brown transition duration-200">
-                    <Link to="/history">โปรไฟล์</Link>
-                  </li>
-                  <li className="p-3 hover:bg-dark-brown transition duration-200">
-                    <Link to="/geneCoffee">เข้าสู่ระบบ</Link>
-                  </li>
+                <ul className="absolute right-0 z-10 bg-brown shadow-lg mt-2 rounded-md w-48 text-beige text-sm transition duration-300">
+                  {user ? (
+                    <>
+                      <li className="p-3 hover:bg-dark-brown transition duration-200">
+                        <Link to="/profile">โปรไฟล์ของฉัน</Link>
+                      </li>
+                      <li className="p-3 hover:bg-red-500 transition duration-200 cursor-pointer" onClick={handleLogout}>
+                        ออกจากระบบ
+                      </li>
+                    </>
+                  ) : (
+                    <li className="p-3 hover:bg-dark-brown transition duration-200">
+                      <Link to="/login">เข้าสู่ระบบ</Link>
+                    </li>
+                  )}
                 </ul>
               )}
             </li>

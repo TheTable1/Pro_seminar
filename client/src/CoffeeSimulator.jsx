@@ -3,8 +3,9 @@ import { motion } from 'framer-motion';
 import Navbar from "./navbar";
 import { updateUserAchievement } from "./firebase/firebaseAchievements";
 import { useNavigate } from "react-router-dom";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-const CoffeeSimulator = ({ userId, selectedMenu }) => {
+const CoffeeSimulator = ({ userId: propUserId, selectedMenu }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [message, setMessage] = useState('ยินดีต้อนรับเข้าสู่ตัวจำลองการทำกาแฟ!');
   const [completedSteps, setCompletedSteps] = useState([]);
@@ -20,8 +21,9 @@ const CoffeeSimulator = ({ userId, selectedMenu }) => {
   const [dripImage, setDripImage] = useState('/simulator/เครื่องดริปที่ล้างกระดาษกรอกแล้วและใส่กาแฟบด.png'); // ภาพปัจจุบัน
   const [isGifPlaying, setIsGifPlaying] = useState(false); // ล็อก QTE ขณะ gif เล่น
   const [menuId, setMenuId] = useState(selectedMenu || "espresso");
+  const [userId, setUserId] = useState(propUserId || null);
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [steps, setSteps] = useState([
     {
@@ -60,6 +62,22 @@ const CoffeeSimulator = ({ userId, selectedMenu }) => {
       equipment: [] // ไม่แสดงอุปกรณ์ในขั้นตอนนี้
     }    
   ]);
+
+  useEffect(() => {
+    if (!propUserId) { // ✅ ถ้ายังไม่มี userId ให้ดึงจาก Firebase
+      const auth = getAuth();
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+          console.log("✅ ดึง userId จาก Firebase:", user.uid);
+          setUserId(user.uid);
+        } else {
+          console.log("❌ ไม่มีผู้ใช้ล็อกอิน");
+        }
+      });
+
+      return () => unsubscribe();
+    }
+  }, [propUserId]); // ✅ ถ้า props มีค่าอยู่แล้ว จะไม่ดึงจาก Firebase
 
   useEffect(() => {
     const backgroundMusic = new Audio('/simulator/cafe-music.mp3');
@@ -531,12 +549,23 @@ const CoffeeSimulator = ({ userId, selectedMenu }) => {
     setCurrentStep((prev) => prev + 1);
   };  
   
-  const handleFinishMenu = () => {
-    updateUserAchievement(userId, menuId);
-    setMessage(`คุณทำเมนู ${menuId} สำเร็จแล้ว!`);
-    navigate("/coffee_menu");
+  const handleFinishMenu = async () => {
+    if (!userId) {
+      console.warn("❌ ไม่สามารถบันทึกได้: userId เป็น undefined หรือไม่ได้ล็อกอิน");
+      navigate("/coffee_menu"); // ✅ ถ้าไม่มี userId ให้เปลี่ยนหน้าโดยไม่บันทึกข้อมูล
+      return;
+    }
+
+    try {
+      await updateUserAchievement(userId, menuId); // ✅ บันทึกค่าความสำเร็จของผู้ใช้
+      setMessage(`คุณทำเมนู ${menuId} สำเร็จแล้ว!`);
+    } catch (error) {
+      console.error("❌ เกิดข้อผิดพลาดในการบันทึกค่าความสำเร็จ:", error);
+    } finally {
+      navigate("/coffee_menu"); // ✅ ไม่ว่าเกิดอะไรขึ้น ให้เปลี่ยนหน้าไป coffee_menu
+    }
   };
-  navigate("/coffee_menu");
+  
   const handleRestart = () => {
     setCurrentStep(0);
     setMessage('ยินดีต้อนรับเข้าสู่ตัวจำลองการทำกาแฟ!');
