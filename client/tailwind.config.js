@@ -1,8 +1,7 @@
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}", // Adjust this path based on your project structure
-  ],
+// tailwind.config.js
+module.exports = {
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  safelist: ["hover:bg-light-brown"],
   theme: {
     extend: {
       colors: {
@@ -20,5 +19,4 @@ export default {
       sm: "640px",
     },
   },
-  plugins: [],
 };

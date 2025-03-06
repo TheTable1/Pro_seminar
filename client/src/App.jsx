@@ -12,6 +12,7 @@ import Login from "./Login";
 import Home from "./Home";
 import Simulator from "./CoffeeSimulator";
 import Extraction from "./extraction";
+import Suggestion from "./suggestion";
 
 function App() {
   return (
@@ -35,6 +36,9 @@ function App() {
         <Route path="/coffee_menu" element={<CoffeeMenu />} />
 
         <Route path="/simulator" element={<Simulator />} />
+        
+        <Route path="/suggestion" element={<Suggestion/>} />
+
       </Routes>
     </BrowserRouter>
   );
