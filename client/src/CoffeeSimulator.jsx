@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Navbar from "./navbar";
+import { updateUserAchievement } from "./firebase/firebaseAchievements";
+import { useNavigate } from "react-router-dom";
 
-
-const CoffeeSimulator = () => {
+const CoffeeSimulator = ({ userId, selectedMenu }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [message, setMessage] = useState('ยินดีต้อนรับเข้าสู่ตัวจำลองการทำกาแฟ!');
   const [completedSteps, setCompletedSteps] = useState([]);
@@ -18,7 +19,9 @@ const CoffeeSimulator = () => {
   const [isReadyToServe, setIsReadyToServe] = useState(false); // สถานะพร้อมเสิร์ฟ
   const [dripImage, setDripImage] = useState('/simulator/เครื่องดริปที่ล้างกระดาษกรอกแล้วและใส่กาแฟบด.png'); // ภาพปัจจุบัน
   const [isGifPlaying, setIsGifPlaying] = useState(false); // ล็อก QTE ขณะ gif เล่น
+  const [menuId, setMenuId] = useState(selectedMenu || "espresso");
 
+    const navigate = useNavigate();
 
   const [steps, setSteps] = useState([
     {
@@ -57,6 +60,27 @@ const CoffeeSimulator = () => {
       equipment: [] // ไม่แสดงอุปกรณ์ในขั้นตอนนี้
     }    
   ]);
+
+  useEffect(() => {
+    const backgroundMusic = new Audio('/simulator/cafe-music.mp3');
+    backgroundMusic.loop = true; // 🔄 วนซ้ำเพลง
+    backgroundMusic.volume = 0.5; // 🔊 ระดับเสียง
+    backgroundMusic.play().catch(error => console.log("Autoplay failed:", error)); // จับ error ถ้า autoplay ถูกบล็อค
+  
+    return () => {
+      backgroundMusic.pause();
+      backgroundMusic.currentTime = 0; // 🔹 รีเซ็ตเสียงเมื่อออกจากหน้า
+    };
+  }, []);
+
+  const startBackgroundMusic = () => {
+    if (!window.backgroundMusic) {
+      window.backgroundMusic = new Audio('/simulator/cafe-music.mp3');
+      window.backgroundMusic.loop = true;
+      window.backgroundMusic.volume = 0.5;
+    }
+    window.backgroundMusic.play();
+  };  
 
   const [subtitle, setSubtitle] = useState('');
 
@@ -171,6 +195,7 @@ const CoffeeSimulator = () => {
                 : i
             );
             setMessage('กดที่เครื่องบดเพื่อบดเมล็ดกาแฟได้เลย');
+            
             return updatedItems;
           }
 
@@ -221,7 +246,10 @@ const CoffeeSimulator = () => {
           if (item.id === 'kettle' && current.some((i) => i.state === 'paper-filter')) {
             setMessage('กำลังล้างกระดาษกรอง...');
             setIsPouring(true);
-        
+
+            const dripSound = new Audio('/simulator/drip-sound.mp3');
+            dripSound.play();
+
             setTimeout(() => {
               setIsPouring(false);
               const updatedItems = current.map((i) =>
@@ -282,12 +310,14 @@ const CoffeeSimulator = () => {
   };  
 
   const handlePourOut = () => {
-    if (
-      currentStep === 1 && // ตรวจสอบว่าขั้นตอนคือการเตรียมเครื่องดริป
+    if (currentStep === 1 && // ตรวจสอบว่าขั้นตอนคือการเตรียมเครื่องดริป
       workspaceItems.some((item) => item.state === 'ready-to-pour-out') // ตรวจสอบสถานะโถรองดริป
     ) {
       setMessage('กำลังเทน้ำออกจากโถรองดริป...');
   
+      const pourSound = new Audio('/simulator/pour-sound.mp3');
+      pourSound.play();
+
       setTimeout(() => {
         // เปลี่ยนสถานะของโถรองดริปให้พร้อมสำหรับขั้นตอนที่ 3
         const updatedItems = workspaceItems.map((item) =>
@@ -299,7 +329,7 @@ const CoffeeSimulator = () => {
         setWorkspaceItems(updatedItems); // อัปเดต workspaceItems
         setMessage('น้ำถูกเทออกเรียบร้อย! พร้อมสำหรับดริป');
         handleNextStep(); // ไปยังขั้นตอนถัดไป
-      }, 2000); // รอ 3 วินาที
+      }, 3000); // รอ 3 วินาที
     } else {
       setMessage('คุณต้องล้างกระดาษกรองก่อนที่จะเทน้ำออก');
     }
@@ -375,6 +405,9 @@ const CoffeeSimulator = () => {
   
     setIsGifPlaying(true); // ล็อก QTE
     setDripImage('/simulator/โถรองดริปพร้อมดริปกาแฟ.png'); // เปลี่ยนเป็น gif
+
+    const dripSound = new Audio('/simulator/drip-sound.mp3');
+    dripSound.play();
   
     setTimeout(() => {
       setIsGifPlaying(false); // ปลดล็อก QTE
@@ -395,7 +428,11 @@ const CoffeeSimulator = () => {
     if (workspaceItems.some((item) => item.state === 'ready-to-grind')) {
       setIsGrinding(true);
       setMessage('กำลังบดเมล็ดกาแฟ...3...2...1...');
-  
+
+      // ✅ เล่นเสียงบดกาแฟ
+      const grindSound = new Audio('/simulator/grind-sound.mp3');
+      grindSound.play();
+
       setTimeout(() => {
         setIsGrinding(false);
   
@@ -440,6 +477,16 @@ const CoffeeSimulator = () => {
   };     
 
   const getImageByState = (item) => {
+    if (item.id === 'grinder') {
+      // ✅ ถ้ากำลังบดอยู่ ให้ใช้ GIF
+      if (isGrinding) return '/simulator/เครื่องบด_.gif';
+      
+      // ✅ ถ้ายังไม่ได้บด แต่มีเมล็ดกาแฟอยู่ แสดงเครื่องบดที่มีเมล็ด
+      if (item.state === 'ready-to-grind') return '/simulator/เครื่องบด(มีเมล็ด).png';
+  
+      // ✅ ค่าเริ่มต้น: เครื่องบดเปล่า
+      return '/simulator/เครื่องบด(ไม่มีเมล็ด).png';
+    }
     const imageMap = {
       "เครื่องบด": "/simulator/เครื่องบด(ไม่มีเมล็ด).png",
       "เครื่องบดที่มีเมล็ดกาแฟ": "/simulator/เครื่องบด(มีเมล็ด).png",
@@ -482,8 +529,14 @@ const CoffeeSimulator = () => {
   
     // ไปยังขั้นตอนถัดไป
     setCurrentStep((prev) => prev + 1);
-  };   
-
+  };  
+  
+  const handleFinishMenu = () => {
+    updateUserAchievement(userId, menuId);
+    setMessage(`คุณทำเมนู ${menuId} สำเร็จแล้ว!`);
+    navigate("/coffee_menu");
+  };
+  navigate("/coffee_menu");
   const handleRestart = () => {
     setCurrentStep(0);
     setMessage('ยินดีต้อนรับเข้าสู่ตัวจำลองการทำกาแฟ!');
@@ -529,16 +582,16 @@ const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสู
         }}
       ></div>
       {/* Layout */}
-      <div className="grid grid-cols-12 gap-4 pt-2 px-4 sm:px-8 "  
+      <div className="grid grid-cols-12 gap-2 pt-2 px-4 sm:px-8 "  
       style={{
         height: simulatorHeight,
       }}>
         {/* Left Area - Equipment list */}
         <div className="col-span-12 sm:col-span-5 h-screen p-2"style={{ height: simulatorHeight }}>
           {/* หัวข้อของรายการอุปกรณ์ */}
-          <h3 className="text-center font-semibold text-2xl text-amber-900 mt-4 p-2 ">อุปกรณ์ที่ใช้ในเมนูนี้</h3>
+          <h3 className="text-center font-semibold text-2xl text-amber-900 mt-4">อุปกรณ์ที่ใช้ในเมนูนี้</h3>
           {/* รายการอุปกรณ์ */}
-          <div className="mt-12 grid grid-cols-2 gap-2 ">
+          <div className="mt-8 grid grid-cols-2  ">
             {/* รวมอุปกรณ์จากทุกขั้นตอน */}
             {Array.from(new Set(steps.flatMap(step => step.equipment
             .filter((item) => item.state !== "hidden") // กรองเฉพาะอุปกรณ์ที่ไม่ซ่อน
@@ -554,10 +607,15 @@ const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสู
                   className="flex items-center justify-center rounded-lg cursor-grab"
                   dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
                   dragElastic={1}
+                  initial={{ opacity: 0, scale: 0.8 }} // เริ่มต้นขนาดเล็กและจาง
+                  animate={{ opacity: 1, scale: 1 }} // แสดงเต็มเมื่อโหลด
+                  transition={{ duration: 0.3 }}
+                  whileHover={{ scale: 1.1 }} // ขยายเมื่อ hover
+                  whileTap={{ scale: 0.9 }} // กดแล้วลดขนาดเล็กน้อย
                   onDragEnd={(event, info) => handleDragEnd(equipment, event, info)}
                   style={{
-                    width: "250px", // ความกว้างพื้นหลัง
-                    height: "170px", // ความสูงพื้นหลัง
+                    width: "100%", // ความกว้างพื้นหลัง
+                    height: "180px", // ความสูงพื้นหลัง
                   }}
                 >
                   {/* แสดงรูปภาพ */}
@@ -585,7 +643,7 @@ const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสู
         </div>
 
         {/* Center Area - Action area */}
-        <div ref={workspaceRef} className="col-span-12 sm:col-span-5 pt-2 px-4 h-screen flex flex-col"style={{ height: simulatorHeight }}>
+        <div ref={workspaceRef} className="col-span-12 sm:col-span-5 h-screen p-2 flex flex-col"style={{ height: simulatorHeight }}>
         {/* หัวข้อสำหรับพื้นที่ดำเนินการ */}
         <h3 className="text-center font-semibold text-2xl text-amber-900 mt-4">พื้นที่สำหรับนำอุปกรณ์ต่างๆ มาดำเนินการ</h3>
         {/* พื้นที่ทำงาน (Workspace) */}
@@ -593,19 +651,32 @@ const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสู
           {currentStep === 3 ? (
             // แสดงขั้นตอนที่ 4: ภาพเมนูเอสเพรสโซและปุ่มเริ่มใหม่
             <div className="flex flex-col items-center mt-4">
-              {/* แสดงภาพเมนูเอสเพรสโซ */}
+              {/* แสดงภาพเมนูที่ผู้ใช้ทำสำเร็จ */}
               <img
-                src="/simulator/เอสเพรสโซ.png" // เปลี่ยนเป็น URL หรือ path ของรูปภาพ
-                alt="เมนูเอสเพรสโซ"
-                className="w-80 h-80 object-cover "
+                src={`/simulator/เอสเพรสโซ.png`} // ใช้ dynamic path ให้รองรับทุกเมนู
+                alt={`เมนู ${menuId}`}
+                className="w-80 h-80 object-cover"
               />
+
               {/* ปุ่มสำหรับเริ่มต้นใหม่ */}
               <button
                 onClick={handleRestart} // รีเซ็ตซิมมูเลเตอร์
-                className="mt-4 text-white py-2 px-4 bg-blue-700 rounded shadow hover:bg-blue-700"
+                className="mt-4 text-white py-2 px-4 bg-blue-700 rounded shadow hover:bg-blue-800"
               >
                 เริ่มต้นใหม่
               </button>
+
+              {/* ปุ่มเสร็จสิ้น เฉพาะเมื่อถึงขั้นตอนสุดท้าย */}
+              {currentStep === steps.length - 1 && (
+                <button
+                  onClick={() => {
+                    handleFinishMenu(); // บันทึกค่าความสำเร็จ
+                  }}
+                  className="mt-4 text-white py-2 px-4 bg-green-600 rounded shadow hover:bg-green-700"
+                >
+                  เสร็จสิ้น
+                </button>
+              )}
             </div>
           ) : qteActive ? (
             // QTE แสดงเมื่อ qteActive เป็น true
@@ -677,6 +748,8 @@ const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสู
                     ? handleServe // กดเพื่อเทกาแฟลงแก้ว
                     : undefined
                 }
+                animate={item.id === 'grinder' && isGround ? { y: [-5, 5, 0] } : {}} // ✅ ทำให้เด้ง
+                transition={{ duration: 0.3, repeat: isGrinding ? Infinity : 0, repeatType: "reverse" }} // ✅ ตั้งค่าให้เด้ง
                 style={{
                   width: "500px", // กำหนดขนาดความกว้าง (ปรับค่าตามต้องการ)
                   height: "500px", // กำหนดขนาดความสูง (ปรับค่าตามต้องการ)
@@ -697,19 +770,31 @@ const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสู
           )}
         </div>
       </div>
+      <div className="relative flex flex-col items-center">
+        {/* ปุ่มเปิดเพลงพื้นหลัง (ชิดขวา) */}
+        <div className="w-full flex justify-end px-4">
+          <button 
+            onClick={startBackgroundMusic} 
+            className="bg-gray-600 bg-opacity-80 hover:bg-gray-700 text-white mt-6 font-semibold px-5 py-2 rounded-xl shadow-lg flex items-center gap-2 transition-all duration-300">
+            🎵 
+          </button>
+        </div>
 
-
-        {/* Right Area - Step List */}
-        <div className="col-span-12 sm:col-span-2 bg-orange-200 rounded shadow p-4 flex flex-col justify-between"
+        {/* Right Area - Step List (จัดให้อยู่ตรงกลาง) */}
+        <div 
+          className="col-span-12 sm:col-span-2 bg-orange-200 rounded shadow p-4 flex flex-col justify-center"
           style={{ 
-            height: "420px",
-            width: "280px",
-            margin: "auto",
-            //backgroundImage: "url('/simulator/list-menu.png')",
-            backgroundSize: "contain", // ให้ภาพพื้นหลังแสดงเต็ม
-            backgroundPosition: "center",
+            height: "420px", 
+            width: "260px", 
+            margin: "auto", 
+            backgroundSize: "contain", 
+            backgroundPosition: "center", 
             backgroundRepeat: "no-repeat",
-          }}>
+            position: "absolute",
+            top: "50%",
+            transform: "translateY(-50%)" // ทำให้ Step List อยู่ตรงกลางระหว่างบน-ล่าง
+          }}
+        >
           {/* หัวข้อรายการขั้นตอน */}
           <h3 className="text-center font-semibold text-lg">รายการขั้นตอนต่างๆ</h3>
 
@@ -717,18 +802,18 @@ const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสู
           <ul className="mt-4 list-none flex-grow">
             {steps.map((step, index) => (
               <li
-                key={step.id} // กำหนด unique key สำหรับ React
+                key={step.id} 
                 className={`flex items-center mt-2 ${
                   index === currentStep ? 'font-bold text-yellow-950' : 'text-gray-800'
-                }`} // ไฮไลต์ขั้นตอนปัจจุบัน
+                }`} 
               >
                 <input
-                  type="checkbox" // ช่องทำเครื่องหมายสำหรับสถานะเสร็จสิ้น
+                  type="checkbox" 
                   readOnly
-                  checked={completedSteps.includes(step.id)} // เช็คว่าขั้นตอนนี้อยู่ในรายการที่เสร็จสิ้นหรือไม่
-                  className="mr-2 accent-yellow-950" // สีของช่องทำเครื่องหมาย
+                  checked={completedSteps.includes(step.id)} 
+                  className="mr-2 accent-yellow-950" 
                 />
-                {step.name} {/* ชื่อขั้นตอน */}
+                {step.name}
               </li>
             ))}
           </ul>
@@ -736,12 +821,12 @@ const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสู
           <div className="mt-4">
             <button
               className="bg-yellow-900 text-white w-full py-2 rounded shadow hover:bg-yellow-950 disabled:opacity-50"
-              disabled={currentStep === 0} // ปิดการใช้งานปุ่มเมื่ออยู่ขั้นตอนแรก
+              disabled={currentStep === 0} 
               onClick={() => {
                 if (currentStep > 0) {
-                  setCurrentStep((prev) => prev - 1); // ย้อนกลับขั้นตอน
+                  setCurrentStep((prev) => prev - 1);
                   setMessage(`กลับไปยังขั้นตอน: ${steps[currentStep - 1]?.name}`);
-                  setWorkspaceItems([]); // ล้าง workspace สำหรับขั้นตอนก่อนหน้า
+                  setWorkspaceItems([]); 
                 }
               }}
             >
@@ -749,7 +834,7 @@ const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสู
             </button>
           </div>
         </div>
-
+      </div>
         {/* Subtitle Area */}
         <div
           className="fixed bottom-8 left-1/2 transform -translate-x-1/2 text-center text-lg font-semibold text-white px-4 py-2 rounded"

@@ -2,8 +2,13 @@
 import { Link } from "react-router-dom";
 
 export default function Navbar() {
+  const [showKnowledgeMenu, setShowKnowledgeMenu] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [scrollbarWidth, setScrollbarWidth] = useState(0);
   const menuRef = useRef(null);
+  const knowledgeMenuRef = useRef(null);
+  const profileMenuRef = useRef(null);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -18,24 +23,39 @@ export default function Navbar() {
     };
   }, [menuRef]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      document.body.style.overflowY = "scroll"; // ทำให้ Scroll Bar อยู่ตลอดเวลา
+      document.body.style.width = "100vw"; // ป้องกันการเปลี่ยนขนาดเมื่อมี Scroll Bar
+    };
+  
+    handleResize(); // เรียกใช้ครั้งแรกเมื่อ Component ถูกโหลด
+    window.addEventListener("resize", handleResize);
+  
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <div>
-      <header className="bg-dark-brown py-4 px-5 flex justify-between items-center relative">
+      <header className="bg-dark-brown py-4 px-5 flex justify-between items-center relative" style={{ paddingRight: `${scrollbarWidth}px` }}>
         <div className="font-bold text-beige text-[5vw] md:text-[1rem] lg:text-[2rem]">
           <Link to="/"> Coffee Bean Fusion </Link>
         </div>
 
         {/* Desktop Menu */}
         <div className="hidden lg:flex items-center space-x-6">
-          <ul className="flex space-x-4 text-beige">
-            <li className="relative group" ref={menuRef}>
+          <ul className="flex space-x-6 text-beige">
+            {/* คลังความรู้กาแฟ */}
+            <li className="relative group" ref={knowledgeMenuRef}>
               <span
                 className="cursor-pointer hover:text-light-brown transition duration-300"
-                onClick={() => setShowMenu((prev) => !prev)}
+                onClick={() => setShowKnowledgeMenu((prev) => !prev)}
               >
                 คลังความรู้กาแฟ
               </span>
-              {showMenu && (
+              {showKnowledgeMenu && (
                 <ul className="absolute left-0 z-10 bg-brown shadow-lg mt-2 rounded-md w-48 text-beige text-sm transition duration-300">
                   <li className="p-3 hover:bg-dark-brown transition duration-200">
                     <Link to="/history">ประวัติศาสตร์กาแฟ</Link>
@@ -61,21 +81,42 @@ export default function Navbar() {
                 </ul>
               )}
             </li>
+
+            {/* เมล็ดกาแฟ */}
             <li className="cursor-pointer hover:text-light-brown transition duration-300">
               <Link to="/coffee_bean">เมล็ดกาแฟ</Link>
             </li>
+
+            {/* เมนูกาแฟ */}
             <li className="cursor-pointer hover:text-light-brown transition duration-300">
               <Link to="/coffee_menu">เมนูกาแฟ</Link>
             </li>
+
+            {/* ทดสอบความรู้ */}
             <li className="cursor-pointer hover:text-light-brown transition duration-300">
-              ฟีดคอกาแฟ
+              ทดสอบความรู้
+            </li>
+
+            {/* ไอคอนโปรไฟล์ */}
+            <li className="relative group" ref={profileMenuRef}>
+              <img
+                src="./profile_defualt.jpg" // เปลี่ยนเป็น path ของรูปโปรไฟล์เริ่มต้น
+                alt="Profile"
+                className="w-10 h-10 rounded-full cursor-pointer hover:opacity-80 transition duration-300"
+                onClick={() => setShowProfileMenu((prev) => !prev)}
+              />
+              {showProfileMenu && (
+                <ul className="absolute right-0 z-10 bg-brown shadow-lg m-2 rounded-md w-48 text-beige text-sm transition duration-300">
+                  <li className="p-3 hover:bg-dark-brown transition duration-200">
+                    <Link to="/history">โปรไฟล์</Link>
+                  </li>
+                  <li className="p-3 hover:bg-dark-brown transition duration-200">
+                    <Link to="/geneCoffee">เข้าสู่ระบบ</Link>
+                  </li>
+                </ul>
+              )}
             </li>
           </ul>
-          <img
-            className="w-10 h-10 rounded-full border-2 border-beige"
-            src="/woman.png"
-            alt="woman"
-          />
         </div>
 
         {/* Mobile Menu Toggle Button */}
@@ -139,7 +180,7 @@ export default function Navbar() {
                 เมนูกาแฟ
               </li>
               <li className="cursor-pointer hover:text-light-brown transition duration-300">
-                ฟีดคอกาแฟ
+                ทดสอบความรู้
               </li>
             </ul>
           </div>

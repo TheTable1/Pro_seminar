@@ -1,0 +1,14 @@
+@keyframes steam {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(-10px); }
+  }
+  .flex flex-col items-center mt-4 {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    width: 20px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    animation: steam 2s infinite alternate ease-in-out;
+  }

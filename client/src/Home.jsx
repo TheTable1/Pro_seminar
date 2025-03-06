@@ -1,11 +1,15 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Navbar from "./navbar";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useRevalidator } from "react-router-dom";
+import { getAuth } from "firebase/auth";
 import Footer from "./footer";
 
 const Home = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  
   useEffect(() => {
     AOS.init({
       duration: 1000, // ระยะเวลาในการแสดงผลของอนิเมชั่น (1 วินาที)
@@ -13,7 +17,19 @@ const Home = () => {
       easing: "ease-in-out", // ใช้การเปลี่ยนแปลงที่ราบรื่น
       offset: 100, // กำหนดจุดเริ่มต้นของการเลื่อน
     });
-  }, []);
+
+    // ✅ ดึงข้อมูลผู้ใช้จาก Firebase Auth
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+
+    if (!currentUser) {
+      console.log("🔴 ผู้ใช้ยังไม่ได้ล็อกอิน");
+      navigate("/login"); // ถ้ายังไม่ได้ล็อกอินให้กลับไปหน้า Login
+    } else {
+      console.log("✅ ข้อมูลผู้ใช้จาก Firebase:", currentUser);
+      setUser(currentUser);
+    }
+  }, [navigate]);
 
   const cardData = [
     { title: "ประวัติกาแฟ", path: "/history" },
@@ -22,8 +38,6 @@ const Home = () => {
     { title: "การสกัดกาแฟ", path: "/extraction" },
     { title: "การผลิตกาแฟ", path: "/process" },
   ];
-
-  const navigate = useNavigate();
 
   const coffeeClick = () => {
     navigate("/coffee_bean");
@@ -34,6 +48,8 @@ const Home = () => {
     navigate("/coffee_menu");
     window.scrollTo({ top: 0, behavior: "smooth" }); // เลื่อนหน้าไปด้านบนอย่างนุ่มนวล
   };
+
+  // console.log(userId);  
 
   return (
     <div className="bg-[#f3f1ec]">

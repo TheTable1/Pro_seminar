@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import "./assets/css/SignUp.css";
-import { auth } from './firebase';
+import { auth } from './firebase/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
 function Login() {
