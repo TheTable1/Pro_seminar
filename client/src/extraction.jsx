@@ -3,6 +3,7 @@ import Navbar from "./navbar";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
+import BackToTop from "./BackToTop";
 
 function Extraction() {
   useEffect(() => {
@@ -11,7 +12,7 @@ function Extraction() {
   return (
     <div>
       <Navbar />
-
+      <BackToTop />
       <div>
         <img
           src="/extraction/extraction.jpg"

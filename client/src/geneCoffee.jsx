@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Navbar from "./navbar";
 import Footer from "./footer";
+import BackToTop from "./BackToTop";
 
 const CoffeeVariety = () => {
   const [selectedVariety, setSelectedVariety] = useState("Arabica");
@@ -93,7 +94,7 @@ const CoffeeVariety = () => {
   return (
     <div className="bg-[#fdfcfb] text-gray-800 font-sans">
       <Navbar />
-
+      <BackToTop />
       <header className="text-center py-6">
         <h1 className="text-2xl md:text-4xl font-bold text-[#5c4033]">
           สายพันธุ์กาแฟ

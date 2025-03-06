@@ -3,6 +3,7 @@ import Navbar from "./navbar";
 import MenuItems from "./beanItems.json";
 import { useNavigate } from "react-router-dom";
 import Footer from "./footer";
+import BackToTop from "./BackToTop";
 
 function CoffeeBeans() {
   const [activeFilter, setActiveFilter] = useState("กาแฟทั้งหมด");
@@ -47,7 +48,7 @@ function CoffeeBeans() {
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />
-
+      <BackToTop />
       <main className="lg:p-6 sm:p-0">
         {selectedItem ? (
           <div className="bg-white rounded-lg shadow-md p-5">

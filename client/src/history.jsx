@@ -3,6 +3,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import Footer from "./footer";
 import Navbar from "./navbar";
+import BackToTop from "./BackToTop";
 
 function History() {
   // Initialize AOS animations
@@ -17,7 +18,7 @@ function History() {
     <div className="bg-[#f3f1ec]">
       {/* ส่วนหัว */}
       <Navbar />
-
+      <BackToTop />
       <header className="text-center py-6 bg-[#e8dfd6]">
         <h1
           className="text-3xl lg:text-4xl font-bold text-[#5c4033]"

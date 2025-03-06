@@ -6,6 +6,7 @@ import History from "./history";
 import GeneCoffee from "./geneCoffee";
 import Roasting from "./Roasting";
 import Articles from "./articles";
+import Profile from "./profile";
 import Process from "./process";
 import SignUp from "./SignUp";
 import Login from "./Login";
@@ -30,6 +31,7 @@ function App() {
         <Route path="/process" element={<Process />} />
         <Route path="/worldCoffee" element={<WorldCoffee />} />
         <Route path="/articles" element={<Articles />} />
+        <Route path="/profile" element={<Profile />} />
 
         <Route path="/coffee_bean" element={<CoffeeBean />} />
 
