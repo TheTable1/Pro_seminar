@@ -11,7 +11,7 @@ const decisionTree = {
       label: "ขม",
       value: "ขม",
       next: {
-        question: "คุณชอบกาแฟที่มีนมมากหรือน้อย?",
+        question: "คุณชอบกาแฟที่มีนมมากน้อยแค่ไหน?",
         key: "milk",
         options: [
           {
@@ -24,33 +24,10 @@ const decisionTree = {
                 {
                   label: "เข้ม",
                   value: "เข้ม",
-                  next: {
-                    question: "คุณชอบกาแฟที่มีรสคั่วจัดหรือรสละมุน?",
-                    key: "roastPreference",
-                    options: [
-                      {
-                        label: "จัด",
-                        value: "จัด",
-                        next: { result: "เอสเพรสโซคั่วเข้ม" },
-                      },
-                      {
-                        label: "ละมุน",
-                        value: "ละมุน",
-                        next: { result: "เอสเพรสโซแบบนุ่มละมุน" },
-                      },
-                    ],
-                  },
+                  next: { result: "ลาเต้เข้มข้น" },
                 },
-                {
-                  label: "กลาง",
-                  value: "กลาง",
-                  next: { result: "ริสเตรตโต" },
-                },
-                {
-                  label: "เบา",
-                  value: "เบา",
-                  next: { result: "อเมริกาโน" },
-                },
+                { label: "กลาง", value: "กลาง", next: { result: "ลาเต้" } },
+                { label: "เบา", value: "เบา", next: { result: "แฟลตไวท์" } },
               ],
             },
           },
@@ -61,44 +38,17 @@ const decisionTree = {
               question: "คุณต้องการกาแฟอุณหภูมิแบบไหน?",
               key: "temperature",
               options: [
-                {
-                  label: "ร้อน",
-                  value: "ร้อน",
-                  next: {
-                    question: "คุณชอบกาแฟที่มีการเติมวิปครีมหรือไม่?",
-                    key: "whippedCream",
-                    options: [
-                      {
-                        label: "ใช่",
-                        value: "ใช่",
-                        next: { result: "ลาเต้วิปครีม" },
-                      },
-                      {
-                        label: "ไม่",
-                        value: "ไม่",
-                        next: { result: "ลาเต้" },
-                      },
-                    ],
-                  },
-                },
+                { label: "ร้อน", value: "ร้อน", next: { result: "เอสเพรสโซ" } },
                 {
                   label: "เย็น",
                   value: "เย็น",
-                  next: { result: "กาแฟเย็น" },
+                  next: { result: "อเมริกาโนเย็น" },
                 },
-                {
-                  label: "อุ่น",
-                  value: "อุ่น",
-                  next: { result: "คาปูชิโน" },
-                },
+                { label: "อุ่น", value: "อุ่น", next: { result: "คาปูชิโน" } },
               ],
             },
           },
-          {
-            label: "ปานกลาง",
-            value: "ปานกลาง",
-            next: { result: "แฟลตไวท์" },
-          },
+          { label: "ปานกลาง", value: "ปานกลาง", next: { result: "แฟลตไวท์" } },
         ],
       },
     },
@@ -114,7 +64,7 @@ const decisionTree = {
             label: "ปานกลาง",
             value: "ปานกลาง",
             next: {
-              question: "คุณชอบเพิ่มช็อคโกแลตในกาแฟหรือไม่?",
+              question: "คุณชอบเพิ่มช็อกโกแลตในกาแฟหรือไม่?",
               key: "chocolate",
               options: [
                 {
@@ -122,11 +72,7 @@ const decisionTree = {
                   value: "ใช่",
                   next: { result: "มอคค่าช็อกโกแลตเข้มข้นพิเศษ" },
                 },
-                {
-                  label: "ไม่",
-                  value: "ไม่",
-                  next: { result: "มอคค่า" },
-                },
+                { label: "ไม่", value: "ไม่", next: { result: "มอคค่า" } },
               ],
             },
           },
@@ -153,70 +99,11 @@ const decisionTree = {
     {
       label: "กลมกล่อม",
       value: "กลมกล่อม",
-      next: {
-        question: "วัตถุประสงค์การดื่มกาแฟของคุณคืออะไร?",
-        key: "occasion",
-        options: [
-          {
-            label: "กระปรี้กระเปร่า",
-            value: "กระปรี้กระเปร่า",
-            next: { result: "เอสเพรสโซ" },
-          },
-          {
-            label: "ผ่อนคลาย",
-            value: "ผ่อนคลาย",
-            next: {
-              question: "คุณชอบการคั่วกาแฟแบบไหน?",
-              key: "roast",
-              options: [
-                {
-                  label: "อ่อน",
-                  value: "อ่อน",
-                  next: { result: "ลาเต้คั่วอ่อน" },
-                },
-                {
-                  label: "กลาง",
-                  value: "กลาง",
-                  next: { result: "ลาเต้คั่วกลาง" },
-                },
-                {
-                  label: "เข้ม",
-                  value: "เข้ม",
-                  next: { result: "ลาเต้คั่วเข้ม" },
-                },
-              ],
-            },
-          },
-          {
-            label: "เพื่อสังคม",
-            value: "เพื่อสังคม",
-            next: { result: "คาปูชิโน" },
-          },
-          {
-            label: "เพื่อความคิดสร้างสรรค์",
-            value: "เพื่อความคิดสร้างสรรค์",
-            next: {
-              question: "คุณต้องการกาแฟแบบไหนสำหรับเสริมความคิดสร้างสรรค์?",
-              key: "creative",
-              options: [
-                {
-                  label: "สดชื่น",
-                  value: "สดชื่น",
-                  next: { result: "อเมริกาโน" },
-                },
-                {
-                  label: "อุ่นสบาย",
-                  value: "อุ่นสบาย",
-                  next: { result: "แฟลตไวท์" },
-                },
-              ],
-            },
-          },
-        ],
-      },
+      next: { result: "คาปูชิโน" },
     },
   ],
 };
+
 
 const Suggestion = () => {
   // State สำหรับเก็บ node ปัจจุบันใน decision tree และประวัติสำหรับย้อนกลับ
