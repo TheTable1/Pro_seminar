@@ -1,7 +1,11 @@
 // tailwind.config.js
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
-  safelist: ["hover:bg-light-brown"],
+  safelist: [
+    { pattern: /hover:bg-light-brown/ },
+    { pattern: /hover:text-beige/ },
+  ],
+
   theme: {
     extend: {
       colors: {

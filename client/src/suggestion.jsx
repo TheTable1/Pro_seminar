@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Navbar from "./navbar";
+import menuItems from "./menuItems.json"; // Import ไฟล์ JSON
 
-// โครงสร้าง decision tree ที่ปรับปรุงให้มีคำถามเพิ่มเติม
+// โครงสร้าง decision tree ที่ปรับปรุงให้มีคำถามเพิ่มเติม โดยตัดส่วนเกี่ยวกับกลิ่นผลไม้ออกไป
 const decisionTree = {
   question: "คุณชอบกาแฟรสอะไร?",
   key: "flavor",
@@ -24,19 +25,18 @@ const decisionTree = {
                   label: "เข้ม",
                   value: "เข้ม",
                   next: {
-                    // เปลี่ยนคำถามนี้จากเรื่องเผ็ดและกรดเป็นเรื่องรสคั่ว
                     question: "คุณชอบกาแฟที่มีรสคั่วจัดหรือรสละมุน?",
                     key: "roastPreference",
                     options: [
                       {
                         label: "จัด",
                         value: "จัด",
-                        next: { result: "Bold Roast Espresso" },
+                        next: { result: "เอสเพรสโซคั่วเข้ม" },
                       },
                       {
                         label: "ละมุน",
                         value: "ละมุน",
-                        next: { result: "Smooth Espresso" },
+                        next: { result: "เอสเพรสโซแบบนุ่มละมุน" },
                       },
                     ],
                   },
@@ -44,12 +44,12 @@ const decisionTree = {
                 {
                   label: "กลาง",
                   value: "กลาง",
-                  next: { result: "Ristretto" },
+                  next: { result: "ริสเตรตโต" },
                 },
                 {
                   label: "เบา",
                   value: "เบา",
-                  next: { result: "Americano" },
+                  next: { result: "อเมริกาโน" },
                 },
               ],
             },
@@ -71,12 +71,12 @@ const decisionTree = {
                       {
                         label: "ใช่",
                         value: "ใช่",
-                        next: { result: "Latte with whipped cream" },
+                        next: { result: "ลาเต้วิปครีม" },
                       },
                       {
                         label: "ไม่",
                         value: "ไม่",
-                        next: { result: "Latte" },
+                        next: { result: "ลาเต้" },
                       },
                     ],
                   },
@@ -84,12 +84,12 @@ const decisionTree = {
                 {
                   label: "เย็น",
                   value: "เย็น",
-                  next: { result: "Iced Coffee" },
+                  next: { result: "กาแฟเย็น" },
                 },
                 {
                   label: "อุ่น",
                   value: "อุ่น",
-                  next: { result: "Cappuccino" },
+                  next: { result: "คาปูชิโน" },
                 },
               ],
             },
@@ -97,7 +97,7 @@ const decisionTree = {
           {
             label: "ปานกลาง",
             value: "ปานกลาง",
-            next: { result: "Flat White" },
+            next: { result: "แฟลตไวท์" },
           },
         ],
       },
@@ -109,7 +109,7 @@ const decisionTree = {
         question: "คุณต้องการระดับคาเฟอีนเท่าไหร่?",
         key: "caffeineLevel",
         options: [
-          { label: "สูง", value: "สูง", next: { result: "Macchiato" } },
+          { label: "สูง", value: "สูง", next: { result: "มักคิอาโต" } },
           {
             label: "ปานกลาง",
             value: "ปานกลาง",
@@ -120,12 +120,12 @@ const decisionTree = {
                 {
                   label: "ใช่",
                   value: "ใช่",
-                  next: { result: "Mocha with extra chocolate" },
+                  next: { result: "มอคค่าช็อกโกแลตเข้มข้นพิเศษ" },
                 },
                 {
                   label: "ไม่",
                   value: "ไม่",
-                  next: { result: "Mocha" },
+                  next: { result: "มอคค่า" },
                 },
               ],
             },
@@ -137,15 +137,15 @@ const decisionTree = {
               question: "คุณชอบกาแฟที่มีนมมากหรือน้อย?",
               key: "milkSweet",
               options: [
-                { label: "มาก", value: "มาก", next: { result: "Affogato" } },
-                { label: "น้อย", value: "น้อย", next: { result: "Cortado" } },
+                { label: "มาก", value: "มาก", next: { result: "อัฟฟอกาโต" } },
+                { label: "น้อย", value: "น้อย", next: { result: "คอร์ทาโด" } },
               ],
             },
           },
           {
             label: "ไม่แน่ใจ",
             value: "ไม่แน่ใจ",
-            next: { result: "Ristretto" },
+            next: { result: "ริสเตรตโต" },
           },
         ],
       },
@@ -160,7 +160,7 @@ const decisionTree = {
           {
             label: "กระปรี้กระเปร่า",
             value: "กระปรี้กระเปร่า",
-            next: { result: "Espresso" },
+            next: { result: "เอสเพรสโซ" },
           },
           {
             label: "ผ่อนคลาย",
@@ -172,68 +172,17 @@ const decisionTree = {
                 {
                   label: "อ่อน",
                   value: "อ่อน",
-                  next: {
-                    question: "คุณต้องการกาแฟที่มีรสผลไม้หรือไม่?",
-                    key: "fruity",
-                    options: [
-                      {
-                        label: "ใช่",
-                        value: "ใช่",
-                        next: {
-                          result: "Latte with light roast and fruity notes",
-                        },
-                      },
-                      {
-                        label: "ไม่",
-                        value: "ไม่",
-                        next: { result: "Latte with light roast" },
-                      },
-                    ],
-                  },
+                  next: { result: "ลาเต้คั่วอ่อน" },
                 },
                 {
                   label: "กลาง",
                   value: "กลาง",
-                  next: {
-                    question: "คุณต้องการกาแฟที่มีรสผลไม้หรือไม่?",
-                    key: "fruity",
-                    options: [
-                      {
-                        label: "ใช่",
-                        value: "ใช่",
-                        next: {
-                          result: "Latte with medium roast and fruity notes",
-                        },
-                      },
-                      {
-                        label: "ไม่",
-                        value: "ไม่",
-                        next: { result: "Latte with medium roast" },
-                      },
-                    ],
-                  },
+                  next: { result: "ลาเต้คั่วกลาง" },
                 },
                 {
                   label: "เข้ม",
                   value: "เข้ม",
-                  next: {
-                    question: "คุณต้องการกาแฟที่มีรสผลไม้หรือไม่?",
-                    key: "fruity",
-                    options: [
-                      {
-                        label: "ใช่",
-                        value: "ใช่",
-                        next: {
-                          result: "Latte with dark roast and fruity notes",
-                        },
-                      },
-                      {
-                        label: "ไม่",
-                        value: "ไม่",
-                        next: { result: "Latte with dark roast" },
-                      },
-                    ],
-                  },
+                  next: { result: "ลาเต้คั่วเข้ม" },
                 },
               ],
             },
@@ -241,7 +190,7 @@ const decisionTree = {
           {
             label: "เพื่อสังคม",
             value: "เพื่อสังคม",
-            next: { result: "Cappuccino" },
+            next: { result: "คาปูชิโน" },
           },
           {
             label: "เพื่อความคิดสร้างสรรค์",
@@ -253,12 +202,12 @@ const decisionTree = {
                 {
                   label: "สดชื่น",
                   value: "สดชื่น",
-                  next: { result: "Americano" },
+                  next: { result: "อเมริกาโน" },
                 },
                 {
                   label: "อุ่นสบาย",
                   value: "อุ่นสบาย",
-                  next: { result: "Flat White" },
+                  next: { result: "แฟลตไวท์" },
                 },
               ],
             },
@@ -319,11 +268,17 @@ const Suggestion = () => {
     setResult("");
   };
 
+  // ดึงข้อมูลรูปภาพจากไฟล์ menuItem.json โดยหาว่าชื่อของ item ตรงกับ result หรือไม่
+  const recommendedItem = result
+    ? menuItems.find((item) => item.name === result)
+    : null;
+
+
   return (
     <div>
       <Navbar />
       <div className="min-h-screen bg-[url('../public/background.jpg')] bg-cover bg-center bg-white/85 bg-blend-overlay flex flex-col items-center justify-center px-4">
-        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl p-8 w-full max-w-4xl relative">
+        <div className="bg-beige-light backdrop-blur-sm rounded-3xl shadow-xl p-8 w-full max-w-4xl relative">
           {!result ? (
             <>
               <h2 className="text-center text-2xl md:text-3xl font-bold text-brown mb-4">
@@ -335,11 +290,11 @@ const Suggestion = () => {
                     <button
                       key={option.value}
                       onClick={() => handleOptionSelect(option)}
-                      className={`p-4 rounded-3xl transition-colors text-left font-medium border bg-beige-light text-brown border-brown ${
+                      className={`p-4 rounded-3xl transition-colors text-left font-medium border bg-white text-brown border-brown ${
                         currentSelection &&
                         currentSelection.value === option.value
-                          ? "bg-brown !text-beige"
-                          : "hover:bg-light-brown hover:text-beige"
+                          ? "!bg-brown !text-beige"
+                          : "!hover:bg-light-brown hover:text-beige"
                       }`}
                     >
                       {option.label}
@@ -368,11 +323,26 @@ const Suggestion = () => {
             </>
           ) : (
             <div className="text-center">
-              <h2 className="text-3xl font-bold text-dark-brown mb-4">
+              <h2 className="text-2xl font-bold text-dark-brown mb-5">
                 กาแฟที่แนะนำสำหรับคุณ
               </h2>
-              <h2 className="text-3xl font-bold text-dark-brown mb-4">
-                {result}
+              <img
+                src={
+                  recommendedItem && recommendedItem.img
+                    ? recommendedItem.img
+                    : "../public/defult-coffeecup.png"
+                }
+                alt={
+                  recommendedItem && recommendedItem.name
+                    ? recommendedItem.name
+                    : "Fallback image"
+                }
+                className="mx-auto w-full md:w-1/2 lg:w-1/3 mb-4"
+              />
+              <h2 className="text-2xl font-bold text-dark-brown mb-4 flex justify-center">
+                <div className="px-4 py-2 bg-brown rounded-3xl text-beige">
+                  {result}
+                </div>
               </h2>
             </div>
           )}
