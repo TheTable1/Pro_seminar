@@ -145,6 +145,16 @@ const filteredItems = menuItems.filter(
                 ))}
               </div>
 
+              {/* suggestion */}
+              <div className="flex justify-end me-3">
+                <button
+                  className="bg-light-brown text-white px-4 py-2 rounded-3xl hover:bg-brown"
+                  onClick={() => navigate("/Suggestion")}
+                >
+                  แนะนำกาแฟที่คุณต้องชอบ
+                </button>
+              </div>
+
               {/* Menu Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 lg:gap-5">
                 {filteredItems
