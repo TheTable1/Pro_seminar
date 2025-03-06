@@ -1,26 +1,27 @@
-  import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
 export default function Navbar() {
   const [showMenu, setShowMenu] = useState(false);
-  const menuRef = useRef(null);
+  const navbarRef = useRef(null);
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+      // ถ้าคลิกนอก navbar ให้ปิดเมนู
+      if (navbarRef.current && !navbarRef.current.contains(event.target)) {
         setShowMenu(false);
       }
     }
-
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [menuRef]);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div>
-      <header className="bg-dark-brown py-4 px-5 flex justify-between items-center relative">
+      <header
+        ref={navbarRef}
+        className="bg-dark-brown py-4 px-5 flex justify-between items-center relative"
+      >
         <div className="font-bold text-beige text-[5vw] md:text-[1rem] lg:text-[2rem]">
           <Link to="/"> Coffee Bean Fusion </Link>
         </div>
@@ -28,7 +29,7 @@ export default function Navbar() {
         {/* Desktop Menu */}
         <div className="hidden lg:flex items-center space-x-6">
           <ul className="flex space-x-4 text-beige">
-            <li className="relative group" ref={menuRef}>
+            <li className="relative group">
               <span
                 className="cursor-pointer hover:text-light-brown transition duration-300"
                 onClick={() => setShowMenu((prev) => !prev)}
@@ -133,10 +134,14 @@ export default function Navbar() {
                 </ul>
               </li>
               <li className="cursor-pointer hover:text-light-brown transition duration-200">
-                เมล็ดกาแฟ
+                <Link to="/coffee_bean" onClick={() => setShowMenu(false)}>
+                  เมล็ดกาแฟ
+                </Link>
               </li>
               <li className="cursor-pointer hover:text-light-brown transition duration-300">
-                เมนูกาแฟ
+                <Link to="/coffee_menu" onClick={() => setShowMenu(false)}>
+                  เมนูกาแฟ
+                </Link>
               </li>
               <li className="cursor-pointer hover:text-light-brown transition duration-300">
                 ฟีดคอกาแฟ
