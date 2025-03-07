@@ -24,7 +24,7 @@ const decisionTree = {
                 {
                   label: "เข้ม",
                   value: "เข้ม",
-                  next: { result: "ลาเต้เข้มข้น" },
+                  next: { result: "ลาเต้" },
                 },
                 { label: "กลาง", value: "กลาง", next: { result: "ลาเต้" } },
                 { label: "เบา", value: "เบา", next: { result: "แฟลตไวท์" } },
