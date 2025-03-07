@@ -70,7 +70,7 @@ const decisionTree = {
                 {
                   label: "ใช่",
                   value: "ใช่",
-                  next: { result: "มอคค่าช็อกโกแลตเข้มข้นพิเศษ" },
+                  next: { result: "มอคค่า" },
                 },
                 { label: "ไม่", value: "ไม่", next: { result: "มอคค่า" } },
               ],

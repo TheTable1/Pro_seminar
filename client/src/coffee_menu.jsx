@@ -148,7 +148,7 @@ const filteredItems = menuItems.filter(
               {/* suggestion */}
               <div className="flex justify-end me-3">
                 <button
-                  className="bg-light-brown text-white px-4 py-2 rounded-3xl hover:bg-brown"
+                  className="bg-light-brown text-white px-4 py-2 rounded-3xl hover:bg-brown mb-4"
                   onClick={() => navigate("/Suggestion")}
                 >
                   แนะนำกาแฟที่คุณต้องชอบ
