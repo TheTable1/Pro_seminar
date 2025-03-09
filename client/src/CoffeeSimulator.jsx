@@ -603,9 +603,12 @@ const simulatorHeight = `calc(100vh - ${navbarHeight}px)`; // ความสู
     <div className="relative ">
       <Navbar />
       {/* 🔹 Background Blur Layer */}
-      <div className="absolute inset-0 bg-cover bg-center"
+      <div className="fixed inset-0 bg-cover bg-center"
         style={{
           backgroundImage: "url('/simulator/bs-sim.jpg')", // เปลี่ยนเป็น path ของพื้นหลัง
+          backgroundAttachment: "fixed", // ทำให้พื้นหลังไม่เลื่อน
+          backgroundSize: "cover", // ให้ภาพคลุมพื้นที่ทั้งหมด
+          backgroundPosition: "center", // จัดกึ่งกลางภาพ
           filter: "blur(8px)", // ปรับระดับความเบลอ
           zIndex: "-1", // ทำให้เป็นพื้นหลัง
         }}

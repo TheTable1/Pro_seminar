@@ -49,7 +49,7 @@ const filteredItems = menuItems.filter(
 
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="flex flex-col min-h-screen bg-gray-100">
       <Navbar />
 
       <main className="lg:p-6 sm:p-0 ">
