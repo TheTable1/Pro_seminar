@@ -24,7 +24,7 @@ const decisionTree = {
                 {
                   label: "เข้ม",
                   value: "เข้ม",
-                  next: { result: "ลาเต้เข้มข้น" },
+                  next: { result: "ลาเต้" },
                 },
                 { label: "กลาง", value: "กลาง", next: { result: "ลาเต้" } },
                 { label: "เบา", value: "เบา", next: { result: "แฟลตไวท์" } },
@@ -70,7 +70,7 @@ const decisionTree = {
                 {
                   label: "ใช่",
                   value: "ใช่",
-                  next: { result: "มอคค่าช็อกโกแลตเข้มข้นพิเศษ" },
+                  next: { result: "มอคค่า" },
                 },
                 { label: "ไม่", value: "ไม่", next: { result: "มอคค่า" } },
               ],
