@@ -139,15 +139,10 @@ const QuizDetail = () => {
             </>
           ) : (
             <div className="text-center">
-              <h2 className="text-2xl font-bold text-dark-brown mb-4">
-                คะแนนของคุณ: {score} / {quiz.questions.length}
-              </h2>
-
-              <p className="text-xl mb-6">
-                <span className="font-bold">
-                  {Math.round((score / quiz.questions.length) * 100)}%
-                </span>
-              </p>
+              <h1 className="text-2xl font-bold text-dark-brown mb-4">
+                คะแนนของคุณ: {score} / {quiz.questions.length} (
+                {Math.round((score / quiz.questions.length) * 100)}%)
+              </h1>
 
               {(() => {
                 const percentage = Math.round(
@@ -176,7 +171,7 @@ const QuizDetail = () => {
 
               <button
                 onClick={() => window.location.reload()}
-                className="mt-6 px-8 py-3 bg-brown text-beige font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+                className="mt-6 px-6 py-2 bg-light-brown text-beige font-semibold rounded-full shadow-lg hover:shadow-xl hover:bg-brown transition-all duration-300"
               >
                 ทำแบบทดสอบอีกครั้ง
               </button>

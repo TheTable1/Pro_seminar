@@ -29,6 +29,8 @@ function CoffeeBeans() {
 
   const handleItemClick = (item) => {
     setSelectedItem(item);
+    // เลื่อนหน้ารายละเอียดขึ้นไปบนสุดทันที
+    window.scrollTo(0, 0);
   };
 
   const handleBack = () => {
@@ -42,7 +44,7 @@ function CoffeeBeans() {
         (Array.isArray(item.type)
           ? item.type.includes(activeFilter)
           : item.type === activeFilter)) &&
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) // ค้นหาชื่อ
+      item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -58,7 +60,6 @@ function CoffeeBeans() {
             >
               ย้อนกลับ
             </button>
-
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div className="flex flex-col items-center">
                 <img
@@ -67,7 +68,6 @@ function CoffeeBeans() {
                   alt={selectedItem.name}
                 />
               </div>
-
               <div className="space-y-6">
                 <h2 className="text-3xl font-bold mb-4 text-brown">
                   {selectedItem.name}
@@ -90,7 +90,6 @@ function CoffeeBeans() {
                 <p className="text-gray-700 mt-2">{selectedItem.tips}</p>
                 <h3 className="font-semibold text-lg text-brown mt-4">ราคา</h3>
                 <p className="text-gray-700 mt-2">{selectedItem.price}</p>
-
                 <h3 className="font-semibold text-lg text-brown mb-3 mt-4">
                   ช่องทางการสั่งซื้อ
                 </h3>
@@ -124,7 +123,6 @@ function CoffeeBeans() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-
               {/* Filter Buttons */}
               <div className="flex flex-wrap justify-center gap-2 md:gap-4 lg:gap-6 mb-6">
                 {filterButtons.map((filter) => (
@@ -141,7 +139,6 @@ function CoffeeBeans() {
                   </button>
                 ))}
               </div>
-
               {/* Menu Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 lg:gap-5">
                 {filteredItems.map((item, index) => (

@@ -10,7 +10,6 @@ function CoffeeBeans() {
   const [searchTerm, setSearchTerm] = useState(""); // State สำหรับการค้นหา
 
   const menuItems = MenuItems;
-
   const navigate = useNavigate();
 
   const filterButtons = [
@@ -28,6 +27,8 @@ function CoffeeBeans() {
 
   const handleItemClick = (item) => {
     setSelectedItem(item);
+    // เมื่อเลือกเมนูแล้วเลื่อนหน้ารายละเอียดขึ้นไปด้านบนทันที (ไม่ smooth)
+    window.scrollTo(0, 0);
   };
 
   const handleBack = () => {
@@ -36,17 +37,20 @@ function CoffeeBeans() {
 
   const handleTryIt = () => {
     navigate("/simulator", { state: selectedItem }); // ส่งข้อมูล selectedItem ไป FinalStep
-  };  
-  
-  // ฟังก์ชันสำหรับการค้นหา
-const filteredItems = menuItems.filter(
-  (item) =>
-    activeFilter === "กาแฟทั้งหมด" ||
-    (Array.isArray(item.type)
-      ? item.type.includes(activeFilter)
-      : item.type === activeFilter)
-);
+  };
 
+  // รวมเงื่อนไข activeFilter และ searchTerm ในการค้นหา
+  const filteredItems = menuItems.filter((item) => {
+    const matchesFilter =
+      activeFilter === "กาแฟทั้งหมด" ||
+      (Array.isArray(item.type)
+        ? item.type.includes(activeFilter)
+        : item.type === activeFilter);
+    const matchesSearch =
+      searchTerm.trim() === "" ||
+      item.name.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesFilter && matchesSearch;
+  });
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
@@ -89,9 +93,9 @@ const filteredItems = menuItems.filter(
                   วัตถุดิบในการทำ
                 </h3>
                 <ol className="list-decimal pl-5 space-y-2 mt-2">
-                  {selectedItem.ingredients.map((ingredients, index) => (
+                  {selectedItem.ingredients.map((ingredient, index) => (
                     <li key={index} className="text-gray-700 ">
-                      {ingredients}
+                      {ingredient}
                     </li>
                   ))}
                 </ol>
@@ -99,9 +103,9 @@ const filteredItems = menuItems.filter(
                   ขั้นตอนการทำ
                 </h3>
                 <ol className="list-decimal pl-5 space-y-2 mt-2">
-                  {selectedItem.stepsAll.map((stepsAll, index) => (
+                  {selectedItem.stepsAll.map((step, index) => (
                     <li key={index} className="text-gray-700 ">
-                      {stepsAll}
+                      {step}
                     </li>
                   ))}
                 </ol>
@@ -157,29 +161,23 @@ const filteredItems = menuItems.filter(
 
               {/* Menu Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 lg:gap-5">
-                {filteredItems
-                  .filter(
-                    (item) =>
-                      activeFilter === "กาแฟทั้งหมด" ||
-                      item.type.includes(activeFilter)
-                  )
-                  .map((item, index) => (
-                    <div
-                      key={index}
-                      style={{ cursor: "pointer" }}
-                      className="sm:p-4 md:p-1 bg-brown rounded-lg shadow-sm text-center text-white font-medium transition duration-200 ease-in-out hover:shadow-lg"
-                      onClick={() => handleItemClick(item)}
-                    >
-                      <div className="p-4 bg-brown rounded-lg shadow-sm text-center text-white font-medium transition duration-200 ease-in-out hover:shadow-lg">
-                        <img
-                          className="w-full h-40 object-cover rounded-md"
-                          src={item.img}
-                          alt={item.name}
-                        />
-                        <h4 className="mt-2">{item.name}</h4>
-                      </div>
+                {filteredItems.map((item, index) => (
+                  <div
+                    key={index}
+                    style={{ cursor: "pointer" }}
+                    className="sm:p-4 md:p-1 bg-brown rounded-lg shadow-sm text-center text-white font-medium transition duration-200 ease-in-out hover:shadow-lg"
+                    onClick={() => handleItemClick(item)}
+                  >
+                    <div className="p-4 bg-brown rounded-lg shadow-sm text-center text-white font-medium transition duration-200 ease-in-out hover:shadow-lg">
+                      <img
+                        className="w-full h-40 object-cover rounded-md"
+                        src={item.img}
+                        alt={item.name}
+                      />
+                      <h4 className="mt-2">{item.name}</h4>
                     </div>
-                  ))}
+                  </div>
+                ))}
               </div>
             </div>
           </section>
