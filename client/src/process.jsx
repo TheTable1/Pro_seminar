@@ -14,7 +14,6 @@ function Process() {
 
   return (
     <div className="bg-[#f3f1ec]">
-
       <Navbar />
 
       <div className="container mx-auto p-6 ">
@@ -24,8 +23,11 @@ function Process() {
             <button
               key={icon.id}
               onClick={() => setSelectedIcon(icon.name)}
-              className={`relative w-20 h-20 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border-4 border-black bg-brown-300 flex justify-center items-center transition-transform duration-300 ${selectedIcon === icon.name ? "ring-4 ring-brown scale-110" : "hover:scale-105"
-                }`}
+              className={`relative w-20 h-20 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border-4 border-black bg-brown-300 flex justify-center items-center transition-transform duration-300 ${
+                selectedIcon === icon.name
+                  ? "ring-4 ring-brown scale-110"
+                  : "hover:scale-105"
+              }`}
             >
               <img
                 src={icon.image}
@@ -41,11 +43,15 @@ function Process() {
           {icons.map(
             (content) =>
               selectedIcon === content.name && (
-                <div key={content.id} >
+                <div key={content.id}>
                   <img src={content.img} className="w-1/2 mx-auto mb-5"></img>
-                  <div className="bg-[#b69788] py-5 mb-3 rounded-2xl" >
-                    <h2 className="text-lg md:text-2xl font-bold mb-4">{content.alt}</h2>
-                    <p className="text-gray-700 max-w-2xl mx-auto">{content.content}</p>
+                  <div className="bg-[#e5c1af] py-5 mb-3 rounded-2xl">
+                    <h2 className="text-lg md:text-2xl font-bold mb-4">
+                      {content.alt}
+                    </h2>
+                    <p className="text-gray-700 max-w-2xl mx-auto">
+                      {content.content}
+                    </p>
                   </div>
                 </div>
               )
@@ -54,7 +60,6 @@ function Process() {
       </div>
 
       <Footer />
-
     </div>
   );
 };
