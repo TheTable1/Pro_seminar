@@ -30,12 +30,12 @@ function Extraction() {
             className="flex flex-col lg:flex-row bg-white shadow-lg mb-8 overflow-hidden rounded-3xl"
             data-aos="fade-right"
           >
-            {/* Image */}
+            {/* Image (Left) */}
             <div className="w-full lg:w-1/2 flex items-center justify-center">
               <img
                 src="/extraction/extraction2.png"
                 alt="Moka Pot"
-                className="w-1/2 h-auto object-cover"
+                className="w-1/2 h-auto object-cover rounded-3xl my-6"
               />
             </div>
 
@@ -44,7 +44,7 @@ function Extraction() {
               <h2 className="text-xl md:text-2xl font-bold mb-4">
                 โมก้าพอต (MOKA POT)
               </h2>
-              <p className="text-gray-700 leading-relaxed ">
+              <p className="text-gray-700 leading-relaxed">
                 Moka Pot หรือหม้อต้มกาแฟแบบอิตาเลียน
                 เป็นอุปกรณ์ที่ใช้ในการชงกาแฟโดยอาศัยหลักการของแรงดันไอน้ำที่ดันน้ำร้อนขึ้นผ่านชั้นกาแฟบดละเอียด
                 เป็นวิธีการชงที่ค่อนข้างเป็นที่นิยมในแถบยุโรป และลาตินอเมริกา
@@ -59,17 +59,17 @@ function Extraction() {
             </div>
           </div>
 
-          {/* Drip Coffee Section */}
+          {/* Drip Coffee Section (Image on Right) */}
           <div
-            className="flex flex-col lg:flex-row-reverse bg-white shadow-lg mb-8 rounded-3xl overflow-hidden "
+            className="flex flex-col lg:flex-row-reverse bg-white shadow-lg mb-8 rounded-3xl overflow-hidden"
             data-aos="fade-left"
           >
-            {/* Image */}
+            {/* Image (Right) */}
             <div className="w-full lg:w-1/2 flex items-center justify-center">
               <img
-                src="/extraction/extraction3.jpg" // Replace with the correct image URL
+                src="/extraction/extraction3.jpg"
                 alt="Drip Coffee"
-                className="w-1/2 h-full object-cover"
+                className="w-1/2 h-auto object-cover rounded-3xl my-6"
               />
             </div>
             {/* Content */}
@@ -90,16 +90,17 @@ function Extraction() {
             </div>
           </div>
 
+          {/* French Press Section (Image on Left) */}
           <div
-            className="flex flex-col lg:flex-row bg-white shadow-lg rounded-3xl mb-8 overflow-hidden"
+            className="flex flex-col lg:flex-row bg-white shadow-lg mb-8 overflow-hidden rounded-3xl"
             data-aos="fade-right"
           >
-            {/* Image */}
+            {/* Image (Left) */}
             <div className="w-full lg:w-1/2 flex items-center justify-center">
               <img
                 src="/extraction/extraction4.jpg"
                 alt="Moka Pot"
-                className="w-1/2 h-auto object-cover"
+                className="w-1/2 h-auto object-cover rounded-3xl my-6"
               />
             </div>
 
@@ -108,40 +109,30 @@ function Extraction() {
               <h2 className="text-xl md:text-2xl font-bold mb-4">
                 เฟรนช์เพรส (French Press)
               </h2>
-              <p className="text-gray-700 leading-relaxed ">
+              <p className="text-gray-700 leading-relaxed">
                 เป็นอุปกรณ์การชงกาแฟที่ไม่ยุ่งยากซับซ้อน
                 โดยใช้วิธีแบบแช่กาแฟให้ชุ่มน้ำ เพื่อสกัดน้ำกาแฟออกมา
                 วิธีนี้จะเป็นการดึงรสชาติของกาแฟได้ดีกว่า
                 การปล่อยน้ำให้ไหลผ่านกาแฟ ซึ่งจะทำให้ได้รสชาติกาแฟที่เข้มข้น
-                ถึงรสกาแฟแท้ๆมากกว่า อีกหนึ่งลักษณะเด่นของการชงกาแฟแบบ
-                เฟรนช์เพรส (French Press) คือ การกรองเอากากกาแฟออกจากน้ำ
-                โดยใช้ตะแกรงเหล็กที่มีรูขนาดใหญ่ ปล่อยให้กาแฟไหลผ่านเข้าไปในแก้ว
-                ซึ่งจุดนี้ จะกลายเป็นข้อดี ที่ทำให้น้ำกาแฟ
-                และกากกาแฟเล็กน้อยผสมผสานกันอย่างลงตัว ทำให้รสชาติของกาแฟ
-                ยิ่งมีความเข้มข้น
-                สัมผัสถึงความเป็นกาแฟรสชาติสไตล์ฝรั่งเศสได้อย่างง่ายดาย
-                แต่วิธีการนี้ อาจไม่ถูกใจสำหรับคนที่ไม่ชอบตะกอนกาแฟเท่าไหร่
-                เพราะจะมีตะกอนตกไปอยู่ก้นแก้ว และหากพลาดซดตะกอนเข้าไป
-                รสชาติของความอร่อย จะเปลี่ยนเป็นเหมือนกินเม็ดทรายเข้าไปทันที
               </p>
             </div>
           </div>
 
-          {/* Drip Coffee Section */}
+          {/* Espresso Section (Image on Right) */}
           <div
             className="flex flex-col lg:flex-row-reverse bg-white shadow-lg mb-8 rounded-3xl overflow-hidden"
             data-aos="fade-left"
           >
-            {/* Image */}
+            {/* Image (Right) */}
             <div className="w-full lg:w-1/2 flex items-center justify-center">
               <img
-                src="/extraction/extraction5.jpg" // Replace with the correct image URL
+                src="/extraction/extraction5.jpg"
                 alt="Drip Coffee"
-                className="w-1/2 h-full object-cover"
+                className="w-1/2 h-auto object-cover rounded-3xl my-6"
               />
             </div>
             {/* Content */}
-            <div className="w-full lg:w-1/2 p-4  lg:p-6 bg-brown-superlight flex justify-center flex-col">
+            <div className="w-full lg:w-1/2 p-4 lg:p-6 bg-brown-superlight flex justify-center flex-col">
               <h2 className="text-xl md:text-2xl font-bold mb-4">
                 เครื่องเอสเปรสโซ่ (Espresso)
               </h2>
@@ -150,28 +141,22 @@ function Extraction() {
                 คืออุปกรณ์ที่สร้างสรรค์รสชาติเข้มข้นของกาแฟให้เราได้ลิ้มลอง
                 ด้วยการใช้แรงดันน้ำร้อนสูงบีบผ่านกาแฟบดละเอียด
                 ทำให้ได้กาแฟที่มีครีมสีน้ำตาลทอง (Crema) ลอยอยู่ด้านบน
-                ซึ่งเป็นเอกลักษณ์ที่บ่งบอกถึงคุณภาพของเอสเพรสโซ่แท้ๆ
-                นอกจากจะได้รสชาติกาแฟที่เข้มข้นแล้ว
-                เครื่องชงกาแฟเอสเพรสโซ่ยังช่วยให้เราได้สัมผัสกับรสชาติที่แท้จริงของกาแฟอย่างเต็มที่
-                ชงกาแฟได้อย่างรวดเร็ว เหมาะสำหรับคนยุคใหม่
-                และยังเป็นฐานของเครื่องดื่มกาแฟยอดนิยมอีกมากมาย เช่น คาปูชิโน่
-                ลาเต้ มัคคิอาโต้
-                การชงกาแฟด้วยเครื่องชงกาแฟเอสเพรสโซ่จึงเป็นเหมือนศิลปะ
-                ที่ต้องใช้ความเข้าใจและฝึกฝน
+                ซึ่งเป็นเอกลักษณ์ที่บ่งบอกถึงคุณภาพของเอสเปรสโซ่แท้ๆ
               </p>
             </div>
           </div>
 
+          {/* Cold drip Section (Image on Left) */}
           <div
             className="flex flex-col lg:flex-row bg-white shadow-lg rounded-3xl mb-8 overflow-hidden"
             data-aos="fade-right"
           >
-            {/* Image */}
+            {/* Image (Left) */}
             <div className="w-full lg:w-1/2 flex items-center justify-center">
               <img
                 src="/extraction/extraction6.jpg"
                 alt="Moka Pot"
-                className="w-1/2 h-auto object-cover"
+                className="w-1/2 h-auto object-cover rounded-3xl my-6"
               />
             </div>
 
@@ -180,9 +165,9 @@ function Extraction() {
               <h2 className="text-xl md:text-2xl font-bold mb-4">
                 ดริปเย็น (Cold drip)
               </h2>
-              <p className="text-gray-700 leading-relaxed ">
-                ดริปเย็น หรือ Cold drip เป็นวิธีการชงกาแฟชนิดหนึ่งที่ใช้ น้ำเย็น
-                ในการสกัดกาแฟ แทนที่จะใช้น้ำร้อนเหมือนวิธีการชงกาแฟทั่วไป
+              <p className="text-gray-700 leading-relaxed">
+                ดริปเย็น หรือ Cold drip เป็นวิธีการชงกาแฟชนิดหนึ่งที่ใช้
+                น้ำเย็นในการสกัดกาแฟ แทนที่จะใช้น้ำร้อน
                 โดยน้ำเย็นจะหยดผ่านกาแฟบดทีละหยดอย่างช้าๆ
                 ทำให้ได้กาแฟที่มีรสชาติกลมกล่อม หอมหวานละมุน
                 และมีคาเฟอีนต่ำกว่ากาแฟที่ชงด้วยน้ำร้อน
@@ -190,17 +175,45 @@ function Extraction() {
             </div>
           </div>
 
-          {/* Drip Coffee Section */}
+          {/* Aeropress Section (Image on Right) */}
           <div
-            className="flex flex-col lg:flex-row-reverse bg-white mb-8 shadow-lg rounded-3xl overflow-hidden"
+            className="flex flex-col lg:flex-row-reverse bg-white shadow-lg mb-8 rounded-3xl overflow-hidden"
             data-aos="fade-left"
           >
-            {/* Image */}
+            {/* Image (Right) */}
             <div className="w-full lg:w-1/2 flex items-center justify-center">
               <img
-                src="/extraction/extraction7.jpg" // Replace with the correct image URL
+                src="/extraction/extraction7.jpg"
                 alt="Drip Coffee"
-                className="w-1/2 h-full object-cover"
+                className="w-1/2 h-auto object-cover rounded-3xl my-6"
+              />
+            </div>
+            {/* Content */}
+            <div className="w-full lg:w-1/2 p-4 lg:p-6 bg-brown-superlight flex justify-center flex-col">
+              <h2 className="text-xl md:text-2xl font-bold mb-4">
+                กาแฟแอโรเพรส (Aeropress)
+              </h2>
+              <p className="text-gray-700 leading-relaxed">
+                ริเริ่มขึ้นเมื่อปี 2005 โดยนักฟิสิกส์ อลัน แอดเลอร์ (Alan Adler)
+                ผู้คิดค้นเครื่องแอโรเพรสที่มีลักษณะเป็นท่อ 2
+                ชิ้นประกอบกันเหมือนไซริงก์
+                เป็นอุปกรณ์ชงกาแฟแบบพกพาที่ได้รับความนิยมอย่างมากในหมู่คนรักกาแฟ
+                เพราะมีขนาดกะทัดรัด ใช้งานง่าย และสามารถชงกาแฟได้หลากหลายสไตล์
+              </p>
+            </div>
+          </div>
+
+          {/* Cold brew Section (Image on Right) */}
+          <div
+            className="flex flex-col lg:flex-row-reverse bg-white shadow-lg mb-8 rounded-3xl overflow-hidden"
+            data-aos="fade-left"
+          >
+            {/* Image (Right) */}
+            <div className="w-full lg:w-1/2 flex items-center justify-center">
+              <img
+                src="/extraction/extraction9.jpg"
+                alt="Drip Coffee"
+                className="w-1/2 h-auto object-cover rounded-3xl my-6"
               />
             </div>
             {/* Content */}
@@ -222,86 +235,17 @@ function Extraction() {
             </div>
           </div>
 
+          {/* Nitro Cold Brew Section (Image on Left) */}
           <div
             className="flex flex-col lg:flex-row bg-white shadow-lg rounded-3xl mb-8 overflow-hidden"
             data-aos="fade-right"
           >
-            {/* Image */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center">
-              <img
-                src="/extraction/extraction8.jpg"
-                alt="Moka Pot"
-                className="w-1/3 h-auto object-cover"
-              />
-            </div>
-
-            {/* Content */}
-            <div className="w-full lg:w-1/2 p-4 lg:p-6 bg-beige-light flex justify-center flex-col">
-              <h2 className="text-xl md:text-2xl font-bold mb-4">
-                ไซฟอน (Siphon)
-              </h2>
-              <p className="text-gray-700 leading-relaxed ">
-                ไซฟอน หรือ เครื่องชงกาแฟแบบสุญญากาศ
-                เป็นหนึ่งในวิธีการชงกาแฟที่เก่าแก่และมีความพิเศษ
-                เพราะอาศัยหลักการทางวิทยาศาสตร์ในการสกัดกาแฟ
-                ทำให้ได้กาแฟที่มีรสชาติกลมกล่อม หอมหวาน และมีความซับซ้อน
-                ถูกคิดค้นขึ้นในกรุงเบอร์ลินประมาณช่วง 1830s
-                แต่ก็มีเสียงแตกบางส่วนที่กล่าวว่ากาแฟไซฟอนนั้นเกิดขึ้นในญี่ปุ่นโดย
-                อะกิระ โคโนะ เมื่อปี 1840
-                อย่างไรก็ตามกาแฟไซฟอนก็ถือเป็นอีกวิธีชงที่ได้รับความนิยมอย่างแพร่หลายไม่แพ้วิธีอื่นๆ
-                ไซฟอนประกอบด้วยกระเปาะแก้วสองส่วนเชื่อมต่อกันด้วยท่อแก้ว
-                เมื่อให้ความร้อนกับน้ำในกระเปาะล่าง
-                อากาศจะขยายตัวและดันให้น้ำร้อนขึ้นไปยังกระเปาะบน
-                ซึ่งมีกาแฟบดอยู่ เมื่อความร้อนลดลง
-                น้ำกาแฟจะไหลกลับลงมาสู่กระเปาะล่างพร้อมกับกากกาแฟที่ถูกกรองไว้
-              </p>
-            </div>
-          </div>
-
-          {/* Drip Coffee Section */}
-          <div
-            className="flex flex-col lg:flex-row-reverse bg-white shadow-lg mb-8 rounded-3xl overflow-hidden"
-            data-aos="fade-left"
-          >
-            {/* Image */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center">
-              <img
-                src="/extraction/extraction9.jpg" // Replace with the correct image URL
-                alt="Drip Coffee"
-                className="w-1/2 h-full object-cover"
-              />
-            </div>
-            {/* Content */}
-            <div className="w-full lg:w-1/2 p-4 lg:p-6 bg-brown-superlight flex justify-center flex-col">
-              <h2 className="text-xl md:text-2xl font-bold mb-4">
-                กาแฟแอโรเพรส (Aeropress)
-              </h2>
-              <p className="text-gray-700 leading-relaxed">
-                ริเริ่มขึ้นเมื่อปี 2005 โดยนักฟิสิกส์ อลัน แอดเลอร์ (Alan Adler)
-                ผู้คิดค้นเครื่องแอโรเพรสที่มีลักษณะเป็นท่อ 2
-                ชิ้นประกอบกันเหมือนไซริงก์
-                เป็นอุปกรณ์ชงกาแฟแบบพกพาที่ได้รับความนิยมอย่างมากในหมู่คนรักกาแฟ
-                เพราะมีขนาดกะทัดรัด ใช้งานง่าย และสามารถชงกาแฟได้หลากหลายสไตล์
-                ซึ่งรสชาติของกาแฟจะเข้มข้นใกล้เคียงกับการชงแบบเอสเพรสโซ
-                แอโรเพรสทำงานโดยอาศัยหลักการของการกด
-                เมื่อเราเติมน้ำร้อนลงไปในกระบอกที่บรรจุกาแฟบด
-                จากนั้นกดลูกสูบลงไป ก็จะได้กาแฟออกมา
-                โดยเราสามารถควบคุมความเข้มข้นของกาแฟได้ด้วยการปรับเวลาในการแช่กาแฟ
-                และแรงกด
-              </p>
-            </div>
-          </div>
-
-          <div
-            className="flex flex-col lg:flex-row bg-white shadow-lg rounded-3xl mb-8 overflow-hidden"
-            data-aos="fade-right"
-          >
-            {/* Image */}
+            {/* Image (Left) */}
             <div className="w-full lg:w-1/2 flex items-center justify-center">
               <img
                 src="/extraction/extraction10.jpg"
                 alt="Moka Pot"
-                className="w-2/3 h-auto object-cover"
+                className="w-2/3 h-auto object-cover rounded-3xl my-6"
               />
             </div>
 
@@ -310,7 +254,7 @@ function Extraction() {
               <h2 className="text-xl md:text-2xl font-bold mb-4">
                 กาแฟไนโตร (Nitro Cold Brew)
               </h2>
-              <p className="text-gray-700 leading-relaxed ">
+              <p className="text-gray-700 leading-relaxed">
                 กาแฟกับเบียร์เหมือนพี่น้องต่างเลือดที่มักมีส่วนเกี่ยวข้องกันอยู่เสมอไม่ทางใดก็ทางหนึ่ง
                 อย่าง Coffee Stout
                 ในคราฟต์เบียร์ที่มีส่วนผสมกาแฟเป็นตัวชูโรงเพิ่มความเข้มข้นแปลกใหม่ในบอดี้
