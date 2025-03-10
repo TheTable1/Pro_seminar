@@ -14,6 +14,8 @@ import Home from "./Home";
 import Simulator from "./CoffeeSimulator";
 import Extraction from "./extraction";
 import Suggestion from "./suggestion";
+import Quiz from "./quiz";
+import QuizDetail from "./quizDetail";
 
 function App() {
   return (
@@ -38,9 +40,11 @@ function App() {
         <Route path="/coffee_menu" element={<CoffeeMenu />} />
 
         <Route path="/simulator" element={<Simulator />} />
-        
-        <Route path="/suggestion" element={<Suggestion/>} />
 
+        <Route path="/suggestion" element={<Suggestion />} />
+
+        <Route path="/quiz" element={<Quiz />} />
+        <Route path="/quiz/:id" element={<QuizDetail />} />
       </Routes>
     </BrowserRouter>
   );

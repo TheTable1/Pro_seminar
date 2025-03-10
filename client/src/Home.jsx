@@ -50,6 +50,10 @@ const Home = () => {
     navigate("/coffee_bean");
     window.scrollTo({ top: 0, behavior: "smooth" }); // เลื่อนหน้าไปด้านบนอย่างนุ่มนวล
   };
+  const quizClick = () => {
+    navigate("/quiz");
+    window.scrollTo({ top: 0, behavior: "smooth" }); // เลื่อนหน้าไปด้านบนอย่างนุ่มนวล
+  };
 
   const handleClick = () => {
     navigate("/coffee_menu");
@@ -86,19 +90,14 @@ const Home = () => {
             <Link
               key={index}
               to={card.path}
-              className="min-w-[200px] sm:w-32 md:w-40 lg:w-48 flex-shrink-0 snap-center text-center 
-  transform transition-all duration-300 ease-in-out 
-  hover:scale-110 hover:translate-y-[-10px] hover:shadow-2xl"
+              className="relative min-w-[200px] sm:w-32 md:w-40 lg:w-48 flex-shrink-0 snap-center text-center transform transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:shadow-2xl"
               data-aos="fade-up"
               data-aos-delay={index * 100}
             >
-              {/* Rest of the code remains the same */}
-
               <img
                 src={`/home${index + 2}.jpg`}
                 alt={card.title}
-                className="rounded-md shadow-md"
-                style={{ width: "100%", height: "150px", objectFit: "cover" }}
+                className="w-full h-[150px] object-cover rounded-md shadow-md"
               />
               <p className="mt-2 text-sm">{card.title}</p>
             </Link>
@@ -167,7 +166,10 @@ const Home = () => {
         <h2 className="text-xl font-bold">
           มาดูกันว่าคุณเป็นคอกาแฟระดับไหนกัน!
         </h2>
-        <button className="bg-[#8b4513] text-white px-4 py-2 rounded-md mt-4">
+        <button
+          className="bg-[#8b4513] text-white px-4 py-2 rounded-md mt-4"
+          onClick={quizClick}
+        >
           มาทำแบบทดสอบกันเถอะ!!
         </button>
       </section>

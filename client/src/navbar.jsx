@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { auth } from "./firebase/firebase";
 import { signOut, onAuthStateChanged } from "firebase/auth";
 
@@ -14,12 +14,15 @@ export default function Navbar() {
   const navbarRef = useRef(null);
   const [user, setUser] = useState(null);
 
-  
+  // ใช้เพื่อดึง path ปัจจุบัน
+  const location = useLocation();
+
   useEffect(() => {
     function handleClickOutside(event) {
-      // ถ้าคลิกนอก navbar ให้ปิดเมนู
       if (navbarRef.current && !navbarRef.current.contains(event.target)) {
         setShowMenu(false);
+        setShowKnowledgeMenu(false);
+        setShowProfileMenu(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -28,45 +31,69 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleResize = () => {
-      document.body.style.overflowY = "scroll"; // ทำให้ Scroll Bar อยู่ตลอดเวลา
-      document.body.style.width = "100vw"; // ป้องกันการเปลี่ยนขนาดเมื่อมี Scroll Bar
+      document.body.style.overflowY = "scroll";
+      document.body.style.width = "100vw";
     };
-  
-    handleResize(); // เรียกใช้ครั้งแรกเมื่อ Component ถูกโหลด
+    handleResize();
     window.addEventListener("resize", handleResize);
-  
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
 
   useEffect(() => {
-    // ✅ ตรวจสอบสถานะการล็อกอินของผู้ใช้
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
-
     return () => unsubscribe();
   }, []);
-  
-  // ✅ ฟังก์ชัน Logout
+
   const handleLogout = async () => {
     await signOut(auth);
     setUser(null);
     setShowProfileMenu(false);
   };
 
+  // เช็คว่า path ปัจจุบันเป็นของหมวดความรู้กาแฟหรือไม่ (ถ้าเป็น path ย่อยใด ๆ ก็ให้เมนูหลัก active)
+  const knowledgeRoutes = [
+    "/history",
+    "/geneCoffee",
+    "/roasting",
+    "/extraction",
+    "/process",
+    "/worldCoffee",
+    "/articles",
+  ];
+  const isKnowledgeActive = knowledgeRoutes.some(
+    (r) => location.pathname === r
+  );
+
+  // เช็ค path ของเมนูอื่น ๆ
+  const isCoffeeBeanActive = location.pathname === "/coffee_bean";
+  const isCoffeeMenuActive = location.pathname === "/coffee_menu";
+  const isQuizActive = location.pathname === "/quiz";
+
   return (
-    <div>
-      <header className="bg-dark-brown py-4 px-5 flex justify-between items-center relative" style={{ paddingRight: `${scrollbarWidth}px` }}>
-        <div className="font-bold text-beige text-[5vw] md:text-[1rem] lg:text-[2rem]">
-          <Link to="/"> Coffee Bean Fusion </Link>
+    <div ref={navbarRef}>
+      <header
+        className="bg-dark-brown py-3 px-5 flex justify-between items-center relative"
+        style={{ paddingRight: `${scrollbarWidth}px` }}
+      >
+        {/* โลโก้ */}
+        <div className="font-bold text-beige text-xl md:text-2xl lg:text-3xl leading-none">
+          <Link to="/">Coffee Bean Fusion</Link>
         </div>
+
         {/* Desktop Menu */}
         <div className="hidden lg:flex items-center space-x-6">
-          <ul className="flex space-x-6 text-beige my-auto">
+          <ul className="flex items-center space-x-6 text-beige">
             {/* คลังความรู้กาแฟ */}
-            <li className="relative group" ref={knowledgeMenuRef}>
+            <li
+              className={`relative group ${
+                isKnowledgeActive ? "border-b-2 border-light-brown" : ""
+              }`}
+              ref={knowledgeMenuRef}
+            >
               <span
                 className="cursor-pointer hover:text-light-brown transition duration-300"
                 onClick={() => setShowKnowledgeMenu((prev) => !prev)}
@@ -101,24 +128,36 @@ export default function Navbar() {
             </li>
 
             {/* เมล็ดกาแฟ */}
-            <li className="cursor-pointer hover:text-light-brown transition duration-300">
+            <li
+              className={`cursor-pointer hover:text-light-brown transition duration-300 ${
+                isCoffeeBeanActive ? "border-b-2 border-light-brown" : ""
+              }`}
+            >
               <Link to="/coffee_bean">เมล็ดกาแฟ</Link>
             </li>
 
             {/* เมนูกาแฟ */}
-            <li className="cursor-pointer hover:text-light-brown transition duration-300">
+            <li
+              className={`cursor-pointer hover:text-light-brown transition duration-300 ${
+                isCoffeeMenuActive ? "border-b-2 border-light-brown" : ""
+              }`}
+            >
               <Link to="/coffee_menu">เมนูกาแฟ</Link>
             </li>
 
             {/* ทดสอบความรู้ */}
-            <li className="cursor-pointer hover:text-light-brown transition duration-300">
-              แบบทดสอบ
+            <li
+              className={`cursor-pointer hover:text-light-brown transition duration-300 ${
+                isQuizActive ? "border-b-2 border-light-brown" : ""
+              }`}
+            >
+              <Link to="/quiz">แบบทดสอบ</Link>
             </li>
 
-            {/* 🔹 เมนูโปรไฟล์ */}
+            {/* เมนูโปรไฟล์ */}
             <li className="relative group" ref={profileMenuRef}>
               <img
-                src={user?.photoURL || "/profile_defualt.jpg"} // ✅ ใช้รูปโปรไฟล์ของผู้ใช้ ถ้าไม่มีให้ใช้ default
+                src={user?.photoURL || "/profile_defualt.jpg"}
                 alt="Profile"
                 className="w-10 h-10 rounded-full cursor-pointer hover:opacity-80 transition duration-300"
                 onClick={() => setShowProfileMenu((prev) => !prev)}
@@ -130,7 +169,10 @@ export default function Navbar() {
                       <li className="p-3 hover:bg-dark-brown transition duration-200">
                         <Link to="/profile">โปรไฟล์ของฉัน</Link>
                       </li>
-                      <li className="p-3 hover:bg-red-500 transition duration-200 cursor-pointer" onClick={handleLogout}>
+                      <li
+                        className="p-3 hover:bg-red-500 transition duration-200 cursor-pointer"
+                        onClick={handleLogout}
+                      >
                         ออกจากระบบ
                       </li>
                     </>
@@ -144,6 +186,7 @@ export default function Navbar() {
             </li>
           </ul>
         </div>
+
         {/* Mobile Menu Toggle Button */}
         <button
           className="lg:hidden text-beige focus:outline-none"
@@ -151,52 +194,61 @@ export default function Navbar() {
         >
           ☰
         </button>
-        {/* Mobile Menu */}
+
         {/* Mobile Menu */}
         {showMenu && (
           <div className="absolute top-full left-0 w-full bg-gradient-to-b from-brown to-dark-brown shadow-lg p-6 lg:hidden z-10 rounded-b-xl animate-slideDown">
             <ul className="space-y-4 text-beige">
               <li>
-                <span className="block text-lg font-semibold cursor-pointer hover:text-light-brown transition duration-300">
+                <span
+                  className="block text-lg font-semibold cursor-pointer hover:text-light-brown transition duration-300"
+                  onClick={() => setShowKnowledgeMenu((prev) => !prev)}
+                >
                   คลังความรู้กาแฟ
                 </span>
-                <ul className="mt-2 bg-dark-brown rounded-lg shadow-inner divide-y divide-gray-700">
-                  <li className="p-3 hover:bg-brown transition duration-200">
-                    <Link to="/history" onClick={() => setShowMenu(false)}>
-                      ประวัติศาสตร์กาแฟ
-                    </Link>
-                  </li>
-                  <li className="p-3 hover:bg-brown transition duration-200">
-                    <Link to="/geneCoffee" onClick={() => setShowMenu(false)}>
-                      สายพันธุ์กาแฟ
-                    </Link>
-                  </li>
-                  <li className="p-3 hover:bg-brown transition duration-200">
-                    <Link to="/roasting" onClick={() => setShowMenu(false)}>
-                      การคั่วกาแฟอย่างมืออาชีพ
-                    </Link>
-                  </li>
-                  <li className="p-3 hover:bg-brown transition duration-200">
-                    <Link to="/extraction" onClick={() => setShowMenu(false)}>
-                      เทคนิคการสกัดกาแฟ
-                    </Link>
-                  </li>
-                  <li className="p-3 hover:bg-brown transition duration-200">
-                    <Link to="/process" onClick={() => setShowMenu(false)}>
-                      กระบวนการผลิตกาแฟ
-                    </Link>
-                  </li>
-                  <li className="p-3 hover:bg-brown transition duration-200">
-                    <Link to="/worldCoffee" onClick={() => setShowMenu(false)}>
-                      แผนที่แหล่งผลิตกาแฟโลก
-                    </Link>
-                  </li>
-                  <li className="p-3 hover:bg-brown transition duration-200">
-                    <Link to="/articles" onClick={() => setShowMenu(false)}>
-                      บทความน่ารู้
-                    </Link>
-                  </li>
-                </ul>
+                {/* Submenu Mobile */}
+                {showKnowledgeMenu && (
+                  <ul className="mt-2 bg-dark-brown rounded-lg shadow-inner divide-y divide-gray-700">
+                    <li className="p-3 hover:bg-brown transition duration-200">
+                      <Link to="/history" onClick={() => setShowMenu(false)}>
+                        ประวัติศาสตร์กาแฟ
+                      </Link>
+                    </li>
+                    <li className="p-3 hover:bg-brown transition duration-200">
+                      <Link to="/geneCoffee" onClick={() => setShowMenu(false)}>
+                        สายพันธุ์กาแฟ
+                      </Link>
+                    </li>
+                    <li className="p-3 hover:bg-brown transition duration-200">
+                      <Link to="/roasting" onClick={() => setShowMenu(false)}>
+                        ระดับของการคั่วกาแฟ
+                      </Link>
+                    </li>
+                    <li className="p-3 hover:bg-brown transition duration-200">
+                      <Link to="/extraction" onClick={() => setShowMenu(false)}>
+                        เทคนิคการสกัดกาแฟ
+                      </Link>
+                    </li>
+                    <li className="p-3 hover:bg-brown transition duration-200">
+                      <Link to="/process" onClick={() => setShowMenu(false)}>
+                        กระบวนการผลิตกาแฟ
+                      </Link>
+                    </li>
+                    <li className="p-3 hover:bg-brown transition duration-200">
+                      <Link
+                        to="/worldCoffee"
+                        onClick={() => setShowMenu(false)}
+                      >
+                        แผนที่แหล่งผลิตกาแฟโลก
+                      </Link>
+                    </li>
+                    <li className="p-3 hover:bg-brown transition duration-200">
+                      <Link to="/articles" onClick={() => setShowMenu(false)}>
+                        บทความน่ารู้
+                      </Link>
+                    </li>
+                  </ul>
+                )}
               </li>
               <li className="hover:bg-brown p-3 rounded transition duration-200">
                 <Link to="/coffee_bean" onClick={() => setShowMenu(false)}>
@@ -209,7 +261,9 @@ export default function Navbar() {
                 </Link>
               </li>
               <li className="hover:bg-brown p-3 rounded transition duration-200 cursor-pointer">
-                แบบทดสอบ
+                <Link to="/quiz" onClick={() => setShowMenu(false)}>
+                  แบบทดสอบ
+                </Link>
               </li>
             </ul>
           </div>
@@ -218,3 +272,4 @@ export default function Navbar() {
     </div>
   );
 }
+  
