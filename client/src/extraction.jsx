@@ -27,7 +27,7 @@ function Extraction() {
         <div className="p-4 pt-0 lg:p-8 bg-gray-100">
           {/* Moka Pot Section */}
           <div
-            className="flex flex-col lg:flex-row bg-white shadow-lg rounded-md mb-8 overflow-hidden"
+            className="flex flex-col lg:flex-row bg-white shadow-lg mb-8 overflow-hidden rounded-3xl"
             data-aos="fade-right"
           >
             {/* Image */}
@@ -61,7 +61,7 @@ function Extraction() {
 
           {/* Drip Coffee Section */}
           <div
-            className="flex flex-col lg:flex-row-reverse bg-white shadow-lg mb-8 rounded-md overflow-hidden "
+            className="flex flex-col lg:flex-row-reverse bg-white shadow-lg mb-8 rounded-3xl overflow-hidden "
             data-aos="fade-left"
           >
             {/* Image */}
@@ -91,7 +91,7 @@ function Extraction() {
           </div>
 
           <div
-            className="flex flex-col lg:flex-row bg-white shadow-lg rounded-md mb-8 overflow-hidden"
+            className="flex flex-col lg:flex-row bg-white shadow-lg rounded-3xl mb-8 overflow-hidden"
             data-aos="fade-right"
           >
             {/* Image */}
@@ -129,7 +129,7 @@ function Extraction() {
 
           {/* Drip Coffee Section */}
           <div
-            className="flex flex-col lg:flex-row-reverse bg-white shadow-lg mb-8 rounded-md overflow-hidden"
+            className="flex flex-col lg:flex-row-reverse bg-white shadow-lg mb-8 rounded-3xl overflow-hidden"
             data-aos="fade-left"
           >
             {/* Image */}
@@ -163,7 +163,7 @@ function Extraction() {
           </div>
 
           <div
-            className="flex flex-col lg:flex-row bg-white shadow-lg rounded-md mb-8 overflow-hidden"
+            className="flex flex-col lg:flex-row bg-white shadow-lg rounded-3xl mb-8 overflow-hidden"
             data-aos="fade-right"
           >
             {/* Image */}
@@ -192,7 +192,7 @@ function Extraction() {
 
           {/* Drip Coffee Section */}
           <div
-            className="flex flex-col lg:flex-row-reverse bg-white mb-8 shadow-lg rounded-md overflow-hidden"
+            className="flex flex-col lg:flex-row-reverse bg-white mb-8 shadow-lg rounded-3xl overflow-hidden"
             data-aos="fade-left"
           >
             {/* Image */}
@@ -223,7 +223,7 @@ function Extraction() {
           </div>
 
           <div
-            className="flex flex-col lg:flex-row bg-white shadow-lg rounded-md mb-8 overflow-hidden"
+            className="flex flex-col lg:flex-row bg-white shadow-lg rounded-3xl mb-8 overflow-hidden"
             data-aos="fade-right"
           >
             {/* Image */}
@@ -260,7 +260,7 @@ function Extraction() {
 
           {/* Drip Coffee Section */}
           <div
-            className="flex flex-col lg:flex-row-reverse bg-white shadow-lg mb-8 rounded-md overflow-hidden"
+            className="flex flex-col lg:flex-row-reverse bg-white shadow-lg mb-8 rounded-3xl overflow-hidden"
             data-aos="fade-left"
           >
             {/* Image */}
@@ -293,7 +293,7 @@ function Extraction() {
           </div>
 
           <div
-            className="flex flex-col lg:flex-row bg-white shadow-lg rounded-md mb-8 overflow-hidden"
+            className="flex flex-col lg:flex-row bg-white shadow-lg rounded-3xl mb-8 overflow-hidden"
             data-aos="fade-right"
           >
             {/* Image */}
