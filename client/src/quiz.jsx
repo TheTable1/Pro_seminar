@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "./navbar";
 import Footer from "./footer";
+import { auth } from "./firebase/firebase";
 
 const quizzes = [
   {
@@ -21,6 +22,8 @@ const quizzes = [
 ];
 
 const Quiz = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -33,6 +36,14 @@ const Quiz = () => {
             <Link
               key={quiz.id}
               to={`/quiz/${quiz.id}`}
+              onClick={(e) => {
+                // ตรวจสอบว่าผู้ใช้งานได้เข้าสู่ระบบหรือยัง
+                if (!auth.currentUser) {
+                  // หากยังไม่เข้าสู่ระบบ ให้หยุดการนำทางและเปลี่ยนไปที่ /login
+                  e.preventDefault();
+                  navigate("/login");
+                }
+              }}
               className="block p-6 border rounded-lg hover:bg-light-brown hover:text-beige transition duration-300"
             >
               <h2 className="text-xl font-semibold mb-2">{quiz.title}</h2>

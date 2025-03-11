@@ -1,14 +1,18 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
 import Navbar from "./navbar";
 import Footer from "./footer";
 import quiz from "./quiz.json";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "./firebase/firebase";
 
 const quizData = quiz;
 
 const QuizDetail = () => {
   const { id } = useParams();
   const quiz = quizData[id];
+  const [user] = useAuthState(auth); // ดึงข้อมูลผู้ใช้ที่ล็อกอินอยู่
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState(
     new Array(quiz?.questions.length).fill(null)
@@ -35,7 +39,7 @@ const QuizDetail = () => {
     setSelectedAnswers(newSelected);
   };
 
-  // คำนวณคะแนนเมื่อส่งคำตอบ
+  // คำนวณคะแนนเมื่อส่งคำตอบ และส่งคืนคะแนนที่คำนวณได้
   const calculateScore = () => {
     let count = 0;
     quiz.questions.forEach((q, idx) => {
@@ -44,6 +48,25 @@ const QuizDetail = () => {
       }
     });
     setScore(count);
+    return count;
+  };
+
+  // ฟังก์ชันบันทึกคะแนนไปยัง Firestore ที่ใช้ user.uid จากผู้ใช้ที่ล็อกอินอยู่
+  const saveScoreToFirestore = async (finalScore) => {
+    if (!user) {
+      console.error("ผู้ใช้ยังไม่ได้ล็อกอิน");
+      return;
+    }
+    try {
+      await setDoc(
+        doc(db, "users", user.uid, "quiz", id),
+        { score: finalScore },
+        { merge: true }
+      );
+      console.log("Score saved to Firestore!");
+    } catch (error) {
+      console.error("Error saving score: ", error);
+    }
   };
 
   // ปุ่มถัดไปหรือส่งคำตอบ
@@ -53,8 +76,9 @@ const QuizDetail = () => {
       return;
     }
     if (currentQuestion === quiz.questions.length - 1) {
-      calculateScore();
+      const finalScore = calculateScore();
       setShowScore(true);
+      saveScoreToFirestore(finalScore);
     } else {
       setCurrentQuestion(currentQuestion + 1);
     }
@@ -143,7 +167,6 @@ const QuizDetail = () => {
                 คะแนนของคุณ: {score} / {quiz.questions.length} (
                 {Math.round((score / quiz.questions.length) * 100)}%)
               </h1>
-
               {(() => {
                 const percentage = Math.round(
                   (score / quiz.questions.length) * 100
@@ -168,7 +191,6 @@ const QuizDetail = () => {
                   );
                 }
               })()}
-
               <button
                 onClick={() => window.location.reload()}
                 className="mt-6 px-6 py-2 bg-light-brown text-beige font-semibold rounded-full shadow-lg hover:shadow-xl hover:bg-brown transition-all duration-300"
