@@ -197,70 +197,62 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {showMenu && (
-          <div className="absolute top-full left-0 w-full bg-gradient-to-b from-brown to-dark-brown shadow-lg p-6 lg:hidden z-10 rounded-b-xl animate-slideDown">
+          <div className="absolute top-full left-0 w-full bg-brown shadow-lg p-6 lg:hidden z-10 rounded-b-xl animate-slideDown">
             <ul className="space-y-4 text-beige">
               <li>
-                <span
-                  className="block text-lg font-semibold cursor-pointer hover:text-light-brown transition duration-300"
-                  onClick={() => setShowKnowledgeMenu((prev) => !prev)}
-                >
+                <span className="block text-lg font-semibold">
                   คลังความรู้กาแฟ
                 </span>
-                {/* Submenu Mobile */}
-                {showKnowledgeMenu && (
-                  <ul className="mt-2 bg-dark-brown rounded-lg shadow-inner divide-y divide-gray-700">
-                    <li className="p-3 hover:bg-brown transition duration-200">
-                      <Link to="/history" onClick={() => setShowMenu(false)}>
-                        ประวัติศาสตร์กาแฟ
-                      </Link>
-                    </li>
-                    <li className="p-3 hover:bg-brown transition duration-200">
-                      <Link to="/geneCoffee" onClick={() => setShowMenu(false)}>
-                        สายพันธุ์กาแฟ
-                      </Link>
-                    </li>
-                    <li className="p-3 hover:bg-brown transition duration-200">
-                      <Link to="/roasting" onClick={() => setShowMenu(false)}>
-                        ระดับของการคั่วกาแฟ
-                      </Link>
-                    </li>
-                    <li className="p-3 hover:bg-brown transition duration-200">
-                      <Link to="/extraction" onClick={() => setShowMenu(false)}>
-                        เทคนิคการสกัดกาแฟ
-                      </Link>
-                    </li>
-                    <li className="p-3 hover:bg-brown transition duration-200">
-                      <Link to="/process" onClick={() => setShowMenu(false)}>
-                        กระบวนการผลิตกาแฟ
-                      </Link>
-                    </li>
-                    <li className="p-3 hover:bg-brown transition duration-200">
-                      <Link
-                        to="/worldCoffee"
-                        onClick={() => setShowMenu(false)}
-                      >
-                        แผนที่แหล่งผลิตกาแฟโลก
-                      </Link>
-                    </li>
-                    <li className="p-3 hover:bg-brown transition duration-200">
-                      <Link to="/articles" onClick={() => setShowMenu(false)}>
-                        บทความน่ารู้
-                      </Link>
-                    </li>
-                  </ul>
-                )}
+                {/* แสดง Submenu Mobile โดยไม่ต้องกดเพิ่ม */}
+                <ul className="mt-2 bg-dark-brown rounded-lg shadow-inner divide-y divide-gray-700">
+                  <li className="p-3 hover:bg-brown transition duration-200">
+                    <Link to="/history" onClick={() => setShowMenu(false)}>
+                      ประวัติศาสตร์กาแฟ
+                    </Link>
+                  </li>
+                  <li className="p-3 hover:bg-brown transition duration-200">
+                    <Link to="/geneCoffee" onClick={() => setShowMenu(false)}>
+                      สายพันธุ์กาแฟ
+                    </Link>
+                  </li>
+                  <li className="p-3 hover:bg-brown transition duration-200">
+                    <Link to="/roasting" onClick={() => setShowMenu(false)}>
+                      ระดับของการคั่วกาแฟ
+                    </Link>
+                  </li>
+                  <li className="p-3 hover:bg-brown transition duration-200">
+                    <Link to="/extraction" onClick={() => setShowMenu(false)}>
+                      เทคนิคการสกัดกาแฟ
+                    </Link>
+                  </li>
+                  <li className="p-3 hover:bg-brown transition duration-200">
+                    <Link to="/process" onClick={() => setShowMenu(false)}>
+                      กระบวนการผลิตกาแฟ
+                    </Link>
+                  </li>
+                  <li className="p-3 hover:bg-brown transition duration-200">
+                    <Link to="/worldCoffee" onClick={() => setShowMenu(false)}>
+                      แผนที่แหล่งผลิตกาแฟโลก
+                    </Link>
+                  </li>
+                  <li className="p-3 hover:bg-brown transition duration-200">
+                    <Link to="/articles" onClick={() => setShowMenu(false)}>
+                      บทความน่ารู้
+                    </Link>
+                  </li>
+                </ul>
               </li>
-              <li className="hover:bg-brown p-3 rounded transition duration-200">
+              <li className="hover:bg-brown pt-3 rounded transition duration-200">
                 <Link to="/coffee_bean" onClick={() => setShowMenu(false)}>
                   เมล็ดกาแฟ
                 </Link>
               </li>
-              <li className="hover:bg-brown p-3 rounded transition duration-200">
+              <li className="hover:bg-brown pt-3 rounded transition duration-200">
                 <Link to="/coffee_menu" onClick={() => setShowMenu(false)}>
                   เมนูกาแฟ
                 </Link>
               </li>
-              <li className="hover:bg-brown p-3 rounded transition duration-200 cursor-pointer">
+              <li className="hover:bg-brown pt-3 rounded transition duration-200 cursor-pointer">
                 <Link to="/quiz" onClick={() => setShowMenu(false)}>
                   แบบทดสอบ
                 </Link>
@@ -272,4 +264,3 @@ export default function Navbar() {
     </div>
   );
 }
-  

@@ -1,209 +1,170 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useState, useEffect } from "react";
 import Navbar from "./navbar";
 import Footer from "./footer";
-import quiz from "./quiz.json";
-import { doc, setDoc } from "firebase/firestore";
-import { auth, db } from "./firebase/firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { db } from "./firebase/firebase";
 
-const quizData = quiz;
+const Profile = () => {
+  const [user, setUser] = useState(null);
+  const [achievements, setAchievements] = useState([]);
+  const [quizResults, setQuizResults] = useState([]); // สำหรับผลการทำแบบทดสอบทั้งหมด
+  const [loading, setLoading] = useState(true);
 
-const QuizDetail = () => {
-  const { id } = useParams();
-  const quiz = quizData[id];
-  const [user] = useAuthState(auth); // ดึงข้อมูลผู้ใช้ที่ล็อกอินอยู่
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState(
-    new Array(quiz?.questions.length).fill(null)
-  );
-  const [showScore, setShowScore] = useState(false);
-  const [score, setScore] = useState(0);
+  useEffect(() => {
+    const auth = getAuth();
+    // โหลดข้อมูลจาก localStorage ก่อนใช้ Firebase
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+    }
 
-  if (!quiz) {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        console.log("✅ ผู้ใช้ล็อกอินอยู่:", currentUser);
+        setUser(currentUser);
+        localStorage.setItem("user", JSON.stringify(currentUser));
+
+        // ดึงข้อมูลโปรไฟล์จาก Firestore
+        const userRef = doc(db, "users", currentUser.uid);
+        const docSnap = await getDoc(userRef);
+        if (docSnap.exists()) {
+          const profileData = docSnap.data();
+          setUser(profileData);
+          setAchievements(Object.keys(profileData.achievements || {}));
+          localStorage.setItem("profileData", JSON.stringify(profileData));
+        }
+
+        // ดึงข้อมูลผลการทำแบบทดสอบทั้งหมดจาก subcollection "quiz"
+        const quizCollectionRef = collection(
+          db,
+          "users",
+          currentUser.uid,
+          "quiz"
+        );
+        const quizSnapshot = await getDocs(quizCollectionRef);
+        const quizResultsList = quizSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setQuizResults(quizResultsList);
+      } else {
+        console.log("🔴 ผู้ใช้ยังไม่ได้ล็อกอิน");
+        setUser(null);
+        localStorage.removeItem("user");
+        localStorage.removeItem("profileData");
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) {
     return (
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        <div className="flex-grow container mx-auto px-4 py-8">
-          <p>ไม่พบแบบทดสอบ</p>
-        </div>
-        <Footer />
+      <div className="text-center mt-10 text-dark-brown text-2xl">
+        ⏳ กำลังโหลดข้อมูล...
       </div>
     );
   }
 
-  // ฟังก์ชันเลือกคำตอบในแต่ละข้อ
-  const handleSelect = (option) => {
-    const newSelected = [...selectedAnswers];
-    newSelected[currentQuestion] = option;
-    setSelectedAnswers(newSelected);
-  };
-
-  // คำนวณคะแนนเมื่อส่งคำตอบ และส่งคืนคะแนนที่คำนวณได้
-  const calculateScore = () => {
-    let count = 0;
-    quiz.questions.forEach((q, idx) => {
-      if (selectedAnswers[idx] === q.answer) {
-        count++;
-      }
-    });
-    setScore(count);
-    return count;
-  };
-
-  // ฟังก์ชันบันทึกคะแนนไปยัง Firestore ที่ใช้ user.uid จากผู้ใช้ที่ล็อกอินอยู่
-  const saveScoreToFirestore = async (finalScore) => {
-    if (!user) {
-      console.error("ผู้ใช้ยังไม่ได้ล็อกอิน");
-      return;
-    }
-    try {
-      await setDoc(
-        doc(db, "users", user.uid, "quiz", id),
-        { score: finalScore },
-        { merge: true }
-      );
-      console.log("Score saved to Firestore!");
-    } catch (error) {
-      console.error("Error saving score: ", error);
-    }
-  };
-
-  // ปุ่มถัดไปหรือส่งคำตอบ
-  const handleNext = () => {
-    if (selectedAnswers[currentQuestion] === null) {
-      alert("กรุณาเลือกคำตอบก่อน");
-      return;
-    }
-    if (currentQuestion === quiz.questions.length - 1) {
-      const finalScore = calculateScore();
-      setShowScore(true);
-      saveScoreToFirestore(finalScore);
-    } else {
-      setCurrentQuestion(currentQuestion + 1);
-    }
-  };
-
-  // ปุ่มย้อนกลับ
-  const handleBack = () => {
-    if (currentQuestion > 0) {
-      setCurrentQuestion(currentQuestion - 1);
-    }
-  };
-
-  // คำนวณเปอร์เซ็นต์ความคืบหน้า
-  const progressPercent = Math.round(
-    ((currentQuestion + 1) / quiz.questions.length) * 100
-  );
-
   return (
-    <div>
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-beige-light to-beige">
       <Navbar />
-      <div className="min-h-screen bg-[url('../public/background.jpg')] bg-cover bg-center bg-white/85 bg-blend-overlay flex flex-col items-center justify-center px-4">
-        <div className="bg-beige-light backdrop-blur-sm rounded-3xl shadow-xl p-8 w-full max-w-4xl relative">
-          {!showScore ? (
-            <>
-              <h2 className="text-center text-2xl md:text-3xl font-bold text-dark-brown mb-4">
-                {quiz.title}
-              </h2>
-              {/* Progress Bar */}
-              <div className="mb-6">
-                <div className="w-full bg-gray-200 rounded-full h-3">
-                  <div
-                    className="bg-dark-brown h-3 rounded-full"
-                    style={{ width: `${progressPercent}%` }}
-                  ></div>
-                </div>
-                <p className="text-right text-sm text-dark-brown mt-1">
-                  {progressPercent}% (คำถาม {currentQuestion + 1} /{" "}
-                  {quiz.questions.length})
-                </p>
-              </div>
-              <div className="mb-4">
-                <p className="text-lg text-dark-brown">
-                  {quiz.questions[currentQuestion].question}
-                </p>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {quiz.questions[currentQuestion].options.map(
-                  (option, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleSelect(option)}
-                      className={`p-4 rounded-3xl transition-colors text-left font-medium border bg-white text-dark-brown border-dark-brown ${
-                        selectedAnswers[currentQuestion] === option
-                          ? "!bg-brown !text-beige"
-                          : "hover:bg-light-brown hover:text-beige"
-                      }`}
-                    >
-                      {option}
-                    </button>
-                  )
-                )}
-              </div>
-              <div className="flex justify-between mt-6">
-                {currentQuestion > 0 && (
-                  <button
-                    onClick={handleBack}
-                    className="bg-dark-brown text-beige py-2 px-4 rounded-3xl hover:bg-brown transition-colors"
-                  >
-                    ย้อนกลับ
-                  </button>
-                )}
-                <button
-                  onClick={handleNext}
-                  disabled={selectedAnswers[currentQuestion] === null}
-                  className="ml-auto bg-dark-brown text-beige py-2 px-4 rounded-3xl hover:bg-brown transition-colors disabled:opacity-50"
-                >
-                  {currentQuestion === quiz.questions.length - 1
-                    ? "ส่งคำตอบ"
-                    : "ถัดไป"}
+
+      <div className="flex-grow container mx-auto px-4 py-8">
+        <h1 className="text-center text-4xl font-extrabold text-dark-brown mb-8">
+          โปรไฟล์ของฉัน
+        </h1>
+
+        {/* Profile Section */}
+        <div className="max-w-3xl mx-auto bg-brown-superlight shadow-2xl rounded-2xl p-8">
+          {user ? (
+            <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
+              <img
+                src={user.profilePic || "/profile_defualt.jpg"}
+                alt="Profile"
+                className="w-28 h-28 rounded-full border-4 border-brown shadow-lg"
+              />
+              <div className="text-center sm:text-left">
+                <h2 className="text-3xl font-bold text-dark-brown">
+                  {user.name}
+                </h2>
+                <p className="text-lg text-dark-brown">{user.email}</p>
+                <button className="mt-4 px-6 py-2 bg-brown text-beige rounded-full shadow hover:bg-light-brown transition duration-300">
+                  แก้ไขข้อมูล
                 </button>
               </div>
-            </>
-          ) : (
-            <div className="text-center">
-              <h1 className="text-2xl font-bold text-dark-brown mb-4">
-                คะแนนของคุณ: {score} / {quiz.questions.length} (
-                {Math.round((score / quiz.questions.length) * 100)}%)
-              </h1>
-              {(() => {
-                const percentage = Math.round(
-                  (score / quiz.questions.length) * 100
-                );
-                if (percentage >= 80) {
-                  return (
-                    <p className="text-xl font-bold mb-6">
-                      เก่งมาก คะแนนอยู่ในระดับดีเยี่ยม
-                    </p>
-                  );
-                } else if (percentage >= 50) {
-                  return (
-                    <p className="text-xl font-bold mb-6">
-                      เก่งมาก คะแนนอยู่ในระดับดี
-                    </p>
-                  );
-                } else {
-                  return (
-                    <p className="text-xl font-bold mb-6">
-                      สู้ๆนะพยายามให้มากกว่านี้
-                    </p>
-                  );
-                }
-              })()}
-              <button
-                onClick={() => window.location.reload()}
-                className="mt-6 px-6 py-2 bg-light-brown text-beige font-semibold rounded-full shadow-lg hover:shadow-xl hover:bg-brown transition-all duration-300"
-              >
-                ทำแบบทดสอบอีกครั้ง
-              </button>
             </div>
+          ) : (
+            <p className="text-center text-dark-brown">
+              โปรดเข้าสู่ระบบเพื่อดูข้อมูล
+            </p>
+          )}
+        </div>
+
+        {/* Achievements Section */}
+        <div className="max-w-3xl mx-auto mt-10 bg-brown-superlight shadow-2xl rounded-2xl p-8">
+          <h2 className="text-2xl font-semibold text-dark-brown mb-6">
+            ความสำเร็จของคุณ
+          </h2>
+          {achievements.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {achievements.map((ach, index) => (
+                <div
+                  key={index}
+                  className="p-6 bg-beige shadow-lg rounded-2xl transform hover:scale-105 transition duration-300"
+                >
+                  <h3 className="text-xl font-bold text-dark-brown mb-2">
+                    {ach}
+                  </h3>
+                  <p className="text-md text-dark-brown">✅ สำเร็จแล้ว</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-dark-brown">
+              ยังไม่มีความสำเร็จที่บันทึก
+            </p>
+          )}
+        </div>
+
+        {/* Quiz Results Section */}
+        <div className="max-w-3xl mx-auto mt-10 bg-brown-superlight shadow-2xl rounded-2xl p-8">
+          <h2 className="text-2xl font-semibold text-dark-brown mb-6">
+            ผลการทำแบบทดสอบทั้งหมด
+          </h2>
+          {quizResults.length > 0 ? (
+            <div className="space-y-4">
+              {quizResults.map((quiz) => (
+                <div
+                  key={quiz.id}
+                  className="p-6 border border-brown rounded-2xl shadow hover:shadow-xl transition duration-300"
+                >
+                  <p className="text-xl font-bold text-dark-brown">
+                    แบบทดสอบ: {quiz.title}
+                  </p>
+                  <p className="text-lg text-dark-brown">
+                    คะแนน: {quiz.score} จาก {quiz.max}
+                  </p>
+                  <p className="text-lg text-dark-brown">
+                    เปอร์เซ็นต์: {((quiz.score / quiz.max) * 100).toFixed(2)}%
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-dark-brown">
+              ยังไม่มีผลการทำแบบทดสอบ
+            </p>
           )}
         </div>
       </div>
+
       <Footer />
     </div>
   );
 };
 
-export default QuizDetail;
+export default Profile;
