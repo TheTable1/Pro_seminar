@@ -8,15 +8,14 @@ import { db } from "./firebase/firebase";
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [achievements, setAchievements] = useState([]);
-  const [quizResults, setQuizResults] = useState([]); // ผลการทำแบบทดสอบทั้งหมด
-  const [loading, setLoading] = useState(true); // สถานะโหลดข้อมูล
+  const [quizResults, setQuizResults] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const auth = getAuth();
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUser(parsedUser);
+      setUser(JSON.parse(storedUser));
     }
 
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -25,7 +24,6 @@ const Profile = () => {
         setUser(currentUser);
         localStorage.setItem("user", JSON.stringify(currentUser));
 
-        // ดึงข้อมูลโปรไฟล์จาก Firestore
         const userRef = doc(db, "users", currentUser.uid);
         const docSnap = await getDoc(userRef);
         if (docSnap.exists()) {
@@ -35,7 +33,6 @@ const Profile = () => {
           localStorage.setItem("profileData", JSON.stringify(profileData));
         }
 
-        // ดึงข้อมูลผลการทำแบบทดสอบทั้งหมดจาก subcollection "quiz"
         const quizCollectionRef = collection(
           db,
           "users",
@@ -62,7 +59,7 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="text-center mt-10 text-brown text-2xl">
+      <div className="text-center mt-8 text-brown text-lg">
         ⏳ กำลังโหลดข้อมูล...
       </div>
     );
@@ -72,33 +69,33 @@ const Profile = () => {
     <div className="flex flex-col min-h-screen bg-beige-light">
       <Navbar />
 
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <h1 className="text-center text-4xl font-extrabold text-brown mb-12">
+      <main className="flex-grow container mx-auto px-2 py-4">
+        <h1 className="text-center text-3xl sm:text-2xl font-bold text-brown mb-4 sm:mb-6">
           โปรไฟล์ของฉัน
         </h1>
 
         {/* Profile Section */}
-        <section className="max-w-5xl mx-auto bg-white/90 backdrop-blur-lg shadow-2xl rounded-2xl p-8 mb-12">
+        <section className="max-w-md sm:max-w-2xl md:max-w-3xl mx-auto bg-white/90 backdrop-blur-md shadow rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
           {user ? (
-            <div className="flex flex-col sm:flex-row items-center justify-between space-y-6 sm:space-y-0">
-              <div className="flex items-center space-x-6">
+            <div className="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0">
+              <div className="flex items-center space-x-3 sm:space-x-4">
                 <img
                   src={user.profilePic || "/profile_defualt.jpg"}
                   alt="Profile"
-                  className="w-28 h-28 rounded-full border-4 border-brown shadow-lg"
+                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-brown shadow"
                 />
                 <div className="text-center sm:text-left">
-                  <h2 className="text-3xl font-bold text-dark-brown">
+                  <h2 className="text-lg sm:text-xl font-bold text-dark-brown">
                     {user.name}
                   </h2>
-                  <p className="text-lg text-dark-brown">{user.email}</p>
+                  <p className="text-sm sm:text-md text-dark-brown">
+                    {user.email}
+                  </p>
                 </div>
               </div>
-              <div>
-                <button className="px-6 py-2 bg-brown text-beige rounded-full shadow hover:bg-light-brown transition duration-300">
-                  แก้ไขข้อมูล
-                </button>
-              </div>
+              <button className="px-3 py-1 bg-brown text-beige rounded-full shadow hover:bg-light-brown transition duration-300 text-sm sm:text-base">
+                แก้ไขข้อมูล
+              </button>
             </div>
           ) : (
             <p className="text-center text-dark-brown">
@@ -108,21 +105,21 @@ const Profile = () => {
         </section>
 
         {/* Achievements Section */}
-        <section className="max-w-5xl mx-auto bg-white/90 backdrop-blur-lg shadow-2xl rounded-2xl p-8 mb-12">
-          <h2 className="text-2xl font-semibold text-dark-brown mb-6">
+        <section className="max-w-md sm:max-w-2xl md:max-w-3xl mx-auto bg-white/90 backdrop-blur-md shadow rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+          <h2 className="text-lg sm:text-xl font-semibold text-dark-brown mb-3 sm:mb-4">
             ความสำเร็จของคุณ
           </h2>
           {achievements.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {achievements.map((ach, index) => (
                 <div
                   key={index}
-                  className="p-6 bg-beige rounded-2xl shadow-lg transform hover:scale-105 transition duration-300"
+                  className="p-3 sm:p-4 bg-beige rounded-lg shadow transform  transition duration-300"
                 >
-                  <h3 className="text-xl font-bold text-dark-brown mb-2">
+                  <h3 className="text-md sm:text-lg font-bold text-dark-brown mb-1">
                     {ach}
                   </h3>
-                  <p className="text-md text-dark-brown">✅ สำเร็จแล้ว</p>
+                  <p className="text-sm text-dark-brown">✅ สำเร็จแล้ว</p>
                 </div>
               ))}
             </div>
@@ -134,24 +131,24 @@ const Profile = () => {
         </section>
 
         {/* Quiz Results Section */}
-        <section className="max-w-5xl mx-auto bg-white/90 backdrop-blur-lg shadow-2xl rounded-2xl p-8">
-          <h2 className="text-2xl font-semibold text-dark-brown mb-6">
+        <section className="max-w-md sm:max-w-2xl md:max-w-3xl mx-auto bg-white/90 backdrop-blur-md shadow rounded-lg p-3 sm:p-4">
+          <h2 className="text-lg sm:text-xl font-semibold text-dark-brown mb-3 sm:mb-4">
             ผลการทำแบบทดสอบทั้งหมด
           </h2>
           {quizResults.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
               {quizResults.map((quiz) => (
                 <div
                   key={quiz.id}
-                  className="p-6 border border-brown rounded-2xl shadow hover:shadow-xl transition duration-300"
+                  className="p-3 sm:p-4 border border-brown rounded-lg shadow hover:shadow-md transition duration-300"
                 >
-                  <p className="text-xl font-bold text-dark-brown">
+                  <p className="text-md sm:text-lg font-bold text-dark-brown">
                     แบบทดสอบ: {quiz.title}
                   </p>
-                  <p className="text-lg text-dark-brown">
+                  <p className="text-sm sm:text-md text-dark-brown">
                     คะแนน: {quiz.score} จาก {quiz.max}
                   </p>
-                  <p className="text-lg text-dark-brown">
+                  <p className="text-sm sm:text-md text-dark-brown">
                     เปอร์เซ็นต์: {((quiz.score / quiz.max) * 100).toFixed(2)}%
                   </p>
                 </div>
