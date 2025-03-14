@@ -4,6 +4,9 @@ import { auth } from "./firebase/firebase";
 import { signOut, onAuthStateChanged } from "firebase/auth";
 
 export default function Navbar() {
+  // กำหนดความสูงของ Navbar เป็น % (ตัวอย่างนี้ใช้ 10% ของหน้าจอ)
+  const NAVBAR_HEIGHT_PERCENT = 10;
+
   const [showKnowledgeMenu, setShowKnowledgeMenu] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -14,7 +17,7 @@ export default function Navbar() {
   const navbarRef = useRef(null);
   const [user, setUser] = useState(null);
 
-  // ใช้เพื่อดึง path ปัจจุบัน
+  // ดึง path ปัจจุบัน
   const location = useLocation();
 
   useEffect(() => {
@@ -54,7 +57,7 @@ export default function Navbar() {
     setShowProfileMenu(false);
   };
 
-  // เช็คว่า path ปัจจุบันเป็นของหมวดความรู้กาแฟหรือไม่ (ถ้าเป็น path ย่อยใด ๆ ก็ให้เมนูหลัก active)
+  // เช็คว่า path ปัจจุบันเป็นของหมวดความรู้กาแฟหรือไม่
   const knowledgeRoutes = [
     "/history",
     "/geneCoffee",
@@ -74,10 +77,10 @@ export default function Navbar() {
   const isQuizActive = location.pathname === "/quiz";
 
   return (
-    <div ref={navbarRef}>
+    <div ref={navbarRef} style={{ height: `${NAVBAR_HEIGHT_PERCENT}%`, width: "100%" }}>
       <header
-        className="bg-dark-brown py-3 px-5 flex justify-between items-center relative"
-        style={{ paddingRight: `${scrollbarWidth}px` }}
+        className="bg-dark-brown flex justify-between items-center"
+        style={{ padding: "1rem 1.25rem", height: "100%" }}
       >
         {/* โลโก้ */}
         <div className="font-bold text-beige text-xl md:text-2xl lg:text-3xl leading-none">
@@ -145,7 +148,7 @@ export default function Navbar() {
               <Link to="/coffee_menu">เมนูกาแฟ</Link>
             </li>
 
-            {/* ทดสอบความรู้ */}
+            {/* แบบทดสอบ */}
             <li
               className={`cursor-pointer hover:text-light-brown transition duration-300 ${
                 isQuizActive ? "border-b-2 border-light-brown" : ""
@@ -203,7 +206,6 @@ export default function Navbar() {
                 <span className="block text-lg font-semibold">
                   คลังความรู้กาแฟ
                 </span>
-                {/* แสดง Submenu Mobile โดยไม่ต้องกดเพิ่ม */}
                 <ul className="mt-2 bg-dark-brown rounded-lg shadow-inner divide-y divide-gray-700">
                   <li className="p-3 hover:bg-brown transition duration-200">
                     <Link to="/history" onClick={() => setShowMenu(false)}>
