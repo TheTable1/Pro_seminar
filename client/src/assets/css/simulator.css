@@ -1,3 +1,200 @@
+/* CoffeeSimulator.css */
+
+/* Container หลักของ Simulator */
+.simulator-container {
+  position: relative;
+  width: 100%;
+  height: 90vh; /* เนื้อหาหลัก 90vh ส่วน Footer 10vh */
+}
+
+/* ส่วนเนื้อหาหลัก */
+.sim-content {
+  height: 90vh;
+  width: 100%;
+}
+
+/* Layout สำหรับเดสก์ท็อป: แบ่งเป็น 3 ส่วน (Left, Center, Right) */
+.desktop-layout {
+  display: flex;
+  height: 100%;
+}
+
+.left-area {
+  width: 33.33%;
+  height: 100%;
+  padding: 0.5rem;
+}
+
+.right-area {
+  width: 16.67%;
+  height: auto;
+  margin: auto 0;
+  padding: 0.5rem;
+  background-color: #fed7aa; /* สีจาก Tailwind bg-orange-200 */
+  border-radius: 0.5rem;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  justify-content: center;
+  display:flow-root ;
+}
+
+/* ส่วนอุปกรณ์ */
+.equipment-area {
+  padding: 0.5rem;
+}
+
+.title {
+  text-align: center;
+  font-weight: bold;
+  font-size: x-large;
+  margin-top: 1rem;
+}
+
+.equipment-grid {
+  margin-top: 2rem;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(2, 1fr);
+  /* จำนวนแถว (rows) จะถูกคำนวณและส่งเข้ามาแบบ inline จาก JSX */
+}
+
+/* ส่วนพื้นที่ดำเนินการ */
+.workspace-area {
+  padding: 0.5rem;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Footer สำหรับ Subtitle */
+.footer-subtitle {
+  height: 10vh;
+  width: 100%;
+  background-color: #5a2d0c; /* สีเข้ม */
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  position: fixed;
+  bottom: 0;
+}
+.equipment-slot {
+  width: 100%;
+  height: 160px;  /* ขนาด default บนจอใหญ่ */
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.equipment-slot img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+}
+.workspace-img {
+  width: 80%;
+  height: auto;
+  object-fit: contain; /* ให้ภาพไม่ถูกครอป/บิดเบี้ยว */
+  display: block; /* ป้องกันการเกิด gap ใต้ภาพ */
+}
+.final-img {
+  width: auto !important;  /* หรือ 300px */
+  height: 500px !important;
+  object-fit: contain; /* ถ้าไม่อยากให้รูปถูกครอบ */
+}
+
+/* Media Queries สำหรับหน้าจอโทรศัพท์ */
+@media (max-width: 640px) {
+  .desktop-layout {
+    display: flex;
+    flex-direction: column;
+    height: 90vh; /* ให้เต็มหน้าจอ (ปรับได้ตามต้องการ) */
+    overflow: hidden; 
+  }
+  .left-area,
+  .center-area,
+  .right-area {
+    width: 100%;
+  }
+  .title {
+    font-size: 1rem;  /* หรือ 20px */
+  }
+  .subtitle-text {
+    font-size: 0.875rem; /* หรือ 14px */
+  }
+  /* บนมือถือไม่แสดงรายการขั้นตอน (Right Area) */
+  .right-area {
+    display: none;
+  }
+  /* พื้นที่อุปกรณ์ให้แสดงเต็มความกว้าง */
+  .equipment-area {
+    flex: 0 0 20%;
+    background-color: rgba(255, 255, 255,0.1); /* ตัวอย่างสีพื้นหลังโปร่งแสง */
+    padding: 0.5rem;
+    width: 100%;
+  }
+  .center-area {
+    width: 475px;     /* ความกว้างตรงตาม Figma */
+    height: 400px;    /* ความสูงตรงตาม Figma */
+    margin: 0 auto;   /* จัดกึ่งกลางหน้าจอ */
+    position: relative;
+    overflow: hidden; /* ป้องกันไม่ให้เนื้อหาเกินกรอบ */
+
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* ถ้าต้องการให้ข้อความอยู่ด้านบนซ้าย */
+    justify-content: flex-start;
+  }
+  /* ถ้ารูปหรืออุปกรณ์ข้างในใหญ่เกิน ให้ย่อด้วย max-width/max-height */
+  .center-area img {
+    max-width: 100%;   /* ไม่ให้ความกว้างเกิน 100% ของพื้นที่ */
+    max-height: 100%;  /* ไม่ให้ความสูงเกิน 100% ของพื้นที่ */
+    margin: 0 auto;
+    width: auto;       /* รักษาอัตราส่วนความกว้าง-สูง */
+    height: auto;
+    object-fit: contain; /* ให้ภาพถูกย่อหรือขยายแต่ไม่ถูกครอป */
+  }
+  .qte-container {
+    position: relative;
+    z-index: 9999; /* สูงกว่าทุกเลเยอร์ */
+  }
+  .equipment-slot {
+    height: 40px !important; /* ย่อเหลือ 80px */
+  }
+  .equipment-slot img {
+    width: 40% !important;   /* หรือกำหนดเป็น px ตายตัว เช่น 40px, 60px */
+    height: auto !important; /* ให้คงอัตราส่วนรูป */
+  }
+  .equipment-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 0.5rem; /* หรือปรับเป็นค่าที่ต้องการ */
+    width: 100%;
+    height: 100%;
+  }
+  .workspace-item {
+    /* ลดขนาดลงเมื่อจอเล็ก */
+    max-width: auto; 
+    max-height: 300px;
+  }
+  .drip-image {
+    height: 200px !important; /* บังคับความสูงเป็น 150px */
+    margin-top: 10px  !important; /* ลบ margin-top */
+  }
+  .final-img {
+    width: auto !important;  /* หรือ 300px */
+    height: 200px !important;
+    object-fit: contain; /* ถ้าไม่อยากให้รูปถูกครอบ */
+  }
+  .footer-subtitle{
+    text-align: center;
+  }
+}
+
 @keyframes steam {
     0% { opacity: 0; transform: translateY(10px); }
     100% { opacity: 1; transform: translateY(-10px); }

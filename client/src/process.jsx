@@ -1,9 +1,13 @@
-import Footer from "./footer";
+import { useEffect, useState } from "react";
 import Navbar from "./navbar";
-import { useState } from "react";
+import Footer from "./footer";
+import BackToTop from "./BackToTop";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { updateUserAchievement } from "./firebase/firebaseAchievements";
 
 function Process() {
   const [selectedIcon, setSelectedIcon] = useState("cherry");
+  const [userId, setUserId] = useState(null);
 
   const icons = [
     {
@@ -44,10 +48,41 @@ function Process() {
     },
   ];
 
+  // ตรวจสอบว่าผู้ใช้ล็อกอินหรือไม่
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserId(user.uid);
+      } else {
+        setUserId(null);
+      }
+    });
+  }, []);
+
+  // เมื่อผู้ใช้เลื่อนดูเนื้อหา Process จนเกือบจบ → บันทึก achievement
+  useEffect(() => {
+    if (!userId) return; // ถ้าไม่ได้ล็อกอิน จะไม่บันทึก achievement
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const contentHeight = document.body.scrollHeight;
+      const viewportHeight = window.innerHeight;
+
+      if (scrollY + viewportHeight >= contentHeight - 100) {
+        console.log("✅ บันทึกความสำเร็จสำหรับ process_coffee");
+        updateUserAchievement(userId, "content", "process_coffee", true);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [userId]);
+
   return (
     <div className="bg-[#f3f1ec]">
       <Navbar />
-
+      <BackToTop />
       <div className="container mx-auto p-6 ">
         {/* Header with icons */}
         <div className="flex justify-center items-center space-x-6 py-6">
@@ -76,7 +111,11 @@ function Process() {
             (content) =>
               selectedIcon === content.name && (
                 <div key={content.id}>
-                  <img src={content.img} className="w-1/2 mx-auto mb-5"></img>
+                  <img
+                    src={content.img}
+                    className="w-1/2 mx-auto mb-5"
+                    alt={content.alt}
+                  />
                   <div className="bg-[#e5c1af] py-5 mb-3 rounded-2xl">
                     <h2 className="text-lg md:text-2xl font-bold mb-4">
                       {content.alt}
@@ -90,11 +129,9 @@ function Process() {
           )}
         </div>
       </div>
-
       <Footer />
     </div>
   );
-};
-
+}
 
 export default Process;

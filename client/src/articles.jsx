@@ -1,7 +1,10 @@
-import { useState } from "react";  
+import { useState, useEffect } from "react";
 import Navbar from "./navbar";
 import Footer from "./footer";
 import Articles from "./article.json";
+import BackToTop from "./BackToTop";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { updateUserAchievement } from "./firebase/firebaseAchievements";
 
 const articles = Articles;
 
@@ -9,8 +12,45 @@ function ArticlesPage() {
   const [activeFilter, setActiveFilter] = useState("บทความทั้งหมด");
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [userId, setUserId] = useState(null);
 
-  const filterButtons = ["บทความทั้งหมด", "ความรู้เบื้องต้น", "เทคนิคชงกาแฟ", "เคล็ดลับการเลือกซื้อ"];
+  // ตรวจสอบการล็อกอิน
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) setUserId(user.uid);
+      else setUserId(null);
+    });
+  }, []);
+
+  // ฟังก์ชันสำหรับกรองบทความ
+  const filteredArticles = articles.filter((article) => {
+    const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFilter =
+      activeFilter === "บทความทั้งหมด" ||
+      (article.category && article.category.includes(activeFilter));
+    return matchesSearch && matchesFilter;
+  });
+
+  // เมื่อเปิดอ่านบทความ (selectedArticle) ให้เพิ่ม Scroll Event เพื่อตรวจสอบว่าอ่านจบแล้ว
+  useEffect(() => {
+    if (!selectedArticle || !userId) return;
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const contentHeight = document.body.scrollHeight;
+      const viewportHeight = window.innerHeight;
+      if (scrollY + viewportHeight >= contentHeight - 100) {
+        // ใช้ article.id ถ้ามี หรือใช้ article.title เป็นตัวระบุ
+        const achievementId = selectedArticle.id || selectedArticle.title;
+        console.log("✅ บันทึก achievement สำหรับบทความ:", achievementId);
+        updateUserAchievement(userId, "knowledge", achievementId, true);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [selectedArticle, userId]);
 
   const handleFilterChange = (filter) => {
     setActiveFilter(filter);
@@ -24,17 +64,10 @@ function ArticlesPage() {
     setSelectedArticle(null);
   };
 
-  const filteredArticles = articles.filter((article) => {
-    const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter =
-      activeFilter === "บทความทั้งหมด" ||
-      (article.category && article.category.includes(activeFilter));
-    return matchesSearch && matchesFilter;
-  });
-
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />
+      <BackToTop />
       <main className="lg:p-6 sm:p-0">
         {selectedArticle ? (
           <div className="bg-white rounded-lg shadow-md p-5">
@@ -44,7 +77,9 @@ function ArticlesPage() {
             >
               กลับ
             </button>
-            <h2 className="text-center text-xl font-bold mb-4 bg-brown text-beige py-2">{selectedArticle.title}</h2>
+            <h2 className="text-center text-xl font-bold mb-4 bg-brown text-beige py-2">
+              {selectedArticle.title}
+            </h2>
             {selectedArticle.content?.map((content, index) => {
               if (content.type === "paragraph") {
                 return <p key={index} className="text-gray-700 text-base leading-7 mb-4">{content.text}</p>;
@@ -81,13 +116,11 @@ function ArticlesPage() {
 
               {/* Filter Buttons */}
               <div className="flex flex-wrap justify-center gap-2 md:gap-4 lg:gap-6 mb-6">
-                {filterButtons.map((filter) => (
+                {["บทความทั้งหมด", "ความรู้เบื้องต้น", "เทคนิคชงกาแฟ", "เคล็ดลับการเลือกซื้อ"].map((filter) => (
                   <button
                     key={filter}
                     className={`px-4 py-2 rounded-full text-sm md:text-base transition duration-200 ease-in-out ${
-                      activeFilter === filter
-                        ? "bg-brown text-white"
-                        : "bg-gray-300 text-gray-700 hover:bg-gray-400"
+                      activeFilter === filter ? "bg-brown text-white" : "bg-gray-300 text-gray-700 hover:bg-gray-400"
                     }`}
                     onClick={() => handleFilterChange(filter)}
                   >
@@ -105,7 +138,11 @@ function ArticlesPage() {
                     onClick={() => handleArticleClick(article)}
                   >
                     <div className="p-4">
-                      <img className="w-full h-40 object-cover mb-4 rounded" src={article.content[0]?.src || ""} alt={article.title} />
+                      <img
+                        className="w-full h-40 object-cover mb-4 rounded"
+                        src={article.content[0]?.src || ""}
+                        alt={article.title}
+                      />
                       <h3 className="text-dark-brown text-lg font-bold mb-2">
                         {article.title}
                       </h3>
