@@ -241,7 +241,7 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {showMenu && (
-          <div className="absolute top-full left-0 w-full bg-brown shadow-lg p-6 lg:hidden z-10 rounded-b-xl animate-slideDown">
+          <div className="absolute top-full left-0 w-full bg-brown shadow-lg p-6 lg:hidden z-50 rounded-b-xl animate-slideDown">
             <ul className="space-y-4 text-beige">
               <li>
                 <span className="block text-lg font-semibold">

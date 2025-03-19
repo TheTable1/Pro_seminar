@@ -8,7 +8,9 @@ function Home() {
   const mapRef = useRef(null); // Use ref to track map instance
   const mapContainerRef = useRef(null); // Ref for the map container (div#map)
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const [showSearch, setShowSearch] = useState(true); // state สำหรับควบคุมการแสดง search-container
   const [coffeeData, setCoffeeData] = useState({
+    // ... (ข้อมูล coffeeData ตามเดิม)
     Afghanistan: {
       description:
         "ไม่ได้เป็นผู้ผลิตกาแฟสำคัญ แต่มีวัฒนธรรมการดื่มชาและเครื่องดื่มที่เกี่ยวข้องมากกว่า",
@@ -210,6 +212,7 @@ function Home() {
     },
   });
 
+  // useEffect สำหรับจัดการแผนที่และ GeoJSON
   useEffect(() => {
     if (mapRef.current !== null) return; // Prevent re-initializing the map
 
@@ -288,15 +291,16 @@ function Home() {
         <img src="/world/bean.png" alt="bean icon" class="w-6 h-6 mr-3" />
         <b class="mr-2">กาแฟที่มีความโดดเด่น:</b>
       </div>
-      <p class="text-[#f5f5dc]">${coffeeData[countryName].specialties.join(", ")}</p>
+      <p class="text-[#f5f5dc]">${coffeeData[countryName].specialties.join(
+        ", "
+      )}</p>
     </div>
   </div>
 </div>
-
         `;
       } else {
         document.getElementById("info").innerHTML = `
-          <div class="p-6 bg-[#5c4033] border border-[#d2b48c] rounded-lg shadow-lg">
+<div class="p-6 bg-[#5c4033] border border-[#d2b48c] rounded-lg shadow-lg">
   <h2 class="text-2xl font-bold text-[#f5f5dc] mb-4">${countryName}</h2>
 
   <!-- Card container -->
@@ -442,6 +446,21 @@ function Home() {
     };
   }, [coffeeData]); // Run this effect once when the component mounts
 
+  // useEffect สำหรับตรวจจับการ scroll เพื่อควบคุมการแสดง search-container
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY === 0) {
+        setShowSearch(true);
+      } else {
+        setShowSearch(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div>
       <Navbar />
@@ -463,7 +482,15 @@ function Home() {
         )}
       </div>
 
-      <div id="search-container">
+      <div
+        id="search-container"
+        style={{
+          position: "fixed",
+          top: showSearch ? "11%" : "-100px",
+          transition: "top 0.3s",
+        }}
+        className="z-0 mt-0  w-20%"
+      >
         <input
           type="text"
           id="search-input"
