@@ -1,5 +1,5 @@
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
-import { db } from "./firebaseConfig";
+import { db } from "./firebase";
 
 const auth = getAuth();
 

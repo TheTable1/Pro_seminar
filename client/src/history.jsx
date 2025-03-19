@@ -1,11 +1,44 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { updateUserAchievement } from "./firebase/firebaseAchievements";
 import Footer from "./footer";
 import Navbar from "./navbar";
 import BackToTop from "./BackToTop";
 
 function History() {
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const auth = getAuth();
+    // ตรวจสอบการล็อกอินของผู้ใช้
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserId(user.uid);
+      } else {
+        setUserId(null); // ❌ ไม่มี userId แสดงว่าเป็น Guest
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!userId) return; // ❌ ไม่บันทึกถ้าไม่มี userId (ผู้เยี่ยมชม)
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const contentHeight = document.body.scrollHeight;
+      const viewportHeight = window.innerHeight;
+
+      // ✅ ถ้าผู้ใช้ล็อกอิน → บันทึกค่าความสำเร็จ
+      if (userId && scrollY + viewportHeight >= contentHeight - 100) {
+        updateUserAchievement(userId, "content", "history_coffee");
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [userId]);
+
   // Initialize AOS animations
   useEffect(() => {
     AOS.init({

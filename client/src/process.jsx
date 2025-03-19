@@ -1,9 +1,13 @@
-import Footer from "./footer";
+import { useEffect, useState } from "react";
 import Navbar from "./navbar";
-import { useState } from "react";
+import Footer from "./footer";
+import BackToTop from "./BackToTop";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { updateUserAchievement } from "./firebase/firebaseAchievements";
 
 function Process() {
   const [selectedIcon, setSelectedIcon] = useState("cherry");
+  const [userId, setUserId] = useState(null);
 
   const icons = [
     { id: 1, name: "cherry", image: "/process/process1.png", alt: "การเตรียมเมล็ดกาแฟ", img: "/process/process5.jpg", content: "การเก็บเมล็ดกาแฟเป็นขั้นตอนแรกที่สำคัญต่อคุณภาพของกาแฟในอนาคต โดยทั่วไปจะรอให้ผลกาแฟสุกเต็มที่จนเปลือกผลเปลี่ยนเป็นสีแดงสดหรือเหลือง (ขึ้นอยู่กับสายพันธุ์) ก่อนจะเก็บเกี่ยว ซึ่งสามารถทำได้สองวิธีหลัก ๆ ได้แก่ การเก็บด้วยมือ (Hand Picking) ที่เน้นการเก็บผลเชอร์รี่สุกทีละลูก เพื่อคัดเลือกเฉพาะผลที่มีคุณภาพสูง และ การเก็บด้วยเครื่องจักร (Mechanical Harvesting) ซึ่งเหมาะสำหรับฟาร์มขนาดใหญ่ที่ต้องการความรวดเร็ว อย่างไรก็ตาม วิธีการเก็บที่เหมาะสมจะขึ้นอยู่กับเป้าหมายด้านคุณภาพ รสชาติ และปริมาณของผลผลิต รวมถึงลักษณะภูมิประเทศของพื้นที่ปลูกอีกด้วย" },
@@ -12,10 +16,41 @@ function Process() {
     { id: 4, name: "brew", image: "/process/process4.png", alt: "การชงกาแฟ", img: "/process/process8.jpg", content: "ขั้นตอนสุดท้ายคือการชงกาแฟ ซึ่งมีวิธีการหลากหลายตามวัฒนธรรมและความนิยม เช่น การชงแบบ Espresso ที่ใช้แรงดันสูงและอุณหภูมิน้ำที่เหมาะสมในการสกัดกาแฟภายในเวลาอันสั้น การดริป (Pour Over) ที่เน้นความพิถีพิถันในการรินน้ำร้อนผ่านผงกาแฟในรูปแบบวงกลม เพื่อควบคุมการสกัดให้ได้รสชาติที่ละเอียดอ่อน การชงแบบ French Press ที่ใช้น้ำร้อนแช่ผงกาแฟในระยะเวลาหนึ่งก่อนกดกรอง การชง Cold Brew ที่ใช้น้ำเย็นแช่กาแฟในระยะเวลานานเพื่อดึงรสชาติที่นุ่มนวลและหวานเป็นธรรมชาติ และวิธีการอื่น ๆ อีกมากมาย โดยการเลือกวิธีการชงที่เหมาะสมกับระดับการบดกาแฟและชนิดของเมล็ด จะช่วยให้ได้รสชาติกาแฟที่ตรงใจผู้ดื่มมากที่สุด" },
   ];
 
+  // ตรวจสอบว่าผู้ใช้ล็อกอินหรือไม่
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserId(user.uid);
+      } else {
+        setUserId(null);
+      }
+    });
+  }, []);
+
+  // เมื่อผู้ใช้เลื่อนดูเนื้อหา Process จนเกือบจบ → บันทึก achievement
+  useEffect(() => {
+    if (!userId) return; // ถ้าไม่ได้ล็อกอิน จะไม่บันทึก achievement
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const contentHeight = document.body.scrollHeight;
+      const viewportHeight = window.innerHeight;
+
+      if (scrollY + viewportHeight >= contentHeight - 100) {
+        console.log("✅ บันทึกความสำเร็จสำหรับ process_coffee");
+        updateUserAchievement(userId, "content", "process_coffee", true);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [userId]);
+
   return (
     <div className="bg-[#f3f1ec]">
       <Navbar />
-
+      <BackToTop />
       <div className="container mx-auto p-6 ">
         {/* Header with icons */}
         <div className="flex justify-center items-center space-x-6 py-6">
@@ -44,7 +79,11 @@ function Process() {
             (content) =>
               selectedIcon === content.name && (
                 <div key={content.id}>
-                  <img src={content.img} className="w-1/2 mx-auto mb-5"></img>
+                  <img
+                    src={content.img}
+                    className="w-1/2 mx-auto mb-5"
+                    alt={content.alt}
+                  />
                   <div className="bg-[#e5c1af] py-5 mb-3 rounded-2xl">
                     <h2 className="text-lg md:text-2xl font-bold mb-4">
                       {content.alt}
@@ -58,11 +97,9 @@ function Process() {
           )}
         </div>
       </div>
-
       <Footer />
     </div>
   );
-};
-
+}
 
 export default Process;

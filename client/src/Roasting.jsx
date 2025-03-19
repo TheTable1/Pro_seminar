@@ -1,8 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "./navbar";
 import Footer from "./footer";
+import BackToTop from "./BackToTop";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { updateUserAchievement } from "./firebase/firebaseAchievements";
 
 const CoffeeInfo = () => {
+  const [selectedRoast, setSelectedRoast] = useState("คั่วอ่อน (Light Roast)");
+  const [userId, setUserId] = useState(null);
+  const [selectedSubVariety, setSelectedSubVariety] = useState("");
+
   const coffeeData = {
     "คั่วอ่อน (Light Roast)": {
       alias: "Cinnamon Roast, New England Roast",
@@ -14,8 +21,8 @@ const CoffeeInfo = () => {
       ],
       characteristics: [
         "ไม่มีน้ำมันบนผิวเมล็ด",
-        "เมล็ดกาแฟจะไม่เกิดการแตก (first crack) ซึ่งเป็นเสียงที่เกิดจากการขยายตัวของเมล็ดกาแฟเมื่อได้รับความร้อน",
-        "เหมาะสำหรับกาแฟที่เน้นคุณภาพเมล็ด เช่น กาแฟพิเศษ (Specialty Coffee)",
+        "เมล็ดกาแฟจะไม่เกิดการแตก (first crack)",
+        "เหมาะสำหรับกาแฟพิเศษ (Specialty Coffee)",
         "เหมาะสำหรับการชงแบบ Pour Over หรือ Aeropress",
       ],
       img: "/roasting/roasting1.png",
@@ -46,7 +53,7 @@ const CoffeeInfo = () => {
       ],
       characteristics: [
         "ผิวเมล็ดมันเนื่องจากมีน้ำมันออกมา",
-        "เหมาะสำหรับการชงกาแฟเอสเปรสโซ และกาแฟที่มีส่วนผสม เช่น ลาเต้หรือคาปูชิโน่",
+        "เหมาะสำหรับการชงกาแฟเอสเพรสโซ และกาแฟที่มีส่วนผสม เช่น ลาเต้หรือคาปูชิโน่",
         "ให้รสชาติหนักแน่น เหมาะสำหรับผู้ที่ชอบกาแฟเข้มข้น",
         "บางครั้งจะมีกลิ่นหอมคล้ายควันหรือถ่านเล็กน้อย",
       ],
@@ -62,38 +69,59 @@ const CoffeeInfo = () => {
       ],
       characteristics: [
         "ผิวเมล็ดมันมากเนื่องจากมีน้ำมันออกมาเยอะ",
-        "เหมาะสำหรับการชงกาแฟเอสเปรสโซแบบเข้มข้น หรือกาแฟแบบอเมริกาโน่",
+        "เหมาะสำหรับการชงกาแฟเอสเพรสโซแบบเข้มข้น หรือกาแฟแบบอเมริกาโน่",
         "รสชาติของเมล็ดกาแฟดั้งเดิมจะถูกกลบด้วยรสคั่วที่โดดเด่น",
         "บางครั้งอาจมีกลิ่นหอมควันไฟที่ชัดเจน",
       ],
       img: "/roasting/roasting4.PNG",
-
     },
-
   };
 
-
-
-
-  const [selectedRoast, setSelectedRoast] = useState("คั่วอ่อน (Light Roast)");
-
   const data = coffeeData[selectedRoast];
+
+  // ตรวจสอบว่าผู้ใช้ล็อกอินหรือไม่
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) setUserId(user.uid);
+      else setUserId(null);
+    });
+  }, []);
+
+  // เมื่อผู้ใช้เลื่อนดูเนื้อหา CoffeeInfo จนเกือบจบ → บันทึก achievement
+  useEffect(() => {
+    if (!userId) return; // ถ้าไม่ได้ล็อกอินจะไม่บันทึก achievement
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const contentHeight = document.body.scrollHeight;
+      const viewportHeight = window.innerHeight;
+      if (scrollY + viewportHeight >= contentHeight - 100) {
+        console.log("✅ บันทึก achievement สำหรับ Roasting");
+        // บันทึก achievement โดยส่งหมวด "content" และ achievementId "roasting_info"
+        updateUserAchievement(userId, "content", "roasting_coffee", true);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [userId]);
 
   return (
     <div>
       <Navbar />
       <div className="bg-[#f3f1ec] min-h-screen p-6">
         {/* Header Buttons */}
-
         <div className="flex gap-4 mb-6 flex-wrap justify-center">
           {Object.keys(coffeeData).map((label) => (
             <button
               key={label}
               onClick={() => setSelectedRoast(label)}
-              className={`w-70 ${selectedRoast === label
-                ? "bg-light-brown text-white"
-                : "bg-[#e0dcd3]"
-                } hover:bg-brown hover:text-white text-dark-brown font-medium py-2 px-4 rounded transition-all`}
+              className={`w-70 ${
+                selectedRoast === label
+                  ? "bg-light-brown text-white"
+                  : "bg-[#e0dcd3]"
+              } hover:bg-brown hover:text-white text-dark-brown font-medium py-2 px-4 rounded transition-all duration-200 border-2`}
             >
               {label}
             </button>
@@ -113,8 +141,6 @@ const CoffeeInfo = () => {
               alt={`${selectedRoast} Coffee Beans`}
               className="w-40 h-40 object-cover rounded-full border-4 border-light-brown"
             />
-
-
           </div>
 
           {/* Info Section */}
@@ -122,7 +148,7 @@ const CoffeeInfo = () => {
             <ul className="mb-2">
               <li className="flex items-center mb-2">
                 <img src="/roasting/icon.png" alt="icon" className="w-6 h-6 mr-2" />
-                <span className="font-semibold">ชื่อเรียกอื่น : </span> { data.alias}
+                <span className="font-semibold">ชื่อเรียกอื่น : </span> {data.alias}
               </li>
               <li className="flex items-center mb-2">
                 <img src="/roasting/icon.png" alt="icon" className="w-6 h-6 mr-2" />
@@ -154,7 +180,6 @@ const CoffeeInfo = () => {
               </ul>
             </div>
           </div>
-
         </div>
       </div>
       <Footer />

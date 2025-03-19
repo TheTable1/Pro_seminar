@@ -1,42 +1,66 @@
 import { db } from "./firebase";
-import { doc, setDoc, updateDoc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
 /**
- * อัปเดตค่าความสำเร็จของผู้ใช้ใน Firestore
- * @param {string} userId - ไอดีของผู้ใช้
- * @param {string} menuId - ไอดีของเมนูกาแฟที่ทำสำเร็จ
+ * อัปเดตค่าความสำเร็จของผู้ใช้ใน Firestore (แบ่งเป็น 3 หมวดหมู่: simulator, content, knowledge)
+ * หากผู้ใช้ยังไม่มี Document หรือ achievements เลย จะกำหนดค่าเริ่มต้นให้
+ *
+ * @param {string} userId - UID ของผู้ใช้
+ * @param {string} category - หมวดหมู่ ("simulator", "content", "knowledge")
+ * @param {string} achievementId - เช่น "espresso", "history_coffee"
+ * @param {boolean} status - true = สำเร็จ
  */
-export const updateUserAchievement = async (userId, menuId) => {
+export async function updateUserAchievement(userId, category, achievementId, status = true) {
+  if (!userId) {
+    console.error("❌ ไม่มี userId ไม่สามารถบันทึกได้");
+    return;
+  }
+
   try {
-    console.log(`🟡 กำลังอัปเดตความสำเร็จของ ${userId} ในเมนู ${menuId}`);
-    
+    console.log(`🟡 Updating user=${userId}, category=${category}, achievement=${achievementId}`);
+
     const userRef = doc(db, "users", userId);
     const docSnap = await getDoc(userRef);
 
-    if (docSnap.exists()) {
-      let data = docSnap.data();
-      let achievements = data.achievements || {};
-      let progress = data.progress || { totalMenus: 5, completedMenus: 0, completionRate: 0 };
+    if (!docSnap.exists()) {
+      // 🔹 ถ้าไม่มี Document ผู้ใช้อยู่เลย สร้าง Document ใหม่พร้อมโครงสร้างเริ่มต้น
+      let achievements = {
+        simulator: {},
+        content: {},
+        knowledge: {}
+      };
 
-      if (!achievements[menuId]) {
-        achievements[menuId] = true;
-        progress.completedMenus += 1;
-        progress.completionRate = Math.round((progress.completedMenus / progress.totalMenus) * 100);
-      }
+      achievements[category][achievementId] = status;
 
-      await updateDoc(userRef, { achievements, progress });
-      console.log("✅ อัปเดตข้อมูลเรียบร้อย:", { achievements, progress });
+      await setDoc(userRef, { achievements });
+      console.log("✅ สร้าง user doc ใหม่และบันทึก achievements:", achievements);
 
     } else {
-      await setDoc(userRef, {
-        achievements: { [menuId]: true },
-        progress: { totalMenus: 5, completedMenus: 1, completionRate: 20 }
-      });
+      // 🔹 ถ้ามี Document อยู่แล้ว
+      let data = docSnap.data();
+      let achievements = data.achievements;
 
-      console.log("✅ สร้างผู้ใช้ใหม่และบันทึกสำเร็จ!");
+      // ถ้า achievements ยังไม่มี หรือเป็น null/undefined ให้กำหนดค่าเริ่มต้น
+      if (!achievements) {
+        achievements = {
+          simulator: {},
+          content: {},
+          knowledge: {}
+        };
+      }
+
+      // ถ้า category ยังไม่มี ก็สร้าง object เปล่า
+      if (!achievements[category]) {
+        achievements[category] = {};
+      }
+
+      achievements[category][achievementId] = status;
+
+      await updateDoc(userRef, { achievements });
+      console.log("✅ อัปเดตความสำเร็จเรียบร้อย:", achievements);
     }
 
   } catch (error) {
-    console.error("❌ เกิดข้อผิดพลาดในการอัปเดต Firestore:", error);
+    console.error("❌ เกิดข้อผิดพลาด:", error);
   }
-};
+}
