@@ -10,7 +10,6 @@ export default function Navbar() {
   const [showKnowledgeMenu, setShowKnowledgeMenu] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const [scrollbarWidth, setScrollbarWidth] = useState(0);
   const menuRef = useRef(null);
   const knowledgeMenuRef = useRef(null);
   const profileMenuRef = useRef(null);
@@ -30,18 +29,6 @@ export default function Navbar() {
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    const handleResize = () => {
-      document.body.style.overflowY = "scroll";
-      document.body.style.width = "100vw";
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
   }, []);
 
   useEffect(() => {
@@ -77,7 +64,11 @@ export default function Navbar() {
   const isQuizActive = location.pathname === "/quiz";
 
   return (
-    <div ref={navbarRef} style={{ height: `${NAVBAR_HEIGHT_PERCENT}%`, width: "100%" }}>
+    <div
+      ref={navbarRef}
+      style={{ height: `${NAVBAR_HEIGHT_PERCENT}%`, width: "100%" }}
+      className="relative z-50"
+    >
       <header
         className="bg-dark-brown flex justify-between items-center"
         style={{ padding: "1rem 1.25rem", height: "100%" }}
@@ -105,26 +96,76 @@ export default function Navbar() {
               </span>
               {showKnowledgeMenu && (
                 <ul className="absolute left-0 z-10 bg-brown shadow-lg mt-2 rounded-md w-48 text-beige text-sm transition duration-300">
-                  <li className="p-3 hover:bg-dark-brown transition duration-200">
-                    <Link to="/history">ประวัติศาสตร์กาแฟ</Link>
+                  {/* 
+                    เปลี่ยนจาก:
+                      <li className="p-3 hover:bg-dark-brown transition duration-200">
+                        <Link to="/history">ประวัติศาสตร์กาแฟ</Link>
+                      </li>
+                    เป็น:
+                      <li>
+                        <Link
+                          to="/history"
+                          className="block p-3 hover:bg-dark-brown transition duration-200"
+                        >
+                          ประวัติศาสตร์กาแฟ
+                        </Link>
+                      </li>
+                  */}
+                  <li>
+                    <Link
+                      to="/history"
+                      className="block p-3 hover:bg-dark-brown transition duration-200"
+                    >
+                      ประวัติศาสตร์กาแฟ
+                    </Link>
                   </li>
-                  <li className="p-3 hover:bg-dark-brown transition duration-200">
-                    <Link to="/geneCoffee">สายพันธุ์กาแฟ</Link>
+                  <li>
+                    <Link
+                      to="/geneCoffee"
+                      className="block p-3 hover:bg-dark-brown transition duration-200"
+                    >
+                      สายพันธุ์กาแฟ
+                    </Link>
                   </li>
-                  <li className="p-3 hover:bg-dark-brown transition duration-200">
-                    <Link to="/roasting">ระดับของการคั่วกาแฟ</Link>
+                  <li>
+                    <Link
+                      to="/roasting"
+                      className="block p-3 hover:bg-dark-brown transition duration-200"
+                    >
+                      ระดับของการคั่วกาแฟ
+                    </Link>
                   </li>
-                  <li className="p-3 hover:bg-dark-brown transition duration-200">
-                    <Link to="/extraction">เทคนิคการสกัดกาแฟ</Link>
+                  <li>
+                    <Link
+                      to="/extraction"
+                      className="block p-3 hover:bg-dark-brown transition duration-200"
+                    >
+                      เทคนิคการสกัดกาแฟ
+                    </Link>
                   </li>
-                  <li className="p-3 hover:bg-dark-brown transition duration-200">
-                    <Link to="/process">กระบวนการผลิตกาแฟ</Link>
+                  <li>
+                    <Link
+                      to="/process"
+                      className="block p-3 hover:bg-dark-brown transition duration-200"
+                    >
+                      กระบวนการผลิตกาแฟ
+                    </Link>
                   </li>
-                  <li className="p-3 hover:bg-dark-brown transition duration-200">
-                    <Link to="/worldCoffee">แผนที่แหล่งผลิตกาแฟโลก</Link>
+                  <li>
+                    <Link
+                      to="/worldCoffee"
+                      className="block p-3 hover:bg-dark-brown transition duration-200"
+                    >
+                      แผนที่แหล่งผลิตกาแฟโลก
+                    </Link>
                   </li>
-                  <li className="p-3 hover:bg-dark-brown transition duration-200">
-                    <Link to="/articles">บทความน่ารู้</Link>
+                  <li>
+                    <Link
+                      to="/articles"
+                      className="block p-3 hover:bg-dark-brown transition duration-200"
+                    >
+                      บทความน่ารู้
+                    </Link>
                   </li>
                 </ul>
               )}
@@ -207,38 +248,67 @@ export default function Navbar() {
                   คลังความรู้กาแฟ
                 </span>
                 <ul className="mt-2 bg-dark-brown rounded-lg shadow-inner divide-y divide-gray-700">
-                  <li className="p-3 hover:bg-brown transition duration-200">
-                    <Link to="/history" onClick={() => setShowMenu(false)}>
+                  {/* ทำให้คลิกได้ทั้งช่อง */}
+                  <li>
+                    <Link
+                      to="/history"
+                      className="block p-3 hover:bg-brown transition duration-200"
+                      onClick={() => setShowMenu(false)}
+                    >
                       ประวัติศาสตร์กาแฟ
                     </Link>
                   </li>
-                  <li className="p-3 hover:bg-brown transition duration-200">
-                    <Link to="/geneCoffee" onClick={() => setShowMenu(false)}>
+                  <li>
+                    <Link
+                      to="/geneCoffee"
+                      className="block p-3 hover:bg-brown transition duration-200"
+                      onClick={() => setShowMenu(false)}
+                    >
                       สายพันธุ์กาแฟ
                     </Link>
                   </li>
-                  <li className="p-3 hover:bg-brown transition duration-200">
-                    <Link to="/roasting" onClick={() => setShowMenu(false)}>
+                  <li>
+                    <Link
+                      to="/roasting"
+                      className="block p-3 hover:bg-brown transition duration-200"
+                      onClick={() => setShowMenu(false)}
+                    >
                       ระดับของการคั่วกาแฟ
                     </Link>
                   </li>
-                  <li className="p-3 hover:bg-brown transition duration-200">
-                    <Link to="/extraction" onClick={() => setShowMenu(false)}>
+                  <li>
+                    <Link
+                      to="/extraction"
+                      className="block p-3 hover:bg-brown transition duration-200"
+                      onClick={() => setShowMenu(false)}
+                    >
                       เทคนิคการสกัดกาแฟ
                     </Link>
                   </li>
-                  <li className="p-3 hover:bg-brown transition duration-200">
-                    <Link to="/process" onClick={() => setShowMenu(false)}>
+                  <li>
+                    <Link
+                      to="/process"
+                      className="block p-3 hover:bg-brown transition duration-200"
+                      onClick={() => setShowMenu(false)}
+                    >
                       กระบวนการผลิตกาแฟ
                     </Link>
                   </li>
-                  <li className="p-3 hover:bg-brown transition duration-200">
-                    <Link to="/worldCoffee" onClick={() => setShowMenu(false)}>
+                  <li>
+                    <Link
+                      to="/worldCoffee"
+                      className="block p-3 hover:bg-brown transition duration-200"
+                      onClick={() => setShowMenu(false)}
+                    >
                       แผนที่แหล่งผลิตกาแฟโลก
                     </Link>
                   </li>
-                  <li className="p-3 hover:bg-brown transition duration-200">
-                    <Link to="/articles" onClick={() => setShowMenu(false)}>
+                  <li>
+                    <Link
+                      to="/articles"
+                      className="block p-3 hover:bg-brown transition duration-200"
+                      onClick={() => setShowMenu(false)}
+                    >
                       บทความน่ารู้
                     </Link>
                   </li>

@@ -296,8 +296,39 @@ function Home() {
         `;
       } else {
         document.getElementById("info").innerHTML = `
-          <h2>${countryName}</h2>
-          <p>No coffee data available</p>
+          <div class="p-6 bg-[#5c4033] border border-[#d2b48c] rounded-lg shadow-lg">
+  <h2 class="text-2xl font-bold text-[#f5f5dc] mb-4">${countryName}</h2>
+
+  <!-- Card container -->
+  <div class="flex flex-wrap gap-4 justify-start">
+    <!-- ข้อมูลเพิ่มเติม -->
+    <div class="bg-[#6b4226] p-4 rounded-md shadow-md border border-[#d2b48c] w-full sm:w-full md:w-[calc(33.333%-16px)]">
+      <div class="flex items-center text-base text-[#f5f5dc] mb-2">
+        <img src="/world/info.png" alt="info icon" class="w-6 h-6 mr-3" />
+        <b class="mr-2">ข้อมูลเพิ่มเติม:</b>
+      </div>
+      <p class="text-[#f5f5dc]"> - </p>
+    </div>
+
+    <!-- ภูมิภาคที่ปลูกกาแฟ -->
+    <div class="bg-[#6b4226] p-4 rounded-md shadow-md border border-[#d2b48c] w-full sm:w-full md:w-[calc(33.333%-16px)]">
+      <div class="flex items-center text-base text-[#f5f5dc] mb-2">
+        <img src="/world/map.png" alt="map icon" class="w-6 h-6 mr-3" />
+        <b class="mr-2">ภูมิภาคที่ปลูกกาแฟ:</b>
+      </div>
+      <p class="text-[#f5f5dc]"> - </p>
+    </div>
+
+    <!-- กาแฟที่มีความโดดเด่น -->
+    <div class="bg-[#6b4226] p-4 rounded-md shadow-md border border-[#d2b48c] w-full sm:w-full md:w-[calc(33.333%-16px)]">
+      <div class="flex items-center text-base text-[#f5f5dc] mb-2">
+        <img src="/world/bean.png" alt="bean icon" class="w-6 h-6 mr-3" />
+        <b class="mr-2">กาแฟที่มีความโดดเด่น:</b>
+      </div>
+      <p class="text-[#f5f5dc]"> - </p>
+    </div>
+  </div>
+</div>
         `;
       }
 
@@ -414,7 +445,15 @@ function Home() {
   return (
     <div>
       <Navbar />
-      <div ref={mapContainerRef} id="map" style={{ height: "500px" }}></div>
+      <div
+        ref={mapContainerRef}
+        id="map"
+        style={{
+          height: "500px",
+          zIndex: 0, // ทำให้แผนที่อยู่ชั้นล่าง
+          position: "relative", // กำหนด position เพื่อรองรับ zIndex
+        }}
+      ></div>
 
       <div id="info" className="info-container">
         {selectedCountry ? (

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"; 
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Navbar from "./navbar";
@@ -89,7 +89,6 @@ const QuizDetail = () => {
     }
   };
 
-
   // ฟังก์ชันสำหรับปุ่มถัดไปหรือส่งคำตอบ
   const handleNext = () => {
     if (selectedAnswers[currentQuestion] === null) {
@@ -121,7 +120,7 @@ const QuizDetail = () => {
     <div>
       <Navbar />
       <div className="min-h-screen bg-[url('../public/background.jpg')] bg-cover bg-center bg-white/85 bg-blend-overlay flex flex-col items-center justify-center px-4">
-        <div className="bg-beige-light backdrop-blur-sm rounded-3xl shadow-xl p-8 w-full max-w-4xl relative">
+        <div className="bg-beige-light backdrop-blur-sm rounded-3xl shadow-xl p-8 w-full max-w-4xl relative mt-4 mb-3">
           {!showScore ? (
             <>
               <h2 className="text-center text-2xl md:text-3xl font-bold text-dark-brown mb-4">
@@ -188,13 +187,13 @@ const QuizDetail = () => {
                 คะแนนของคุณ: {score} / {quiz.questions.length} (
                 {Math.round((score / quiz.questions.length) * 100)}%)
               </h1>
-              {(() => {
+              {/* {(() => {
                 const percentage = Math.round(
                   (score / quiz.questions.length) * 100
                 );
                 if (percentage >= 80) {
                   return (
-                    <p className="text-xl font-bold mb-6">
+                    <p className="text-xl font-bold mb-6 ">
                       เก่งมาก คะแนนอยู่ในระดับดีเยี่ยม
                     </p>
                   );
@@ -211,7 +210,50 @@ const QuizDetail = () => {
                     </p>
                   );
                 }
-              })()}
+              })()} */}
+              {/* แสดงรายละเอียดคำตอบแต่ละข้อ */}
+              <div className="text-left mt-6 ">
+                {quiz.questions.map((q, idx) => {
+                  const isCorrect = selectedAnswers[idx] === q.answer;
+                  return (
+                    <div
+                      key={idx}
+                      className="mb-6 p-6 border border-gray-300 rounded-3xl bg-white shadow-md"
+                    >
+                      <p className="font-bold text-dark-brown text-lg">
+                        {idx + 1}. {q.question}
+                      </p>
+                      <div className="mt-2">
+                        <p className="text-dark-brown">
+                          คำตอบของคุณ:{" "}
+                          <span
+                            className={
+                              isCorrect
+                                ? "text-green-600 font-bold"
+                                : "text-red-600 font-bold"
+                            }
+                          >
+                            {selectedAnswers[idx]} {isCorrect ? "✓" : "✗"}
+                          </span>
+                        </p>
+                        {!isCorrect && (
+                          <p className="mt-1 text-dark-brown">
+                            คำตอบที่ถูกต้อง:{" "}
+                            <span className="font-bold">{q.answer}</span>
+                          </p>
+                        )}
+                      </div>
+                      {q.explanation && (
+                        <div className="mt-3 p-3 bg-beige-light/60 backdrop-blur-md rounded-md">
+                          <p className="text-dark-brown">
+                            คำอธิบาย: {q.explanation}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
               <button
                 onClick={() => window.location.reload()}
                 className="mt-6 px-6 py-2 bg-light-brown text-beige font-semibold rounded-full shadow-lg hover:shadow-xl hover:bg-brown transition-all duration-300"
