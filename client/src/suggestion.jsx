@@ -21,11 +21,7 @@ const decisionTree = {
               question: "คุณต้องการกาแฟที่มีความเข้มข้นแบบไหน?",
               key: "intensity",
               options: [
-                {
-                  label: "เข้ม",
-                  value: "เข้ม",
-                  next: { result: "ลาเต้" },
-                },
+                { label: "เข้ม", value: "เข้ม", next: { result: "ลาเต้" } },
                 { label: "กลาง", value: "กลาง", next: { result: "ลาเต้" } },
                 { label: "เบา", value: "เบา", next: { result: "แฟลตไวท์" } },
               ],
@@ -67,11 +63,7 @@ const decisionTree = {
               question: "คุณชอบเพิ่มช็อกโกแลตในกาแฟหรือไม่?",
               key: "chocolate",
               options: [
-                {
-                  label: "ใช่",
-                  value: "ใช่",
-                  next: { result: "มอคค่า" },
-                },
+                { label: "ใช่", value: "ใช่", next: { result: "มอคค่า" } },
                 { label: "ไม่", value: "ไม่", next: { result: "มอคค่า" } },
               ],
             },
@@ -99,10 +91,39 @@ const decisionTree = {
     {
       label: "กลมกล่อม",
       value: "กลมกล่อม",
-      next: { result: "คาปูชิโน" },
+      next: {
+        question: "คุณชอบฟองนมกาแฟแบบไหน?",
+        key: "foam",
+        options: [
+          { label: "หนา", value: "หนา", next: { result: "คาปูชิโนฟองหนา" } },
+          { label: "บาง", value: "บาง", next: { result: "คาปูชิโนคลาสสิค" } },
+        ],
+      },
+    },
+    {
+      label: "เปรี้ยว",
+      value: "เปรี้ยว",
+      next: {
+        question: "คุณชอบกาแฟเปรี้ยวระดับไหน?",
+        key: "sourIntensity",
+        options: [
+          { label: "จัด", value: "จัด", next: { result: "เอสเพรสโซเปรี้ยว" } },
+          {
+            label: "ปานกลาง",
+            value: "ปานกลาง",
+            next: { result: "ลาเต้ซิตริค" },
+          },
+          {
+            label: "เบาๆ",
+            value: "เบาๆ",
+            next: { result: "อเมริกาโนเปรี้ยว" },
+          },
+        ],
+      },
     },
   ],
 };
+
 
 
 const Suggestion = () => {

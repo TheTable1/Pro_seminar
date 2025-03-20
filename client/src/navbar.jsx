@@ -330,7 +330,7 @@ export default function Navbar() {
                 </Link>
               </li>
               <li className="hover:bg-brown pt-3 rounded transition duration-200 cursor-pointer">
-                <Link to="/quiz" onClick={() => setShowMenu(false)}>
+                <Link to="/profile" onClick={() => setShowMenu(false)}>
                   โปรไฟล์
                 </Link>
               </li>
