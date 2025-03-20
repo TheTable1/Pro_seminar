@@ -14,7 +14,7 @@ function ArticlesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [userId, setUserId] = useState(null);
 
-  // ตรวจสอบการล็อกอิน
+  // ตรวจสอบว่าผู้ใช้ล็อกอินหรือไม่
   useEffect(() => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
@@ -23,7 +23,6 @@ function ArticlesPage() {
     });
   }, []);
 
-  // ฟังก์ชันสำหรับกรองบทความ
   const filteredArticles = articles.filter((article) => {
     const matchesSearch = article.title
       .toLowerCase()
@@ -34,7 +33,7 @@ function ArticlesPage() {
     return matchesSearch && matchesFilter;
   });
 
-  // เมื่อเปิดอ่านบทความ (selectedArticle) ให้เพิ่ม Scroll Event เพื่อตรวจสอบว่าอ่านจบแล้ว
+  // เมื่อผู้ใช้เปิดอ่านบทความ (selectedArticle) และเลื่อนจนเกือบจบบทความ
   useEffect(() => {
     if (!selectedArticle || !userId) return;
 
@@ -43,10 +42,10 @@ function ArticlesPage() {
       const contentHeight = document.body.scrollHeight;
       const viewportHeight = window.innerHeight;
       if (scrollY + viewportHeight >= contentHeight - 100) {
-        // ใช้ article.id ถ้ามี หรือใช้ article.title เป็นตัวระบุ
+        // ใช้ article.id ถ้ามี หรือ article.title เป็นตัวระบุ
         const achievementId = selectedArticle.id || selectedArticle.title;
-        console.log("✅ บันทึก achievement สำหรับบทความ:", achievementId);
-        updateUserAchievement(userId, "knowledge", achievementId, true);
+        console.log("✅ บันทึกความสำเร็จบทความ:", achievementId);
+        updateArticleAchievement(userId, achievementId, true);
       }
     };
 
