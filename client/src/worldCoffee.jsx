@@ -67,12 +67,12 @@ function Home() {
     India: {
       description:
         "อินเดียผลิตกาแฟทั้งอาราบิก้าและโรบัสต้า โดยมักใช้ในกาแฟเอสเปรสโซ",
-      cultivation: "พื้นที่เพาะปลูกหลักอยู่ในรัฐคาร์นาทากา เคราลา และทมิฬนาฑู",
+      cultivation: "พื้นที่เพาะปลูกหลักอยู่ในรัฐคาร์นาทากา, เคราลา และทมิฬนาฑู",
       specialties: ["Monsooned Malabar Coffee"],
     },
     Indonesia: {
       description:
-        "อินโดนีเซียผลิตกาแฟที่หลากหลาย รวมถึงกาแฟจากเกาะบาหลี สุมาตรา และสุลาเวสี",
+        "อินโดนีเซียผลิตกาแฟที่หลากหลาย รวมถึงกาแฟจากเกาะบาหลี, สุมาตรา และสุลาเวสี",
       cultivation: "ปลูกในหลายภูมิภาค เช่น สุมาตราและชวา",
       specialties: ["Kopi Luwak (กาแฟขี้ชะมด)", "Sumatra Mandheling Coffee"],
     },
@@ -139,7 +139,7 @@ function Home() {
       specialties: ["Lao Arabica Coffee"],
     },
     Philippines: {
-      description: "ปลูกกาแฟทั้งอาราบิก้า โรบัสต้า เอ็กเซลซ่า และลิเบอริก้า",
+      description: "ปลูกกาแฟทั้งอาราบิก้า, โรบัสต้า, เอ็กเซลซ่า และลิเบอริก้า",
       cultivation: "ปลูกในภูมิภาค Batangas และ Cordillera",
       specialties: ["Kape Barako"],
     },
@@ -210,20 +210,88 @@ function Home() {
       cultivation: "ไม่มีการเพาะปลูกกาแฟ",
       specialties: ["Saudi Arabian Qahwa"],
     },
+
+    // เพิ่มประเทศใหม่
+    DominicanRepublic: {
+      description:
+        "ประเทศโดมินิกันเป็นอีกหนึ่งประเทศในภูมิภาคคาริบเบียนที่มีการผลิตกาแฟในระดับน้อย แต่มีรสชาติที่เป็นเอกลักษณ์",
+      cultivation: "ปลูกกาแฟในภูมิภาคสูง เช่น Cordillera Central",
+      specialties: ["Dominican Coffee"],
+    },
+    Panama: {
+      description:
+        "ประเทศปานามามีชื่อเสียงในเรื่องกาแฟ Geisha ที่ได้รับรางวัลมากมาย",
+      cultivation: "ปลูกในพื้นที่สูง เช่น Boquete",
+      specialties: ["Panama Geisha Coffee"],
+    },
+    ElSalvador: {
+      description: "เป็นหนึ่งในประเทศในอเมริกากลางที่มีการผลิตกาแฟคุณภาพสูง",
+      cultivation: "ปลูกในภูมิภาคสูง เช่น Apaneca",
+      specialties: ["El Salvador Pacamara Coffee"],
+    },
+    Nicaragua: {
+      description:
+        "กาแฟนิการากามีรสชาติที่กลมกล่อมและเป็นที่นิยมในตลาดกาแฟพิเศษ",
+      cultivation: "ปลูกในพื้นที่สูง เช่น Matagalpa",
+      specialties: ["Nicaraguan Coffee"],
+    },
+    Bolivia: {
+      description:
+        "กาแฟโบลิเวียนมีความหลากหลายทางรสชาติและมีการผลิตในระดับชุมชน",
+      cultivation: "ปลูกในพื้นที่สูงในภูมิภาค Andes",
+      specialties: ["Bolivian Organic Coffee"],
+    },
+    Ecuador: {
+      description:
+        "กาแฟเอกวาดอร์เป็นผลิตภัณฑ์ที่มีความเป็นเอกลักษณ์ในภูมิภาคอเมริกาใต้",
+      cultivation: "ปลูกในพื้นที่สูงในภูมิภาค Andes",
+      specialties: ["Ecuadorian Arabica Coffee"],
+    },
+    Venezuela: {
+      description:
+        "กาแฟเวเนซุเอลามีรสชาติที่นุ่มนวลและมีความเป็นเอกลักษณ์ แต่ปริมาณการผลิตลดลงในปัจจุบัน",
+      cultivation: "ปลูกในพื้นที่สูง เช่น Andes ของเวเนซุเอลา",
+      specialties: ["Venezuelan Coffee"],
+    },
+    USA: {
+      description:
+        "แม้ไม่เป็นประเทศผู้ผลิตกาแฟหลัก แต่สหรัฐอเมริกามีการเพาะปลูกกาแฟในบางพื้นที่ เช่น ฮาวาย",
+      cultivation: "ปลูกในฮาวายและบางส่วนของแคลิฟอร์เนีย",
+      specialties: ["Hawaiian Kona Coffee"],
+    },
+    Italy: {
+      description:
+        "ประเทศอิตาลีเป็นที่รู้จักในวัฒนธรรมการชงกาแฟ โดยเฉพาะเอสเปรสโซและคาปูชิโน",
+      cultivation: "ไม่ได้ปลูกกาแฟในระดับการค้า",
+      specialties: ["Italian Espresso"],
+    },
+    France: {
+      description:
+        "ฝรั่งเศสมีวัฒนธรรมการดื่มกาแฟที่โดดเด่น โดยเฉพาะในร้านกาแฟริมถนน",
+      cultivation: "ไม่ได้ปลูกกาแฟในระดับการค้า",
+      specialties: ["French Press Coffee"],
+    },
+    NewZealand: {
+      description:
+        "นิวซีแลนด์มีวัฒนธรรมการชงกาแฟที่เติบโตขึ้น โดยเฉพาะในเมืองใหญ่",
+      cultivation: "ไม่ได้ปลูกกาแฟ แต่มีการนำเข้ากาแฟคุณภาพสูง",
+      specialties: ["Flat White (ต้นกำเนิดจากออสเตรเลียและนิวซีแลนด์)"],
+    },
   });
 
   // useEffect สำหรับจัดการแผนที่และ GeoJSON
   useEffect(() => {
     if (mapRef.current !== null) return; // Prevent re-initializing the map
 
-    const map = L.map(mapContainerRef.current).setView([20, 0], 2); // Display world map
-    mapRef.current = map; // Store map instance in ref
+    const map = L.map(mapContainerRef.current, {
+      attributionControl: false,
+    }).setView([20, 0], 2);
+    mapRef.current = map;
 
     L.tileLayer(
       "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
       {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        // attribution: '', // หากไม่ต้องการให้มีเลย
         maxZoom: 19,
       }
     ).addTo(map);

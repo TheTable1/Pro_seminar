@@ -1,16 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "./navbar";
-import MenuItems from "./menuItems.json";
-import { useNavigate } from "react-router-dom";
 import Footer from "./footer";
+import MenuItems from "./menuItems.json";
 
 function CoffeeBeans() {
   const [activeFilter, setActiveFilter] = useState("กาแฟทั้งหมด");
   const [selectedItem, setSelectedItem] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(""); // State สำหรับการค้นหา
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const menuItems = MenuItems;
   const navigate = useNavigate();
+  const location = useLocation();
+  const menuItems = MenuItems;
+
+  // ตรวจสอบว่ามี state จาก Suggestion ส่งมาหรือไม่
+  useEffect(() => {
+    if (location.state) {
+      setSelectedItem(location.state);
+      window.scrollTo(0, 0); // เลื่อนหน้าไปบนสุด
+    }
+  }, [location.state]);
 
   const filterButtons = [
     "กาแฟทั้งหมด",
@@ -27,7 +36,6 @@ function CoffeeBeans() {
 
   const handleItemClick = (item) => {
     setSelectedItem(item);
-    // เมื่อเลือกเมนูแล้วเลื่อนหน้ารายละเอียดขึ้นไปด้านบนทันที (ไม่ smooth)
     window.scrollTo(0, 0);
   };
 
@@ -36,7 +44,8 @@ function CoffeeBeans() {
   };
 
   const handleTryIt = () => {
-    navigate("/simulator", { state: selectedItem }); // ส่งข้อมูล selectedItem ไป FinalStep
+    // ส่งข้อมูล selectedItem ไปหน้า simulator (FinalStep) ถ้าต้องการ
+    navigate("/simulator", { state: selectedItem });
   };
 
   // รวมเงื่อนไข activeFilter และ searchTerm ในการค้นหา
@@ -55,9 +64,8 @@ function CoffeeBeans() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <Navbar />
-
-      <main className="lg:p-6 sm:p-0 ">
-        {/* แสดงรายละเอียดของเมนู */}
+      <main className="lg:p-6 sm:p-0">
+        {/* ถ้ามี selectedItem -> แสดงรายละเอียดเมนู */}
         {selectedItem ? (
           <div className="bg-white rounded-lg shadow-md p-5">
             <button
@@ -68,7 +76,7 @@ function CoffeeBeans() {
             </button>
             {/* Grid Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {/* Left Section: Image and Menu Name */}
+              {/* รูปภาพ */}
               <div className="flex flex-col items-center">
                 <img
                   className="w-4/5 h-auto object-cover rounded-md shadow-lg"
@@ -76,8 +84,8 @@ function CoffeeBeans() {
                   alt={selectedItem.name}
                 />
               </div>
-              {/* Right Section: Steps and Button */}
-              <div className="space-y-6 ">
+              {/* ข้อมูลเมนู */}
+              <div className="space-y-6">
                 <h2 className="text-3xl font-bold mb-4 text-brown">
                   {selectedItem.name}
                 </h2>
@@ -85,30 +93,40 @@ function CoffeeBeans() {
                   รายละเอียดเมนู
                 </h3>
                 <p className="text-gray-700 mt-2">{selectedItem.details}</p>
+
                 <h3 className="font-semibold text-lg text-brown">
                   ระดับความเข้ม
                 </h3>
                 <p className="text-gray-700 mt-2">{selectedItem.cafeid}</p>
+
+                <h3 className="font-semibold text-lg text-brown">คาเฟอีน</h3>
+                <p className="text-gray-700 mt-2">{selectedItem.caffeine}</p>
+
+                <h3 className="font-semibold text-lg text-brown">แคลอรี่</h3>
+                <p className="text-gray-700 mt-2">{selectedItem.calories}</p>
+
                 <h3 className="font-semibold text-lg text-brown">
                   วัตถุดิบในการทำ
                 </h3>
                 <ol className="list-decimal pl-5 space-y-2 mt-2">
                   {selectedItem.ingredients.map((ingredient, index) => (
-                    <li key={index} className="text-gray-700 ">
+                    <li key={index} className="text-gray-700">
                       {ingredient}
                     </li>
                   ))}
                 </ol>
+
                 <h3 className="font-semibold text-lg text-brown">
                   ขั้นตอนการทำ
                 </h3>
                 <ol className="list-decimal pl-5 space-y-2 mt-2">
                   {selectedItem.stepsAll.map((step, index) => (
-                    <li key={index} className="text-gray-700 ">
+                    <li key={index} className="text-gray-700">
                       {step}
                     </li>
                   ))}
                 </ol>
+
                 <button
                   onClick={handleTryIt}
                   className="bg-brown text-white px-4 py-2 rounded-3xl hover:bg-light-brown"
@@ -119,7 +137,8 @@ function CoffeeBeans() {
             </div>
           </div>
         ) : (
-          <section className="bg-white rounded-lg h-full shadow-md transition duration-200 ease-in-out hover:shadow-lg ">
+          // ถ้ายังไม่ได้เลือกเมนู -> แสดงรายการเมนู + ค้นหา + ฟิลเตอร์
+          <section className="bg-white rounded-lg h-full shadow-md transition duration-200 ease-in-out hover:shadow-lg">
             <div className="p-2 md:p-3 lg:p-5 pb-5">
               {/* Search Bar */}
               <div className="mb-6 flex justify-center">
@@ -149,17 +168,17 @@ function CoffeeBeans() {
                 ))}
               </div>
 
-              {/* suggestion */}
+              {/* ปุ่มไปหน้า Suggestion */}
               <div className="flex justify-end me-3">
                 <button
                   className="bg-light-brown text-white px-4 py-2 rounded-3xl hover:bg-brown mb-4"
-                  onClick={() => navigate("/Suggestion")}
+                  onClick={() => navigate("/suggestion")}
                 >
                   แนะนำกาแฟที่คุณต้องชอบ
                 </button>
               </div>
 
-              {/* Menu Grid */}
+              {/* แสดงรายการเมนูเป็น Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 lg:gap-5">
                 {filteredItems.map((item, index) => (
                   <div

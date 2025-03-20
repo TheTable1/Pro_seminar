@@ -16,10 +16,21 @@ import Extraction from "./extraction";
 import Suggestion from "./suggestion";
 import Quiz from "./quiz";
 import QuizDetail from "./quizDetail";
+import { Helmet } from "react-helmet";
 
 function App() {
   return (
     <BrowserRouter>
+      {/* Move Helmet outside of Routes */}
+      <Helmet>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+          integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2DhKNuXjbwN5th9XDEK7N+OaXsmRnN4p5bKf8Eh6D6+Kfh2wLyoe2B+mN2zSts3ug=="
+          crossOrigin="anonymous"
+          referrerPolicy="no-referrer"
+        />
+      </Helmet>
       <Routes>
         <Route path="/register" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
