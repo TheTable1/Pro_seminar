@@ -42,6 +42,7 @@ export default function Navbar() {
     await signOut(auth);
     setUser(null);
     setShowProfileMenu(false);
+    navigate("/login");
   };
 
   // เช็คว่า path ปัจจุบันเป็นของหมวดความรู้กาแฟหรือไม่
@@ -129,7 +130,7 @@ export default function Navbar() {
 
                   <li>
                     <Link
-                      to="/history"
+                      to="/geneCoffee"
                       className="flex items-center p-3 hover:bg-dark-brown transition duration-200"
                     >
                       {/* ไอคอนแบบรูปภาพ */}
@@ -143,7 +144,7 @@ export default function Navbar() {
                   </li>
                   <li>
                     <Link
-                      to="/history"
+                      to="/roasting"
                       className="flex items-center p-3 hover:bg-dark-brown transition duration-200"
                     >
                       {/* ไอคอนแบบรูปภาพ */}
@@ -157,7 +158,7 @@ export default function Navbar() {
                   </li>
                   <li>
                     <Link
-                      to="/history"
+                      to="/extraction"
                       className="flex items-center p-3 hover:bg-dark-brown transition duration-200"
                     >
                       {/* ไอคอนแบบรูปภาพ */}
@@ -171,7 +172,7 @@ export default function Navbar() {
                   </li>
                   <li>
                     <Link
-                      to="/history"
+                      to="/process"
                       className="flex items-center p-3 hover:bg-dark-brown transition duration-200"
                     >
                       {/* ไอคอนแบบรูปภาพ */}
@@ -185,7 +186,7 @@ export default function Navbar() {
                   </li>
                   <li>
                     <Link
-                      to="/history"
+                      to="/worldCoffee"
                       className="flex items-center p-3 hover:bg-dark-brown transition duration-200"
                     >
                       {/* ไอคอนแบบรูปภาพ */}
@@ -199,7 +200,7 @@ export default function Navbar() {
                   </li>
                   <li>
                     <Link
-                      to="/history"
+                      to="/articles"
                       className="flex items-center p-3 hover:bg-dark-brown transition duration-200"
                     >
                       {/* ไอคอนแบบรูปภาพ */}

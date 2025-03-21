@@ -8,6 +8,7 @@ module.exports = {
         "dark-brown": "#20170E",
         brown: "#4e3629",
         "light-brown": "#7a5647",
+        "light-brown2": "rgba(114, 59, 27, 0.55)",
         beige: "#FFE2B4",
         "beige-light": "#fff4e2",
         "brown-superlight": "#efdfc3",
