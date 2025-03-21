@@ -222,7 +222,7 @@ const Profile = () => {
               {quizResults.map((quiz) => (
                 <div
                   key={quiz.id}
-                  className="p-4 border border-brown rounded-lg shadow hover:shadow-md transition duration-300"
+                  className="p-4 border bg-light-brown2 border-brown rounded-lg shadow hover:shadow-md transition duration-300"
                 >
                   <p className="text-xl font-bold text-dark-brown">
                     แบบทดสอบ: {quiz.title}
@@ -310,27 +310,27 @@ const Profile = () => {
                           const mapping = {
                             history_coffee: {
                               label: "ประวิติกาแฟ",
-                              icon: "nav/icons8-history-80.png",
+                              icon: "nav/icons8-history-80-b.png",
                               link: "/history",
                             },
                             gene_coffee: {
                               label: "สายพันธุ์กาแฟ",
-                              icon: "nav/icons8-coffee-beans-48 (2).png",
+                              icon: "nav/icons8-coffee-beans-48-b.png",
                               link: "/geneCoffee",
                             },
                             roasting_coffee: {
                               label: "ระดับการคั่วกาแฟ",
-                              icon: "nav/icons8-coffee-bag-50.png",
+                              icon: "nav/icons8-coffee-bag-50 (1).png",
                               link: "/roasting",
                             },
                             extraction_coffee: {
                               label: "เทคนิคการสกัดกาแฟ",
-                              icon: "nav/icons8-vietnamese-coffee-50.png",
+                              icon: "nav/icons8-vietnamese-coffee-50-b.png",
                               link: "/extraction",
                             },
                             process_coffee: {
                               label: "กระบวนการผลิตกาแฟ",
-                              icon: "nav/icons8-coffee-cup-50.png",
+                              icon: "nav/icons8-coffee-cup-50-b.png",
                               link: "/process",
                             },
                           }[key];
@@ -338,7 +338,7 @@ const Profile = () => {
                             return (
                               <div
                                 key={key}
-                                className="p-3 bg-white/65 rounded-lg shadow hover:shadow-md transition transform"
+                                className="p-3 bg-white/85 rounded-lg shadow hover:shadow-md transition transform"
                               >
                                 <Link
                                   to={mapping.link}
@@ -360,8 +360,13 @@ const Profile = () => {
                             return (
                               <div
                                 key={key}
-                                className="p-3 bg-white/65 rounded-lg shadow hover:shadow-md transition transform"
+                                className="p-3 bg-white/85 rounded-lg shadow hover:shadow-md transition transform"
                               >
+                                <img
+                                  src={mapping.icon}
+                                  alt={`${mapping.label} icon`}
+                                  className="w-6 h-6 mr-2"
+                                />
                                 <h4 className="text-lg font-bold text-dark-brown">
                                   {key}
                                 </h4>
@@ -375,9 +380,14 @@ const Profile = () => {
                         {Object.keys(achievements[category]).map((key) => (
                           <div
                             key={key}
-                            className="p-3 bg-white/65 rounded-lg shadow hover:shadow-md transition transform"
+                            className="p-3 bg-white/85 rounded-lg shadow hover:shadow-md transition transform"
                           >
-                            <h4 className="text-lg font-bold text-dark-brown">
+                            <h4 className="text-lg font-bold text-dark-brown flex ">
+                              <img
+                                src="nav/icons8-coffee-bean-32.png"
+                                alt={`${key} icon`}
+                                className="w-6 h-6 mr-2"
+                              />
                               {key}
                             </h4>
                           </div>
