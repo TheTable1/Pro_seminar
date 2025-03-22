@@ -600,7 +600,10 @@
     }
 
     return (
-      <div className="relative bg-[url('../public/background.jpg')] bg-cover bg-center bg-white/85 bg-blend-overlay" style={{ height: "90vh", width: "100%" }}>
+      <div
+        className="relative bg-[url('../public/background.jpg')] bg-cover bg-center bg-white/85 bg-blend-overlay"
+        style={{ height: "90vh", width: "100%" }}
+      >
         <Navbar />
         {/* ส่วนเนื้อหาหลักแบ่งเป็น 2 ส่วน: พื้นที่เนื้อหา (90%) กับ Footer (10%) */}
         <div className="simulator-container">
@@ -614,54 +617,68 @@
                   gridTemplateRows: `repeat(${rows}, 1fr)`,
                 }}
               >
-              {Array.from(new Set(steps.flatMap(step => step.equipment
-              .filter((item) => item.state !== "hidden") // กรองเฉพาะอุปกรณ์ที่ไม่ซ่อน
-              .map(equipment => equipment.id)))).map((id) => {
-                // หาข้อมูลของอุปกรณ์จากขั้นตอน
-                const equipment = steps
-                  .flatMap(step => step.equipment)
-                  .find(equipment => equipment.id === id);
-                return (
-                  <motion.div
-                    key={equipment.id}
-                    className="equipment-slot flex items-center justify-center rounded-lg cursor-grab"
-                    dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-                    dragElastic={1}
-                    dragSnapToOrigin={true}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3 }}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    onDragEnd={(event, info) => handleDragEnd(equipment, event, info)}
-                    style={{
-                      width: "100%",
-                      height: "140px",
-                      transform: `scale(${scaleFactor})`,
-                      transformOrigin: "top left",
-                    }}
-                  >
-                    {equipment.image ? (
-                      <motion.img
-                        src={equipment.image}
-                        alt={equipment.name}
-                        className="object-contain cursor-grab"
-                        style={{ width: "80%", height: "80%" }}
-                        drag
-                        dragElastic={1}
-                        dragSnapToOrigin={true}
-                        onDragEnd={(event, info) => handleDragEnd(equipment, event, info)}
-                      />
-                    ) : (
-                      <span>{equipment.name}</span>
-                    )}
-                  </motion.div>
-                );})}
+                {Array.from(
+                  new Set(
+                    steps.flatMap((step) =>
+                      step.equipment
+                        .filter((item) => item.state !== "hidden") // กรองเฉพาะอุปกรณ์ที่ไม่ซ่อน
+                        .map((equipment) => equipment.id)
+                    )
+                  )
+                ).map((id) => {
+                  // หาข้อมูลของอุปกรณ์จากขั้นตอน
+                  const equipment = steps
+                    .flatMap((step) => step.equipment)
+                    .find((equipment) => equipment.id === id);
+                  return (
+                    <motion.div
+                      key={equipment.id}
+                      className="equipment-slot flex items-center justify-center rounded-lg cursor-grab"
+                      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+                      dragElastic={1}
+                      dragSnapToOrigin={true}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.3 }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onDragEnd={(event, info) =>
+                        handleDragEnd(equipment, event, info)
+                      }
+                      style={{
+                        width: "100%",
+                        height: "140px",
+                        transform: `scale(${scaleFactor})`,
+                        transformOrigin: "top left",
+                      }}
+                    >
+                      {equipment.image ? (
+                        <motion.img
+                          src={equipment.image}
+                          alt={equipment.name}
+                          className="object-contain cursor-grab"
+                          style={{ width: "80%", height: "80%" }}
+                          drag
+                          dragElastic={1}
+                          dragSnapToOrigin={true}
+                          onDragEnd={(event, info) =>
+                            handleDragEnd(equipment, event, info)
+                          }
+                        />
+                      ) : (
+                        <span>{equipment.name}</span>
+                      )}
+                    </motion.div>
+                  );
+                })}
               </div>
             </div>
 
             {/* Center Area: Workspace */}
-            <div className="center-area workspace-area flex-1" ref={workspaceRef}>
+            <div
+              className="center-area w-40 sm:w-96 md:w-1/2 workspace-area flex-1"
+              ref={workspaceRef}
+            >
               <h3 className="title m-0">
                 พื้นที่สำหรับนำอุปกรณ์ต่างๆ มาดำเนินการ
               </h3>
@@ -720,7 +737,10 @@
                     </div>
                   </div>
                 ) : qteActive ? (
-                  <div className="flex flex-col items-center" style={{ minHeight: "300px" }}>
+                  <div
+                    className="flex flex-col items-center"
+                    style={{ minHeight: "300px" }}
+                  >
                     {/* รูปเครื่องดริป */}
                     <img
                       src={dripImage}
@@ -753,8 +773,8 @@
                           alt="Pointer"
                           className="absolute pointer-point"
                           style={{
-                            width: "80px",       // กำหนดความกว้างเป็น 20px (หรือมากกว่านี้ตามต้องการ)
-                            height: "80px",      // กำหนดความสูงเป็น 20px
+                            width: "80px", // กำหนดความกว้างเป็น 20px (หรือมากกว่านี้ตามต้องการ)
+                            height: "80px", // กำหนดความสูงเป็น 20px
                             left: `${pointerPosition}%`,
                             top: "50%",
                             transform: "translate(-50%, -50%)", // เลื่อนให้อยู่กึ่งกลาง pointer
@@ -768,7 +788,9 @@
                       onClick={handleQTEProgress}
                       disabled={isGifPlaying}
                       className={`mt-4 bg-amber-900 text-white py-2 px-4 rounded ${
-                        isGifPlaying ? "opacity-50 cursor-not-allowed" : "hover:bg-amber-950"
+                        isGifPlaying
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:bg-amber-950"
                       }`}
                     >
                       คลิกเพื่อดริป
@@ -800,7 +822,7 @@
                       }}
                     />
                   </div>
-                ) : isServing ? (  // <-- เพิ่มเงื่อนไข isServing
+                ) : isServing ? ( // <-- เพิ่มเงื่อนไข isServing
                   <div className="flex flex-col items-center pour-img">
                     <img
                       src="/simulator/เทกาแฟออก.png"
@@ -834,12 +856,36 @@
                     <motion.div
                       key={item.id}
                       className={`workspace-item p-4 rounded 
-                        ${item.state === "ready-to-grind" && !isGrinding ? "cursor-pointer" : ""}
-                        ${item.id === "kettle" && isPouring ? "text-blue-500" : ""}
-                        ${item.state === "ready-to-drip" ? "cursor-pointer bg-yellow-200" : ""}
-                        ${item.state === "ready-to-pour-out" ? "cursor-pointer" : ""}
-                        ${item.state === "ready-to-brew" ? "cursor-pointer bg-orange-300" : ""}
-                        ${item.state === "ready-to-serve" ? "cursor-pointer bg-purple-300" : ""}
+                        ${
+                          item.state === "ready-to-grind" && !isGrinding
+                            ? "cursor-pointer"
+                            : ""
+                        }
+                        ${
+                          item.id === "kettle" && isPouring
+                            ? "text-blue-500"
+                            : ""
+                        }
+                        ${
+                          item.state === "ready-to-drip"
+                            ? "cursor-pointer bg-yellow-200"
+                            : ""
+                        }
+                        ${
+                          item.state === "ready-to-pour-out"
+                            ? "cursor-pointer"
+                            : ""
+                        }
+                        ${
+                          item.state === "ready-to-brew"
+                            ? "cursor-pointer bg-orange-300"
+                            : ""
+                        }
+                        ${
+                          item.state === "ready-to-serve"
+                            ? "cursor-pointer bg-purple-300"
+                            : ""
+                        }
                       `}
                       onClick={
                         item.state === "ready-to-grind" && !isGrinding
@@ -854,13 +900,21 @@
                           ? handleServe
                           : undefined
                       }
-                      animate={item.id === "grinder" && isGround ? { y: [-5, 5, 0] } : {}}
-                      transition={{ duration: 0.3, repeat: isGrinding ? Infinity : 0, repeatType: "reverse" }}
+                      animate={
+                        item.id === "grinder" && isGround
+                          ? { y: [-5, 5, 0] }
+                          : {}
+                      }
+                      transition={{
+                        duration: 0.3,
+                        repeat: isGrinding ? Infinity : 0,
+                        repeatType: "reverse",
+                      }}
                     >
                       <img
                         src={getImageByState(item)}
                         alt={item.name}
-                        className="workspace-img" 
+                        className="workspace-img"
                       />
                     </motion.div>
                   ))
@@ -871,12 +925,16 @@
             {/* Right Area: Step List (สำหรับเดสก์ท็อปเท่านั้น) */}
             <div className="right-area">
               <button
-                onClick={toggleBackgroundMusic}  // ฟังก์ชันเปิด/ปิดเสียง
+                onClick={toggleBackgroundMusic} // ฟังก์ชันเปิด/ปิดเสียง
                 className="bg-gray-600 bg-orange-300 hover:bg-red-400 text-white font-semibold px-3 py-1 rounded-full shadow-lg transition-all duration-300 mb-2"
               >
                 {/* ใช้รูปแทนข้อความ */}
                 <img
-                  src={isMusicPlaying ? "/simulator/music-sign.png" : "/simulator/mute.png"}
+                  src={
+                    isMusicPlaying
+                      ? "/simulator/music-sign.png"
+                      : "/simulator/mute.png"
+                  }
                   alt={isMusicPlaying ? "mute icon" : "music icon"}
                   className="w-6 h-6 object-contain"
                 />
@@ -911,9 +969,9 @@
                     onClick={() => {
                       if (currentStep > 0) {
                         const oldStep = currentStep;
-                        const newStep = oldStep - 1;  // ขั้นตอนที่จะย้อนกลับไป
-                        const stepIdToRemove = steps[oldStep].id;      // ขั้นตอนที่กำลังออก
-                        const arrivingStepId = steps[newStep].id;      // ขั้นตอนที่ย้อนกลับไป
+                        const newStep = oldStep - 1; // ขั้นตอนที่จะย้อนกลับไป
+                        const stepIdToRemove = steps[oldStep].id; // ขั้นตอนที่กำลังออก
+                        const arrivingStepId = steps[newStep].id; // ขั้นตอนที่ย้อนกลับไป
 
                         // ลดขั้นตอน
                         setCurrentStep(newStep);
@@ -923,7 +981,10 @@
                         // เอาขั้นตอนที่กำลังออก (stepIdToRemove) และขั้นตอนที่ไปถึง (arrivingStepId) ออกจาก completedSteps
                         // เพื่อให้ต้องทำใหม่ทั้งสองขั้น
                         setCompletedSteps((prev) =>
-                          prev.filter((id) => id !== stepIdToRemove && id !== arrivingStepId)
+                          prev.filter(
+                            (id) =>
+                              id !== stepIdToRemove && id !== arrivingStepId
+                          )
                         );
 
                         // ตรวจสอบการย้อนกลับในกรณีที่ย้อนกลับจากขั้นตอนสุดท้ายหรือ QTE
@@ -933,15 +994,21 @@
                           setQteCount(0);
                           setIsGifPlaying(false);
                           setIsReadyToServe(false);
-                          setDripImage("/simulator/เครื่องดริปที่ล้างกระดาษกรอกแล้วและใส่กาแฟบด.png");
-                          setMessage("กลับมาที่ขั้นตอน 3: ดริปกาแฟ (QTE) อีกครั้ง!");
+                          setDripImage(
+                            "/simulator/เครื่องดริปที่ล้างกระดาษกรอกแล้วและใส่กาแฟบด.png"
+                          );
+                          setMessage(
+                            "กลับมาที่ขั้นตอน 3: ดริปกาแฟ (QTE) อีกครั้ง!"
+                          );
                         } else if (oldStep === 2 && newStep === 1) {
                           // ปิด QTE
                           setQteActive(false);
                           setQteCount(0);
                           setIsGifPlaying(false);
                           setIsReadyToServe(false);
-                          setDripImage("/simulator/เครื่องดริปที่ล้างกระดาษกรอกแล้วและใส่กาแฟบด.png");
+                          setDripImage(
+                            "/simulator/เครื่องดริปที่ล้างกระดาษกรอกแล้วและใส่กาแฟบด.png"
+                          );
                           setMessage("กลับมาที่ขั้นตอน 2: เตรียมเครื่องดริป");
                         }
 
@@ -949,14 +1016,18 @@
                         if (newStep === 0) {
                           // นอกจากรีเซ็ต state ของกาแฟบดแล้ว
                           // เอา "grind" ออกจาก completedSteps ด้วย (เผื่อมีค้างอยู่)
-                          setCompletedSteps((prev) => prev.filter((id) => id !== "grind"));
+                          setCompletedSteps((prev) =>
+                            prev.filter((id) => id !== "grind")
+                          );
                           setSteps((prevSteps) =>
                             prevSteps.map((step) =>
                               step.id === "grind"
                                 ? {
                                     ...step,
                                     equipment: step.equipment.map((equip) =>
-                                      equip.id === "ground-coffee" ? { ...equip, state: "hidden" } : equip
+                                      equip.id === "ground-coffee"
+                                        ? { ...equip, state: "hidden" }
+                                        : equip
                                     ),
                                   }
                                 : step
@@ -976,13 +1047,17 @@
 
         {/* Footer: Subtitle */}
         <footer className="footer-subtitle">
-          <p className="
+          <p
+            className="
             text-base     /* default มือถือเล็ก ๆ */
             font-bold
             sm:text-lg    /* ≥640px */
             md:text-xl    /* ≥768px */
             lg:text-2xl   /* ≥1024px */
-          ">{subtitle}</p>
+          "
+          >
+            {subtitle}
+          </p>
         </footer>
       </div>
     );
