@@ -5,8 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import "./assets/css/SignUp.css";
-import { auth } from './firebase/firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth, db } from './firebase/firebase';
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -41,7 +42,29 @@ function Login() {
                 }
             })
             .catch(err => console.log(err));
-    }
+    };
+
+    const loginWithGoogle = async () => {
+        const provider = new GoogleAuthProvider();
+        try {
+            // เข้าสู่ระบบด้วย Google ผ่าน popup
+            const result = await signInWithPopup(auth, provider);
+            console.log("Logged in as:", result.user.email);
+
+            // ส่งข้อมูลผู้ใช้ไปยัง Firestore ใน collection "users"
+            await setDoc(doc(db, "users", result.user.uid), {
+                email: result.user.email,
+                displayName: result.user.displayName,
+                photoURL: result.user.photoURL,
+                lastLogin: new Date()
+            }, { merge: true });
+
+            navigate('/');
+        } catch (error) {
+            console.error("Google login error:", error);
+            setErrorMessage("เกิดข้อผิดพลาดในการเข้าสู่ระบบด้วย Google");
+        }
+    };
 
     return (
       <div
@@ -56,7 +79,7 @@ function Login() {
         <div className="row w-100">
           <div className="col-12 col-md-6 d-flex flex-column justify-content-center align-items-center">
             <h2 className="text-white mb-5 text-3xl font-bold">Login</h2>
-            <form onSubmit={handleSubmit} className="w-75 ">
+            <form onSubmit={handleSubmit} className="w-75">
               <div className="form-group mb-3">
                 <input
                   type="email"
@@ -72,10 +95,10 @@ function Login() {
                 />
               </div>
               <style>{`
-                                .form-control::placeholder {
-                                    color: white; /* กำหนดสีของ placeholder เป็นสีขาว */
-                                }
-                            `}</style>
+                .form-control::placeholder {
+                  color: white; /* กำหนดสีของ placeholder เป็นสีขาว */
+                }
+              `}</style>
               <div className="form-group mb-4">
                 <input
                   type="password"
@@ -93,25 +116,26 @@ function Login() {
               {errorMessage && (
                 <div className="alert alert-danger">{errorMessage}</div>
               )}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
+              {/* ปุ่มเข้าสู่ระบบด้วย Google และปุ่ม Login อยู่ในแถวเดียวกัน */}
+              <div className="d-flex justify-content-center mb-3" style={{ gap: "1rem" }}>
+                <button 
+                  type="button"
+                  className="btn btn-danger rounded-pill px-4 w-50"
+                  onClick={loginWithGoogle}
+                >
+                  Login Google
+                </button>
                 <button
                   type="submit"
-                  className="buttonHover btn btn-light btn-block rounded-pill w-25 "
+                  className="buttonHover btn btn-light rounded-pill px-4 w-50"
                 >
-                  {" "}
                   Login
                 </button>
               </div>
             </form>
-            <p className="text-white mt-4 mb-1 ">
-              You don`&apos;`t have an account yet.{" "}
-              <Link to="/register" className="text-light ">
+            <p className="text-white mt-4 mb-1">
+              You don’t have an account yet.{" "}
+              <Link to="/register" className="text-light">
                 Register
               </Link>
             </p>
