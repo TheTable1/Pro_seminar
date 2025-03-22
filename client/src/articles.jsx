@@ -24,7 +24,9 @@ function ArticlesPage() {
   }, []);
 
   const filteredArticles = articles.filter((article) => {
-    const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = article.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
     const matchesFilter =
       activeFilter === "บทความทั้งหมด" ||
       (article.category && article.category.includes(activeFilter));
@@ -51,6 +53,13 @@ function ArticlesPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [selectedArticle, userId]);
 
+  // เมื่อคลิกเลือกบทความแล้วให้เลื่อนขึ้นไปบนสุดของเนื้อหาบทความ
+  useEffect(() => {
+    if (selectedArticle) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [selectedArticle]);
+
   const handleFilterChange = (filter) => {
     setActiveFilter(filter);
   };
@@ -76,34 +85,56 @@ function ArticlesPage() {
             >
               กลับ
             </button>
-            <h2 className="text-center text-xl font-bold mb-4 bg-brown text-beige py-2">
+            <h2 className="text-center text-xl font-bold mb-4 bg-brown text-beige py-2 px-1">
               {selectedArticle.title}
             </h2>
+            <h2 className="text-md py-2 px-1">• {selectedArticle.post_date}</h2>
+            <h2 className="text-md py-2 px-1">• {selectedArticle.author}</h2>
             {selectedArticle.content?.map((content, index) => {
               if (content.type === "paragraph") {
-                return <p key={index} className="text-gray-700 text-base leading-7 mb-4">{content.text}</p>;
+                return (
+                  <p
+                    key={index}
+                    className="text-gray-700 text-base leading-7 mb-4 px-1 md:!px-16 lg:!px-36 whitespace-pre-line"
+                  >
+                    {content.text}
+                  </p>
+                );
               }
               if (content.type === "image") {
                 return (
                   <img
                     key={index}
-                    className="mx-auto w-1/3 h-auto mb-6 rounded-lg"
+                    className="mx-auto w-3/3 sm:w-2/3 md:w-1/3 h-auto mb-6 rounded-lg"
                     src={content.src}
                     alt={content.alt}
                   />
                 );
               }
               if (content.type === "subheading") {
-                return <h3 key={index} className="text-lg font-semibold mb-4">{content.text}</h3>;
+                return (
+                  <h3
+                    key={index}
+                    className="text-lg font-semibold mb-3 px-1 md:!px-16 lg:!px-36"
+                  >
+                    {content.text}
+                  </h3>
+                );
               }
               return null;
             })}
+            <h5 className="px-1 md:!px-16 lg:!px-36 mt-24">
+              ที่มา :{" "}
+              <a href={selectedArticle.related_articles}>
+                {selectedArticle.related_articles}
+              </a>
+            </h5>
           </div>
         ) : (
-          <section className="bg-white rounded-lg shadow-md transition duration-200 ease-in-out hover:shadow-lg">
-            <div className="p-2 md:p-3 lg:p-5">
+          <section className="bg-white rounded-lg shadow-md transition duration-200 ease-in-out hover:shadow-lg pb-4">
+            <div className="p-2 md:p-3 lg:p-5 ">
               {/* Search Bar */}
-              <div className="mb-6 flex justify-center">
+              <div className="mb-6 flex justify-center ">
                 <input
                   type="text"
                   placeholder="ค้นหาบทความ..."
@@ -115,7 +146,12 @@ function ArticlesPage() {
 
               {/* Filter Buttons */}
               <div className="flex flex-wrap justify-center gap-2 md:gap-4 lg:gap-6 mb-6">
-                {["บทความทั้งหมด", "ความรู้เบื้องต้น", "เทคนิคชงกาแฟ", "เคล็ดลับการเลือกซื้อ"].map((filter) => (
+                {[
+                  "บทความทั้งหมด",
+                  "ความรู้เบื้องต้น",
+                  "เทคนิคชงกาแฟ",
+                  "เคล็ดลับการเลือกซื้อ",
+                ].map((filter) => (
                   <button
                     key={filter}
                     className={`px-4 py-2 rounded-full text-sm md:text-base transition duration-200 ease-in-out ${
@@ -135,7 +171,7 @@ function ArticlesPage() {
                 {filteredArticles.map((article) => (
                   <div
                     key={article.id}
-                    className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300 cursor-pointer"
+                    className="bg-brown-light rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300 cursor-pointer"
                     onClick={() => handleArticleClick(article)}
                   >
                     <div className="p-4">
@@ -144,7 +180,7 @@ function ArticlesPage() {
                         src={article.content[0]?.src || ""}
                         alt={article.title}
                       />
-                      <h3 className="text-dark-brown text-lg font-bold mb-2">
+                      <h3 className="text-dark-brown text-md font-bold mb-2">
                         {article.title}
                       </h3>
                       <p className="text-gray-600 text-sm line-clamp-2">

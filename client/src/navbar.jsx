@@ -42,6 +42,7 @@ export default function Navbar() {
     await signOut(auth);
     setUser(null);
     setShowProfileMenu(false);
+    navigate("/login");
   };
 
   // เช็คว่า path ปัจจุบันเป็นของหมวดความรู้กาแฟหรือไม่
@@ -95,7 +96,7 @@ export default function Navbar() {
                 คลังความรู้กาแฟ
               </span>
               {showKnowledgeMenu && (
-                <ul className="absolute left-0 z-10 bg-brown shadow-lg mt-2 rounded-md w-48 text-beige text-sm transition duration-300">
+                <ul className="absolute left-0 z-10 bg-brown shadow-lg mt-2 rounded-md w-60 text-beige text-sm transition duration-300">
                   {/* 
                     เปลี่ยนจาก:
                       <li className="p-3 hover:bg-dark-brown transition duration-200">
@@ -114,56 +115,100 @@ export default function Navbar() {
                   <li>
                     <Link
                       to="/history"
-                      className="block p-3 hover:bg-dark-brown transition duration-200"
+                      className="flex items-center p-3 hover:bg-dark-brown transition duration-200"
                     >
-                      ประวัติศาสตร์กาแฟ
+                      {/* ไอคอนแบบรูปภาพ */}
+                      <img
+                        src="nav/icons8-history-80.png"
+                        alt="history icon"
+                        className="w-6 h-6 mr-2"
+                      />
+                      {/* ข้อความ */}
+                      <span>ประวัติศาสตร์กาแฟ</span>
                     </Link>
                   </li>
+
                   <li>
                     <Link
                       to="/geneCoffee"
-                      className="block p-3 hover:bg-dark-brown transition duration-200"
+                      className="flex items-center p-3 hover:bg-dark-brown transition duration-200"
                     >
+                      {/* ไอคอนแบบรูปภาพ */}
+                      <img
+                        src="nav/icons8-coffee-beans-48 (2).png"
+                        alt="history icon"
+                        className="w-6 h-6 mr-2"
+                      />
                       สายพันธุ์กาแฟ
                     </Link>
                   </li>
                   <li>
                     <Link
                       to="/roasting"
-                      className="block p-3 hover:bg-dark-brown transition duration-200"
+                      className="flex items-center p-3 hover:bg-dark-brown transition duration-200"
                     >
+                      {/* ไอคอนแบบรูปภาพ */}
+                      <img
+                        src="nav/icons8-coffee-bag-50.png"
+                        alt="history icon"
+                        className="w-6 h-6 mr-2"
+                      />
                       ระดับของการคั่วกาแฟ
                     </Link>
                   </li>
                   <li>
                     <Link
                       to="/extraction"
-                      className="block p-3 hover:bg-dark-brown transition duration-200"
+                      className="flex items-center p-3 hover:bg-dark-brown transition duration-200"
                     >
+                      {/* ไอคอนแบบรูปภาพ */}
+                      <img
+                        src="nav/icons8-vietnamese-coffee-50.png"
+                        alt="history icon"
+                        className="w-6 h-6 mr-2"
+                      />
                       เทคนิคการสกัดกาแฟ
                     </Link>
                   </li>
                   <li>
                     <Link
                       to="/process"
-                      className="block p-3 hover:bg-dark-brown transition duration-200"
+                      className="flex items-center p-3 hover:bg-dark-brown transition duration-200"
                     >
+                      {/* ไอคอนแบบรูปภาพ */}
+                      <img
+                        src="nav/icons8-coffee-cup-50.png"
+                        alt="history icon"
+                        className="w-6 h-6 mr-2"
+                      />
                       กระบวนการผลิตกาแฟ
                     </Link>
                   </li>
                   <li>
                     <Link
                       to="/worldCoffee"
-                      className="block p-3 hover:bg-dark-brown transition duration-200"
+                      className="flex items-center p-3 hover:bg-dark-brown transition duration-200"
                     >
+                      {/* ไอคอนแบบรูปภาพ */}
+                      <img
+                        src="nav/icons8-map-80 (1).png"
+                        alt="history icon"
+                        className="w-6 h-6 mr-2"
+                      />
                       แผนที่แหล่งผลิตกาแฟโลก
                     </Link>
                   </li>
                   <li>
                     <Link
                       to="/articles"
-                      className="block p-3 hover:bg-dark-brown transition duration-200"
+                      className="flex items-center p-3 hover:bg-dark-brown transition duration-200"
                     >
+                      {/* ไอคอนแบบรูปภาพ */}
+                      <img
+                        src="nav/icons8-article-50.png"
+                        alt="history icon"
+                        className="w-6 h-6 mr-2"
+                      />
                       บทความน่ารู้
                     </Link>
                   </li>
