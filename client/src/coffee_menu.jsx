@@ -14,13 +14,22 @@ function CoffeeBeans() {
   const location = useLocation();
   const menuItems = MenuItems;
 
-  // ตรวจสอบว่ามี state จาก Suggestion ส่งมาหรือไม่
+  // ฟังก์ชั่นสำหรับเลื่อนหน้าไปตำแหน่งบนสุดโดยปรับ offset
+  const scrollToTopWithOffset = () => {
+    if (mainRef.current) {
+      // สมมุติว่า Navbar สูงประมาณ 70px (ปรับค่าได้ตามความเหมาะสม)
+      const offset = -70;
+      const elementPosition =
+        mainRef.current.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = elementPosition + offset;
+      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+    }
+  };
+
   useEffect(() => {
     if (location.state) {
       setSelectedItem(location.state);
-      if (mainRef.current) {
-        mainRef.current.scrollIntoView({ behavior: "smooth" });
-      }
+      scrollToTopWithOffset();
     }
   }, [location.state]);
 
@@ -39,23 +48,18 @@ function CoffeeBeans() {
 
   const handleItemClick = (item) => {
     setSelectedItem(item);
-    if (mainRef.current) {
-      mainRef.current.scrollIntoView({ behavior: "smooth" });
-    }
+    scrollToTopWithOffset();
   };
 
   const handleBack = () => {
     setSelectedItem(null);
-    if (mainRef.current) {
-      mainRef.current.scrollIntoView({ behavior: "smooth" });
-    }
+    scrollToTopWithOffset();
   };
 
   const handleTryIt = () => {
     navigate("/simulator", { state: selectedItem });
   };
 
-  // ค้นหาเมนูตามเงื่อนไข activeFilter และ searchTerm
   const filteredItems = menuItems.filter((item) => {
     const matchesFilter =
       activeFilter === "กาแฟทั้งหมด" ||
