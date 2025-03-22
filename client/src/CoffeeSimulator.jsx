@@ -676,7 +676,7 @@
 
             {/* Center Area: Workspace */}
             <div
-              className="center-area w-40 sm:w-96 md:w-1/2 workspace-area flex-1"
+              className="center-area w-64 sm:w-96 md:w-1/2 workspace-area flex-1"
               ref={workspaceRef}
             >
               <h3 className="title m-0">
