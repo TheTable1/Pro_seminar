@@ -30,6 +30,9 @@
     const [menuId, setMenuId] = useState(selectedMenu || "espresso");
     const [userId, setUserId] = useState(propUserId || null);
     const [subtitle, setSubtitle] = useState("");
+    const [isMusicPlaying, setIsMusicPlaying] = useState(true);
+    const [isServing, setIsServing] = useState(false);
+    const [isDiscardingWater, setIsDiscardingWater] = useState(false);
 
     const navigate = useNavigate();
     const workspaceRef = useRef(null);
@@ -131,24 +134,34 @@
     }, [propUserId]);
 
     // ---------- เล่นเพลงพื้นหลัง ----------
+    const backgroundMusicRef = useRef(null);
     useEffect(() => {
-      const backgroundMusic = new Audio("/simulator/cafe-music.mp3");
-      backgroundMusic.loop = true;
-      backgroundMusic.volume = 0.2;
-      backgroundMusic.play().catch((error) => console.log("Autoplay failed:", error));
-      return () => {
-        backgroundMusic.pause();
-        backgroundMusic.currentTime = 0;
-      };
-    }, []);
-
-    const startBackgroundMusic = () => {
-      if (!window.backgroundMusic) {
-        window.backgroundMusic = new Audio("/simulator/cafe-music.mp3");
-        window.backgroundMusic.loop = true;
-        window.backgroundMusic.volume = 0.5;
+      if (!backgroundMusicRef.current) {
+        backgroundMusicRef.current = new Audio("/simulator/cafe-music.mp3");
+        backgroundMusicRef.current.loop = true;
+        backgroundMusicRef.current.volume = 0.2;
       }
-      window.backgroundMusic.play();
+      backgroundMusicRef.current.play().catch((error) =>
+        console.log("Autoplay failed:", error)
+      );
+      
+      return () => {
+        backgroundMusicRef.current.pause();
+        backgroundMusicRef.current.currentTime = 0;
+      };
+    }, []);    
+
+    // ฟังก์ชัน toggleBackgroundMusic
+    const toggleBackgroundMusic = () => {
+      if (!backgroundMusicRef.current) return;
+      if (isMusicPlaying) {
+        backgroundMusicRef.current.pause();
+      } else {
+        backgroundMusicRef.current.play().catch((err) =>
+          console.log("Play error:", err)
+        );
+      }
+      setIsMusicPlaying(!isMusicPlaying);
     };
 
   // ---------- อัปเดตข้อความ (Subtitle) ตามขั้นตอนและ QTE ----------
@@ -211,9 +224,14 @@
         info.point.x <= workspaceRect.right &&
         info.point.y >= workspaceRect.top &&
         info.point.y <= workspaceRect.bottom;
+      
+      console.log("handleDragEnd: isInWorkspace =", isInWorkspace, "for item =", item);
+    
       if (isInWorkspace) {
         setWorkspaceItems((current) => {
+          console.log("Before processing, workspaceItems =", current);
           let updatedItems = [...current];
+          
           // ----- ขั้นตอนที่ 1: บดกาแฟ -----
           if (currentStep === 0) {
             if (current.some((i) => i.id === item.id)) {
@@ -254,6 +272,7 @@
             setMessage("กรุณาเพิ่มอุปกรณ์ตามลำดับ! เริ่มจากเครื่องบดก่อนจากนั้นเป็นเมล็ดกาแฟ");
             return current;
           }
+          
           // ----- ขั้นตอนที่ 2: เตรียมเครื่องดริป -----
           if (currentStep === 1) {
             if (current.some((i) => i.id === item.id)) {
@@ -283,23 +302,25 @@
             if (item.id === "kettle" && current.some((i) => i.state === "paper-filter")) {
               setMessage("กำลังล้างกระดาษกรอง...");
               setIsPouring(true);
+    
               const dripSound = new Audio("/simulator/drip-sound.mp3");
               dripSound.play();
+    
               setTimeout(() => {
                 setIsPouring(false);
-                const updatedItems = current.map((i) =>
+                const updatedItemsAfter = current.map((i) =>
                   i.state === "paper-filter"
                     ? { ...i, name: "โถรองดริปพร้อมสำหรับเทน้ำ", state: "ready-to-pour-out" }
                     : i
                 );
-                setWorkspaceItems(updatedItems);
+                setWorkspaceItems(updatedItemsAfter);
                 setMessage("ล้างกระดาษกรองเรียบร้อยแล้ว! กดที่เครื่องดริปเพื่อเทน้ำออกจากโถ");
+                console.log("Updated workspaceItems after cleaning =", updatedItemsAfter);
               }, 3000);
               return current;
-            }
-            setMessage("กรุณาเพิ่มอุปกรณ์ตามลำดับ! เริ่มจากโถรองดริปก่อน");
-            return current;
+            }          
           }
+          
           // ----- ขั้นตอนที่ 3: ดริปกาแฟ -----
           if (currentStep === 2) {
             if (current.some((i) => i.id === item.id)) {
@@ -328,6 +349,7 @@
             setMessage("กรุณาเพิ่มอุปกรณ์ตามลำดับ! เริ่มจากผงกาแฟบดก่อน");
             return current;
           }
+          
           return current;
         });
       } else {
@@ -341,9 +363,15 @@
         workspaceItems.some((item) => item.state === "ready-to-pour-out")
       ) {
         setMessage("กำลังเทน้ำออกจากโถรองดริป...");
+        setIsDiscardingWater(true); // บอกว่ากำลังเทน้ำทิ้ง
+    
         const pourSound = new Audio("/simulator/pour-sound.mp3");
         pourSound.play();
+    
         setTimeout(() => {
+          // เทน้ำออกเสร็จ
+          setIsDiscardingWater(false);
+    
           const updatedItems = workspaceItems.map((item) =>
             item.state === "ready-to-pour-out"
               ? { ...item, name: "โถรองดริปที่มีดริปเปอร์และกระดาษกรอง", state: "ready-to-drip" }
@@ -356,65 +384,61 @@
       } else {
         setMessage("คุณต้องล้างกระดาษกรองก่อนที่จะเทน้ำออก");
       }
-    };
+    };    
 
     const handleServe = () => {
       setMessage("กำลังเทกาแฟลงแก้ว...");
+      setIsServing(true); // บอกว่ากำลังเทกาแฟ
+      const pourSound = new Audio("/simulator/pour-sound.mp3");
+      pourSound.play();
       setTimeout(() => {
+        // ลบอุปกรณ์ "ready-to-serve" ออกจาก workspace
         setWorkspaceItems((current) =>
           current.filter((item) => item.state !== "ready-to-serve")
         );
+        // ไปยังขั้นตอนถัดไป
         handleNextStep();
+        // เปลี่ยนข้อความ
         setMessage("กาแฟพร้อมเสิร์ฟ! ไปยังขั้นตอนสุดท้าย");
-      }, 1000);
-    };
-
-    useEffect(() => {
-      if (qteCount > 0 && qteCount < 3) {
-        setMessage(`ดริปสำเร็จ ${qteCount}/3 ครั้ง`);
-        const timeout = setTimeout(() => {
-          setMessage("");
-        }, 3000);
-        return () => clearTimeout(timeout);
-      }
-      if (qteCount === 3) {
-        setQteActive(false);
-        setIsReadyToServe(true);
-        setQteCount(0);
-        setMessage("ดริปกาแฟเสร็จสิ้น! โปรดกดที่โถเพื่อเทกาแฟใส่แก้ว");
-        const timeout = setTimeout(() => {
-          setMessage("");
-        }, 3000);
-        setWorkspaceItems((current) =>
-          current.map((item) =>
-            item.id === "ground-coffee" || item.id === "kettle"
-              ? { ...item, state: "ready-to-serve" }
-              : item
-          )
-        );
-        handleNextStep();
-        return () => clearTimeout(timeout);
-      }
-    }, [qteCount]);
-
+        // เลิกสถานะกำลังเทกาแฟ
+        setIsServing(false);
+      }, 3000);
+    };    
+    
     const handleQTEProgress = () => {
       if (isGifPlaying) return;
+      // ตรวจสอบตำแหน่ง pointer ก่อน
+      if (pointerPosition < 40 || pointerPosition > 60) {
+        // กดผิดจังหวะ: แสดงข้อความแจ้งเตือนและแสดงภาพ static
+        setDripImage("/simulator/เครื่องดริปที่ล้างกระดาษกรอกแล้วและใส่กาแฟบด.png");
+        setTimeout(() => {
+          // หลังจาก 3 วินาทีให้รีเซ็ตข้อความกลับไปแสดงคำแนะนำสำหรับ QTE อีกครั้ง
+          setMessage("ดริปพลาด! กรุณากดให้ตรงจังหวะ");
+        }, 3000);
+        return; // ไม่ทำงานต่อ
+      }
+      
+      // ถ้า pointer อยู่ใน target zone ให้เล่น effect (gif กับเสียง)
       setIsGifPlaying(true);
-      setDripImage("/simulator/โถรองดริปพร้อมดริปกาแฟ.png");
+      setDripImage("/simulator/ดริปกาแฟ.gif");
       const dripSound = new Audio("/simulator/drip-sound.mp3");
       dripSound.play();
       setTimeout(() => {
         setIsGifPlaying(false);
         setDripImage("/simulator/เครื่องดริปที่ล้างกระดาษกรอกแล้วและใส่กาแฟบด.png");
-        setQteCount((prev) => prev + 1);
-        if (qteCount + 1 === 3) {
-          setDripImage("/simulator/เครื่องดริปที่ล้างกระดาษกรอกแล้วและใส่กาแฟบด.png");
-          setQteActive(false);
-          setIsReadyToServe(true);
-          setMessage("QTE เสร็จสิ้น! โปรดเทกาแฟใส่แก้ว");
-        }
+        setQteCount((prev) => {
+          const newCount = prev + 1;
+          if (newCount === 3) {
+            setQteActive(false);
+            setIsReadyToServe(true);
+            setMessage("QTE เสร็จสิ้น! โปรดเทกาแฟใส่แก้ว");
+          } else {
+            setMessage(`ดริปสำเร็จ ${newCount}/3 ครั้ง`);
+          }
+          return newCount;
+        });
       }, 3000);
-    };
+    };    
 
     const handleGrind = () => {
       if (workspaceItems.some((item) => item.state === "ready-to-grind")) {
@@ -464,6 +488,11 @@
         if (item.state === "ready-to-grind") return "/simulator/เครื่องบด(มีเมล็ด).png";
         return "/simulator/เครื่องบด(ไม่มีเมล็ด).png";
       }
+      if (item.id === "kettle") {
+        console.log("getImageByState: isPouring =", isPouring, "item.state =", item.state);
+        // ทดสอบบังคับให้ return gif ถ้าเงื่อนไขไหนตรง
+        return "/simulator/ล้างที่กรอง.gif";
+      }
       const imageMap = {
         "เครื่องบด": "/simulator/เครื่องบด(ไม่มีเมล็ด).png",
         "เครื่องบดที่มีเมล็ดกาแฟ": "/simulator/เครื่องบด(มีเมล็ด).png",
@@ -474,7 +503,8 @@
         "โถรองดริปพร้อมสำหรับเทน้ำ": "/simulator/ล้างกระดาษกรอก.png",
         "โถรองดริปที่มีดริปเปอร์และกระดาษกรองที่ล้างกระดาษแล้ว(พร้อมใส่กาแฟบด)":
           "/simulator/เครื่องดริป(ล้างกระดาษแล้ว).png",
-        "โถรองดริปที่มีผงกาแฟ": "/simulator/เครื่องดริปที่ล้างกระดาษกรอกแล้วและใส่กาแฟบด.png",
+        "โถรองดริปที่มีผงกาแฟ":
+          "/simulator/เครื่องดริปที่ล้างกระดาษกรอกแล้วและใส่กาแฟบด.png",
         "โถรองดริปพร้อมดริปกาแฟ": "/simulator/โถรองดริปพร้อมดริปกาแฟ.png",
         "เทกาแฟออกจากโถรอง": "/simulator/ดริปกาแฟเสร็จ.png",
       };
@@ -500,6 +530,8 @@
         setWorkspaceItems([]);
       }
       setCurrentStep((prev) => prev + 1);
+
+      console.log("ขั้นตอนที่ :"+currentStep);
     };
 
     const handleFinishMenu = async () => {
@@ -568,26 +600,14 @@
     }
 
     return (
-      <div className="relative" style={{ height: "90vh", width: "100%" }}>
+      <div className="relative bg-[url('../public/background.jpg')] bg-cover bg-center bg-white/85 bg-blend-overlay" style={{ height: "90vh", width: "100%" }}>
         <Navbar />
-        {/* 🔹 Background Blur Layer */}
-        <div className="fixed inset-0 bg-cover bg-center"
-          style={{
-          backgroundImage: "url('/simulator/bs-sim.jpg')", // เปลี่ยนเป็น path ของพื้นหลัง
-          backgroundAttachment: "fixed", // ทำให้พื้นหลังไม่เลื่อน
-          backgroundSize: "cover", // ให้ภาพคลุมพื้นที่ทั้งหมด
-          backgroundPosition: "center", // จัดกึ่งกลางภาพ
-          filter: "blur(8px)", // ปรับระดับความเบลอ
-          zIndex: "-1", // ทำให้เป็นพื้นหลัง
-          }}
-          ></div>
-
         {/* ส่วนเนื้อหาหลักแบ่งเป็น 2 ส่วน: พื้นที่เนื้อหา (90%) กับ Footer (10%) */}
         <div className="simulator-container">
-          <div className="sim-content desktop-layout">
+          <div className="sim-content desktop-layout flex items-start p-2">
             {/* Left Area: Equipment List */}
             <div className="left-area equipment-area">
-              <h3 className="title">อุปกรณ์ที่ใช้ในเมนูนี้</h3>
+              <h3 className="title m-0">อุปกรณ์ที่ใช้ในเมนูนี้</h3>
               <div
                 className="equipment-grid"
                 style={{
@@ -616,7 +636,7 @@
                     onDragEnd={(event, info) => handleDragEnd(equipment, event, info)}
                     style={{
                       width: "100%",
-                      height: "160px",
+                      height: "140px",
                       transform: `scale(${scaleFactor})`,
                       transformOrigin: "top left",
                     }}
@@ -641,11 +661,11 @@
             </div>
 
             {/* Center Area: Workspace */}
-            <div className="center-area workspace-area" ref={workspaceRef}>
-              <h3 className="title">
+            <div className="center-area workspace-area flex-1" ref={workspaceRef}>
+              <h3 className="title m-0">
                 พื้นที่สำหรับนำอุปกรณ์ต่างๆ มาดำเนินการ
               </h3>
-              <div className="flex-1 flex flex-col items-center justify-start">
+              <div className="flex-1 flex flex-col items-center mt-4">
                 {currentStep === 3 ? (
                   <div className="flex flex-col items-center">
                     <img
@@ -653,20 +673,51 @@
                       alt={`เมนู ${menuId}`}
                       className="final-img"
                     />
-                    <button
-                      onClick={handleRestart}
-                      className="mt-2 text-white py-2 px-4 bg-blue-700 rounded shadow hover:bg-blue-800"
-                    >
-                      เริ่มต้นใหม่
-                    </button>
-                    {currentStep === steps.length - 1 && (
+                    {/* 🔹 กล่องครอบปุ่มแบบแนวนอน */}
+                    <div className="mt-2 flex flex-row items-center gap-4">
                       <button
-                        onClick={handleFinishMenu}
-                        className="mt-4 text-white py-2 px-4 bg-green-600 rounded shadow hover:bg-green-700"
+                        onClick={handleRestart}
+                        className="text-white 
+                          py-2 px-4 
+                          bg-yellow-800
+                          font-semibold 
+                          rounded-full 
+                          shadow-md 
+                          hover:bg-yellow-900
+                          transition 
+                          transform 
+                          hover:scale-105 
+                          focus:outline-none 
+                          focus:ring-2 
+                          focus:ring-blue-500 
+                          focus:ring-offset-2"
                       >
-                        เสร็จสิ้น
+                        เริ่มต้นใหม่
                       </button>
-                    )}
+                      {currentStep === steps.length - 1 && (
+                        <button
+                          onClick={handleFinishMenu}
+                          className="
+                            text-white 
+                            py-2 px-4 
+                            bg-yellow-800 
+                            font-semibold 
+                            rounded-full 
+                            shadow-md 
+                            hover:bg-yellow-900
+                            transition 
+                            transform 
+                            hover:scale-105 
+                            focus:outline-none 
+                            focus:ring-2 
+                            focus:ring-blue-500 
+                            focus:ring-offset-2
+                          "
+                        >
+                          เสร็จสิ้น
+                        </button>
+                      )}
+                    </div>
                   </div>
                 ) : qteActive ? (
                   <div className="flex flex-col items-center" style={{ minHeight: "300px" }}>
@@ -678,18 +729,18 @@
                       style={{
                         width: "300px",
                         height: "350px",
-                        marginTop: "125px",
+                        marginTop: "25px",
                         objectFit: "contain",
                       }}
                     />
                     {/* Progress Bar */}
                     <div
                       className="progress-container relative mt-8"
-                      style={{ width: "300px", height: "10px" }}
+                      style={{ width: "300px", height: "7px" }}
                     >
-                      <div className="progress-bar bg-gray-300 w-full h-full relative overflow-hidden">
+                      <div className="progress-bar bg-gray-300 w-full h-full relative overflow-visible">
                         <div
-                          className="target-zone bg-green-500 absolute"
+                          className="target-zone bg-orange-600 absolute"
                           style={{
                             width: "20%",
                             height: "100%",
@@ -697,13 +748,17 @@
                             top: 0,
                           }}
                         />
-                        <div
-                          className="pointer bg-red-500 absolute"
+                        <img
+                          src="/simulator/เมล็ดกาแฟqte.png"
+                          alt="Pointer"
+                          className="absolute pointer-point"
                           style={{
-                            width: "2px",
-                            height: "100%",
+                            width: "80px",       // กำหนดความกว้างเป็น 20px (หรือมากกว่านี้ตามต้องการ)
+                            height: "80px",      // กำหนดความสูงเป็น 20px
                             left: `${pointerPosition}%`,
-                            top: 0,
+                            top: "50%",
+                            transform: "translate(-50%, -50%)", // เลื่อนให้อยู่กึ่งกลาง pointer
+                            zIndex: 9999, // เพิ่ม z-index สูง ๆ
                           }}
                         />
                       </div>
@@ -712,20 +767,65 @@
                     <button
                       onClick={handleQTEProgress}
                       disabled={isGifPlaying}
-                      className={`mt-4 bg-blue-500 text-white py-2 px-4 rounded ${
-                        isGifPlaying ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
+                      className={`mt-4 bg-amber-900 text-white py-2 px-4 rounded ${
+                        isGifPlaying ? "opacity-50 cursor-not-allowed" : "hover:bg-amber-950"
                       }`}
                     >
                       คลิกเพื่อดริป
                     </button>
+                  </div>
+                ) : isDiscardingWater ? (
+                  <div className="flex flex-col items-center pour-out">
+                    <img
+                      src="/simulator/เทน้ำทิ้ง.png"
+                      alt="กำลังเทน้ำทิ้ง"
+                      style={{
+                        width: "auto",
+                        height: "400px",
+                        marginTop: "25px",
+                        objectFit: "contain",
+                      }}
+                    />
+                  </div>
+                ) : currentStep === 1 && isPouring ? (
+                  // 🔸 ถ้าอยู่ในขั้นตอนที่ 2 และกำลังล้างกระดาษกรอง
+                  <div className="flex flex-col items-center pouring">
+                    <img
+                      src="/simulator/ล้างที่กรอง.gif"
+                      alt="กำลังล้างกระดาษกรอง"
+                      style={{
+                        width: "auto",
+                        height: "400px",
+                        objectFit: "contain",
+                      }}
+                    />
+                  </div>
+                ) : isServing ? (  // <-- เพิ่มเงื่อนไข isServing
+                  <div className="flex flex-col items-center pour-img">
+                    <img
+                      src="/simulator/เทกาแฟออก.png"
+                      alt="กำลังเทกาแฟ"
+                      style={{
+                        width: "auto",
+                        height: "400px",
+                        marginTop: "25px",
+                        objectFit: "contain",
+                      }}
+                    />
                   </div>
                 ) : isReadyToServe ? (
                   <div className="flex flex-col items-center">
                     <img
                       src="/simulator/ดริปกาแฟเสร็จ.png"
                       alt="เทกาแฟลงแก้ว"
-                      className="object-contain cursor-pointer"
+                      className="serve-image object-contain cursor-pointer"
                       onClick={handleServe}
+                      style={{
+                        width: "auto",
+                        height: "450px",
+                        marginTop: "25px",
+                        objectFit: "contain",
+                      }}
                     />
                   </div>
                 ) : (
@@ -770,43 +870,105 @@
 
             {/* Right Area: Step List (สำหรับเดสก์ท็อปเท่านั้น) */}
             <div className="right-area">
-              <h3 className="text-center font-semibold text-lg text-dark-brown">
-                รายการขั้นตอนต่างๆ
-              </h3>
-              <ul className="mt-4 list-none flex-grow text-dark-brown items-center">
-                {steps.map((step, index) => (
-                  <li
-                    key={step.id}
-                    className={`flex items-center mt-2 ${
-                      index === currentStep
-                        ? "font-bold text-yellow-950"
-                        : "text-gray-800"
-                    }`}
+              <button
+                onClick={toggleBackgroundMusic}  // ฟังก์ชันเปิด/ปิดเสียง
+                className="bg-gray-600 bg-orange-300 hover:bg-red-400 text-white font-semibold px-3 py-1 rounded-full shadow-lg transition-all duration-300 mb-2"
+              >
+                {/* ใช้รูปแทนข้อความ */}
+                <img
+                  src={isMusicPlaying ? "/simulator/music-sign.png" : "/simulator/mute.png"}
+                  alt={isMusicPlaying ? "mute icon" : "music icon"}
+                  className="w-6 h-6 object-contain"
+                />
+              </button>
+              <div className="right-item flex flex-col relative">
+                <h3 className="text-center font-semibold text-lg text-dark-brown m-0">
+                  รายการขั้นตอนต่างๆ
+                </h3>
+                <ul className="mt-4 list-none flex-grow text-dark-brown items-center">
+                  {steps.map((step, index) => (
+                    <li
+                      key={step.id}
+                      className={`flex items-center mt-2 ${
+                        index === currentStep
+                          ? "font-bold text-yellow-950"
+                          : "text-gray-800"
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        readOnly
+                        checked={completedSteps.includes(step.id)}
+                        className="mr-2 accent-yellow-950"
+                      />
+                      {step.name}
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-4">
+                  <button
+                    className="bg-yellow-900 text-white w-full py-2 rounded shadow hover:bg-yellow-950 disabled:opacity-50"
+                    onClick={() => {
+                      if (currentStep > 0) {
+                        const oldStep = currentStep;
+                        const newStep = oldStep - 1;  // ขั้นตอนที่จะย้อนกลับไป
+                        const stepIdToRemove = steps[oldStep].id;      // ขั้นตอนที่กำลังออก
+                        const arrivingStepId = steps[newStep].id;      // ขั้นตอนที่ย้อนกลับไป
+
+                        // ลดขั้นตอน
+                        setCurrentStep(newStep);
+                        // ล้าง workspace
+                        setWorkspaceItems([]);
+
+                        // เอาขั้นตอนที่กำลังออก (stepIdToRemove) และขั้นตอนที่ไปถึง (arrivingStepId) ออกจาก completedSteps
+                        // เพื่อให้ต้องทำใหม่ทั้งสองขั้น
+                        setCompletedSteps((prev) =>
+                          prev.filter((id) => id !== stepIdToRemove && id !== arrivingStepId)
+                        );
+
+                        // ตรวจสอบการย้อนกลับในกรณีที่ย้อนกลับจากขั้นตอนสุดท้ายหรือ QTE
+                        if (oldStep === 3 && newStep === 2) {
+                          // กลับมา QTE
+                          setQteActive(true);
+                          setQteCount(0);
+                          setIsGifPlaying(false);
+                          setIsReadyToServe(false);
+                          setDripImage("/simulator/เครื่องดริปที่ล้างกระดาษกรอกแล้วและใส่กาแฟบด.png");
+                          setMessage("กลับมาที่ขั้นตอน 3: ดริปกาแฟ (QTE) อีกครั้ง!");
+                        } else if (oldStep === 2 && newStep === 1) {
+                          // ปิด QTE
+                          setQteActive(false);
+                          setQteCount(0);
+                          setIsGifPlaying(false);
+                          setIsReadyToServe(false);
+                          setDripImage("/simulator/เครื่องดริปที่ล้างกระดาษกรอกแล้วและใส่กาแฟบด.png");
+                          setMessage("กลับมาที่ขั้นตอน 2: เตรียมเครื่องดริป");
+                        }
+
+                        // ถ้าย้อนกลับมา step 0 (บดกาแฟ) → รีเซ็ตกาแฟบดเป็น hidden
+                        if (newStep === 0) {
+                          // นอกจากรีเซ็ต state ของกาแฟบดแล้ว
+                          // เอา "grind" ออกจาก completedSteps ด้วย (เผื่อมีค้างอยู่)
+                          setCompletedSteps((prev) => prev.filter((id) => id !== "grind"));
+                          setSteps((prevSteps) =>
+                            prevSteps.map((step) =>
+                              step.id === "grind"
+                                ? {
+                                    ...step,
+                                    equipment: step.equipment.map((equip) =>
+                                      equip.id === "ground-coffee" ? { ...equip, state: "hidden" } : equip
+                                    ),
+                                  }
+                                : step
+                            )
+                          );
+                        }
+                      }
+                    }}
                   >
-                    <input
-                      type="checkbox"
-                      readOnly
-                      checked={completedSteps.includes(step.id)}
-                      className="mr-2 accent-yellow-950"
-                    />
-                    {step.name}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-4">
-                <button
-                  className="bg-yellow-900 text-white w-full py-2 rounded shadow hover:bg-yellow-950 disabled:opacity-50"
-                  disabled={currentStep === 0}
-                  onClick={() => {
-                    if (currentStep > 0) {
-                      setCurrentStep((prev) => prev - 1);
-                      setMessage(`กลับไปยังขั้นตอน: ${steps[currentStep - 1]?.name}`);
-                      setWorkspaceItems([]);
-                    }
-                  }}
-                >
-                  ย้อนกลับขั้นตอน
-                </button>
+                    ย้อนกลับขั้นตอน
+                  </button>
+                </div>
               </div>
             </div>
           </div>

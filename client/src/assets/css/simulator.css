@@ -27,14 +27,24 @@
 
 .right-area {
   width: 16.67%;
-  height: auto;
-  margin: auto 0;
+  height: 100%;
   padding: 0.5rem;
-  background-color: #fed7aa; /* สีจาก Tailwind bg-orange-200 */
+
+  display: flex;            /* ใช้ Flex */
+  flex-direction: column;   /* เรียงบนลงล่าง */
+  justify-content: flex-start; /* เริ่มติดบน */
+  align-items: flex-end;    /* ชิดขวา */
+}
+
+.right-item {
+  width: 100%;
+  background-color: hwb(32 67% 0%);
   border-radius: 0.5rem;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-  justify-content: center;
-  display:flow-root ;
+  padding: 0.5rem;
+
+  /* margin: auto 0 เพื่อให้อยู่กึ่งกลางแนวตั้ง (vertical center) */
+  margin: auto 0;
 }
 
 /* ส่วนอุปกรณ์ */
@@ -45,7 +55,7 @@
 .title {
   text-align: center;
   font-weight: bold;
-  font-size: x-large;
+  font-size: xx-large;
   margin-top: 1rem;
 }
 
@@ -58,7 +68,7 @@
 }
 
 /* ส่วนพื้นที่ดำเนินการ */
-.workspace-area {
+.center-area {
   padding: 0.5rem;
   width: 50%;
   height: 100%;
@@ -97,6 +107,7 @@
 .workspace-img {
   width: 80%;
   height: auto;
+  margin: 0 auto;
   object-fit: contain; /* ให้ภาพไม่ถูกครอป/บิดเบี้ยว */
   display: block; /* ป้องกันการเกิด gap ใต้ภาพ */
 }
@@ -112,7 +123,6 @@
     display: flex;
     flex-direction: column;
     height: 90vh; /* ให้เต็มหน้าจอ (ปรับได้ตามต้องการ) */
-    overflow: hidden; 
   }
   .left-area,
   .center-area,
@@ -139,9 +149,8 @@
   .center-area {
     width: 475px;     /* ความกว้างตรงตาม Figma */
     height: 400px;    /* ความสูงตรงตาม Figma */
-    margin: 0 auto;   /* จัดกึ่งกลางหน้าจอ */
+    margin: 10px auto;   /* จัดกึ่งกลางหน้าจอ */
     position: relative;
-    overflow: hidden; /* ป้องกันไม่ให้เนื้อหาเกินกรอบ */
 
     display: flex;
     flex-direction: column;
@@ -151,11 +160,16 @@
   /* ถ้ารูปหรืออุปกรณ์ข้างในใหญ่เกิน ให้ย่อด้วย max-width/max-height */
   .center-area img {
     max-width: 100%;   /* ไม่ให้ความกว้างเกิน 100% ของพื้นที่ */
-    max-height: 100%;  /* ไม่ให้ความสูงเกิน 100% ของพื้นที่ */
+    max-height: 100%;
     margin: 0 auto;
     width: auto;       /* รักษาอัตราส่วนความกว้าง-สูง */
     height: auto;
     object-fit: contain; /* ให้ภาพถูกย่อหรือขยายแต่ไม่ถูกครอป */
+  }
+  .pointer-point{
+    max-height: 400px !important; /* กำหนดความสูงสูงสุดเฉพาะสำหรับ QTE */
+    width: auto;       /* ปรับอัตราส่วนตามที่ต้องการ */
+    object-fit: contain;
   }
   .qte-container {
     position: relative;
@@ -192,6 +206,24 @@
   }
   .footer-subtitle{
     text-align: center;
+  }
+  .serve-image{
+    height: 300px !important; /* บังคับความสูงเป็น 150px */
+    margin-top: 10px  !important; /* ลบ margin-top */
+  }
+  .pour-img{
+    height: 300px !important; /* บังคับความสูงเป็น 150px */
+    margin-top: 10px  !important; /* ลบ margin-top */
+  }
+
+  .pouring{
+    height: 300px !important; /* บังคับความสูงเป็น 150px */
+    margin-top: 10px  !important; /* ลบ margin-top */
+  }
+
+  .pour-out{
+    height: 300px !important; /* บังคับความสูงเป็น 150px */
+    margin-top: 10px  !important; /* ลบ margin-top */
   }
 }
 
