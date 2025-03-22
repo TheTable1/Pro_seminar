@@ -223,7 +223,7 @@ export default function Navbar() {
             {/* เมนูโปรไฟล์ */}
             <li className="relative group" ref={profileMenuRef}>
               <img
-                src={user?.photoURL || "/profile_defualt.jpg"}
+                src={user?.photoURL || "/coffeebean.png"}
                 alt="Profile"
                 className="w-10 h-10 rounded-full cursor-pointer hover:opacity-80 transition duration-300"
                 onClick={() => setShowProfileMenu((prev) => !prev)}
@@ -255,7 +255,7 @@ export default function Navbar() {
 
         {/* Mobile Menu Toggle Button */}
         <button
-          className="lg:hidden text-beige focus:outline-none text-lg"
+          className="lg:hidden text-beige focus:outline-none text-2xl"
           onClick={() => setShowMenu((prev) => !prev)}
         >
           ☰
