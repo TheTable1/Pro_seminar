@@ -23,18 +23,22 @@ function CoffeeBeans() {
     "กาแฟดิบ",
   ];
 
+  // หากต้องการให้เปลี่ยน filter แล้วเลื่อนขึ้นบนสุด
   const handleFilterChange = (filter) => {
     setActiveFilter(filter);
+    // window.scrollTo({ top: 0, left: 0, behavior: "auto" }); // uncomment หากต้องการ
   };
 
+  // เมื่อคลิกที่รายการให้แสดงรายละเอียด แล้วเลื่อนขึ้นบนสุดทันที (โดยไม่มี smooth scroll)
   const handleItemClick = (item) => {
     setSelectedItem(item);
-    // เลื่อนหน้ารายละเอียดขึ้นไปบนสุดทันที
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   };
 
+  // เมื่อกดปุ่มย้อนกลับให้แสดงรายการหลัก พร้อมเลื่อนขึ้นบนสุดทันที
   const handleBack = () => {
     setSelectedItem(null);
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   };
 
   // ฟังก์ชันสำหรับการค้นหาและการกรอง
@@ -88,25 +92,29 @@ function CoffeeBeans() {
                   เพิ่มเติม
                 </h3>
                 <p className="text-gray-700 mt-2">{selectedItem.tips}</p>
-                <h3 className="font-semibold text-lg text-brown mt-4">ราคา</h3>
+                <h3 className="font-semibold text-lg text-brown mb-3 mt-4">
+                  ราคา
+                </h3>
                 <p className="text-gray-700 mt-2">{selectedItem.price}</p>
                 <h3 className="font-semibold text-lg text-brown mb-3 mt-4">
                   ช่องทางการสั่งซื้อ
                 </h3>
-                {selectedItem.order?.map((platform, index) => {
-                  const [[name, url]] = Object.entries(platform);
-                  return (
-                    <a
-                      key={index}
-                      href={url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-brown text-white px-4 py-2 rounded-3xl hover:bg-light-brown transition me-4"
-                    >
-                      ซื้อผ่าน {name}
-                    </a>
-                  );
-                })}
+                <div className="space-y-2 sm:space-y-0">
+                  {selectedItem.order?.map((platform, index) => {
+                    const [[name, url]] = Object.entries(platform);
+                    return (
+                      <a
+                        key={index}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block sm:inline-block bg-brown text-white px-4 py-2 rounded-3xl hover:bg-light-brown transition text-center sm:mr-2 text-start"
+                      >
+                        ซื้อผ่าน {name}
+                      </a>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>

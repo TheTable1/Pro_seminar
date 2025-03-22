@@ -261,5 +261,89 @@
     "price": "฿380",
     "order": [{"lazada":"https://www.lazada.co.th/products/nescafe-gold-crema-intense-180-nescafe-i2225282846.html?spm=a2o4m.store_keyword.list.7.6a3d1b81xGXOHD&trafficFrom=17449020_303586&laz_trackid=2:mm_150141143_51502503_2010552501:clkgl3pc41im0dlrl44t0e&mkttid=clkgl3pc41im0dlrl44t0e"},
     {"shopee": "https://shopee.co.th/NESCAFÉ-Gold-Crema-Intense-เนสกาแฟ-โกลด์-เครมมา-อินเทนส์-แบบขวดแก้ว-ขนาด-200-กรัม-NESCAFE-i.164729718.3206619675?sp_atk=4cb8c97f-d12d-4de4-8339-4ad922bff9fc&uls_trackid=526e5dts001f&utm_campaign=-&utm_content=thmybest_presses_48466&utm_medium=affiliates&utm_source=an_15297270000&utm_term=coutrbd7rs4b&xptdk=4cb8c97f-d12d-4de4-8339-4ad922bff9fc"}]
+  },
+  {
+    "name": "กาแฟกระป๋อง เนสกาแฟ เอสเปรสโซ โรสต์",
+    "type": ["กาแฟพร้อมดื่ม"],
+    "img": "../public/bean/กาแฟกระป๋อง เนสกาแฟ เอสเปรสโซ โรสต์.webp",
+    "details": "หากคุณชอบกาแฟแต่ไม่ชอบรสขม เนสกาแฟสูตรเอสเพรสโซตอบโจทย์ด้วยรสชาติเข้มข้นแต่ขมน้อย ผสมนมและน้ำตาลอย่างลงตัว ให้รสนุ่มละมุน ดื่มง่ายแม้สำหรับคนที่ไม่ชอบกาแฟเข้ม ๆ แต่ยังคงเสน่ห์ของกาแฟไว้ได้ดี กาแฟกระป๋องนี้ผลิตจากเมล็ดโรบัสต้าที่มีคาเฟอีนสูง ช่วยกระตุ้นความตื่นตัว ผ่านการคั่วในแบบฉบับของเนสกาแฟ จึงคงความเข้มข้นและดื่มง่ายแม้ในรูปแบบกระป๋อง",
+    "roast": "คั่วกลาง (Medium Roast)",
+    "tests": "รสขมเล็กน้อย เข้มข้นถึงใจ",
+    "tips": "รสขมเล็กน้อย เข้มข้นถึงใจ ดื่มอร่อยด้วยส่วนผสมคุณภาพดี",
+    "price": "฿16",
+    "order": [
+    {"shopee": "https://shopee.co.th/NESCAFE-Espresso-Roast-180ml-%E0%B9%80%E0%B8%99%E0%B8%AA%E0%B8%81%E0%B8%B2%E0%B9%81%E0%B8%9F-%E0%B9%80%E0%B8%AD%E0%B8%AA%E0%B9%80%E0%B8%9B%E0%B8%A3%E0%B8%AA%E0%B9%82%E0%B8%8B%E0%B9%82%E0%B8%A3%E0%B8%AA%E0%B8%95%E0%B9%8C-180%E0%B8%A1%E0%B8%A5-%E0%B8%96%E0%B8%B2%E0%B8%94-30%E0%B8%81%E0%B8%A3%E0%B8%B0%E0%B8%9B%E0%B9%8B%E0%B8%AD%E0%B8%87-i.38576445.7147384667?sp_atk=4a6edaec-e6b1-4148-a378-b8747c6133f4&uls_trackid=529f58h7008r&utm_campaign=-&utm_content=thmybest_presses_26645&utm_medium=affiliates&utm_source=an_15297270000&utm_term=cqx3ix1qzap8&xptdk=4a6edaec-e6b1-4148-a378-b8747c6133f4"}]
+  },
+  {
+    "name": "กาแฟกระป๋อง Ready To Drink Coffee Segafredo Zanetti Caffé Latte",
+    "type": ["กาแฟพร้อมดื่ม"],
+    "img": "../public/bean/กาแฟกระป๋อง Ready To Drink Coffee Segafredo Zanetti Caffé Latte.webp",
+    "details": "กาแฟ Arabus Speed แม้จะเป็นแบรนด์ใหม่แต่คุณภาพไม่แพ้ใคร ด้วยรสชาติเข้มข้น ดื่มง่าย กลมกล่อม ช่วยเพิ่มความสดชื่น โดยเฉพาะสำหรับผู้ที่ใช้แรงกายในการทำงาน ปัจจุบันมี 2 สูตรให้เลือก คือ ออริจินัล ที่เข้มข้นเหมาะกับคอกาแฟ และ เอสเปรสโซ ที่นุ่มละมุนด้วยกลิ่นและรสนม กาแฟกระป๋องนี้ราคาประหยัด ขนาดพกพาสะดวก เหมาะสำหรับดื่มได้ทุกที่ทุกเวลา",
+    "roast": "คั่วกลาง (Medium Roast)",
+    "tests": "หวานมัน กลิ่นหอม",
+    "tips": "รสสัมผัสไม่แรง มีคาเฟอีนน้อย กลิ่นหอมนุ่ม หวานมันอร่อย",
+    "price": "฿10",
+    "order": [
+    {"shopee": "https://shopee.co.th/ARABUS-SPEED-%E0%B8%AD%E0%B8%B2%E0%B8%A3%E0%B8%B2%E0%B8%9A%E0%B8%B1%E0%B8%AA%E0%B8%AA%E0%B8%9B%E0%B8%B5%E0%B8%94-%E0%B9%81%E0%B8%9A%E0%B8%9A%E0%B8%81%E0%B8%A3%E0%B8%B0%E0%B8%9B%E0%B9%8B%E0%B8%AD%E0%B8%87-150-%E0%B8%A1%E0%B8%A5.-%E0%B8%9E%E0%B8%A3%E0%B9%89%E0%B8%AD%E0%B8%A1%E0%B8%94%E0%B8%B7%E0%B9%88%E0%B8%A1-%E0%B8%81%E0%B8%B2%E0%B9%81%E0%B8%9F%E0%B8%9B%E0%B8%A3%E0%B8%B8%E0%B8%87%E0%B8%AA%E0%B8%B3%E0%B9%80%E0%B8%A3%E0%B9%87%E0%B8%88-%E0%B8%81%E0%B8%B2%E0%B9%81%E0%B8%9F%E0%B8%81%E0%B8%A3%E0%B8%B0%E0%B8%9B%E0%B9%8B%E0%B8%AD%E0%B8%87-%E0%B9%80%E0%B8%AD%E0%B8%AA%E0%B9%80%E0%B8%9B%E0%B8%A3%E0%B8%AA%E0%B9%82%E0%B8%8B-%E0%B8%AD%E0%B8%AD%E0%B8%A3%E0%B8%B4%E0%B8%88%E0%B8%B4%E0%B8%99%E0%B8%B1%E0%B8%A5-%E0%B8%81%E0%B8%B2%E0%B9%81%E0%B8%9F%E0%B9%80%E0%B8%82%E0%B9%89%E0%B8%A1-i.176635204.19151623942?sp_atk=9a2dcff1-0ebd-4bf4-8e44-e677840e5f02&uls_trackid=529f5nmr006r&utm_campaign=-&utm_content=thmybest_presses_26645&utm_medium=affiliates&utm_source=an_15297270000&utm_term=cqx3wby6kwd9&xptdk=9a2dcff1-0ebd-4bf4-8e44-e677840e5f02"}]
+  },
+  {
+    "name": "กาแฟกระป๋อง ROBUSTA BLACK ROAST",
+    "type": ["กาแฟพร้อมดื่ม"],
+    "img": "../public/bean/กาแฟกระป๋อง ROBUSTA BLACK ROAST.jpeg",
+    "details": "Nescafé ROBUSTA BLACK ROAST เป็นกาแฟกระป๋องยอดนิยมที่โดดเด่นด้วยรสชาติเข้มข้นจากเมล็ดกาแฟโรบัสต้าคุณภาพสูง ผ่านการคั่วที่อุณหภูมิสูงและนานกว่าปกติ เพิ่มความกลมกล่อมด้วยนมเล็กน้อย เหมาะสำหรับคอกาแฟที่ต้องการความสดชื่นและตื่นตัว โดยเฉพาะกลุ่มคนทำงานหรือใช้แรงงานเป็นเวลานาน อย่างไรก็ตาม รสชาติที่เข้มข้นอาจไม่เหมาะกับมือใหม่ หากดื่มแบบเย็นจะเพิ่มความสดชื่นได้มากขึ้น เหมาะสำหรับผู้ที่ชื่นชอบความเข้มเต็มรสกาแฟโดยเฉพาะ",
+    "roast": "คั่วกลาง (Medium Roast)",
+    "tests": "เข้มข้น กลิ่นหอม",
+    "tips": "รสเข้มข้นสำหรับคอกาแฟ มีกลิ่นหอมเตะจมูกเมื่อเปิดกระป๋อง",
+    "price": "฿17",
+    "order": [
+    {"lazada": "https://www.lazada.co.th/products/nescafe-180-x30-i5141045414-s21720472847.html?c=&channelLpJumpArgs=&clickTrackInfo=query%253A%2525E0%2525B9%252580%2525E0%2525B8%252599%2525E0%2525B8%2525AA%2525E0%2525B8%252581%2525E0%2525B8%2525B2%2525E0%2525B9%252581%2525E0%2525B8%25259F%252B%2525E0%2525B9%252582%2525E0%2525B8%2525A3%2525E0%2525B8%25259A%2525E0%2525B8%2525B1%2525E0%2525B8%2525AA%2525E0%2525B8%252595%2525E0%2525B9%252589%2525E0%2525B8%2525B2%252B%2525E0%2525B9%252581%2525E0%2525B8%25259A%2525E0%2525B8%2525A5%2525E0%2525B9%252587%2525E0%2525B8%252584%2525E0%2525B9%252582%2525E0%2525B8%2525A3%2525E0%2525B8%2525AA%2525E0%2525B8%252595%2525E0%2525B9%25258C%253Bnid%253A5141045414%253Bsrc%253ALazadaMainSrp%253Brn%253Afe6e60eb23a4211c4ff27b847e470c97%253Bregion%253Ath%253Bsku%253A5141045414_TH%253Bprice%253A445%253Bclient%253Adesktop%253Bsupplier_id%253A1000207041%253Bbiz_source%253Ah5_pdp%253Bslot%253A1%253Butlog_bucket_id%253A470687%253Basc_category_id%253A14588%253Bitem_id%253A5141045414%253Bsku_id%253A21720472847%253Bshop_id%253A435462&fastshipping=0&freeshipping=0&fs_ab=2&fuse_fs=&lang=th&location=%E0%B8%AA%E0%B8%A1%E0%B8%B8%E0%B8%97%E0%B8%A3%E0%B8%AA%E0%B8%B2%E0%B8%84%E0%B8%A3&price=445&priceCompare=skuId%3A21720472847%3Bsource%3Alazada-search-voucher%3Bsn%3Afe6e60eb23a4211c4ff27b847e470c97%3BunionTrace%3Aa3b527a317181595181025008e%3BoriginPrice%3A44500%3BvoucherPrice%3A44500%3BdisplayPrice%3A44500%3BsinglePromotionId%3A-1%3BsingleToolCode%3A-1%3BvoucherPricePlugin%3A1%3BbuyerId%3A0%3Btimestamp%3A1718159518714&ratingscore=&request_id=fe6e60eb23a4211c4ff27b847e470c97&review=&sale=0&search=1&source=search&spm=a2o4m.searchlist.list.1&stock=1&trafficFrom=17449020_303586&laz_trackid=2:mm_150141143_51502503_2010552501:clkgikuur1imuo4lftm9nd&mkttid=clkgikuur1imuo4lftm9nd"}]
+  },
+  {
+    "name": "กาแฟกระป๋อง Black Low Sugar",
+    "type": ["กาแฟพร้อมดื่ม"],
+    "img": "../public/bean/กาแฟกระป๋อง Black Low Sugar.png",
+    "details": "Birdy Black Low Sugar เหมาะสำหรับผู้ที่ชื่นชอบกาแฟดำรสเข้มข้นแต่น้ำตาลน้อย ลดน้ำตาลลงถึง 50% ทำให้รสหวานลดลง แต่ยังคงความเข้มข้นและนุ่มละมุนจากกาแฟคั่วบดผสมนมสด ดื่มง่ายได้ทุกช่วงเวลา กาแฟกระป๋องนี้ช่วยเพิ่มความสดชื่น โดยเฉพาะสำหรับผู้ที่ทำงานหนัก หากดื่มแบบเย็นจะยิ่งสดชื่นมากขึ้น คงเอกลักษณ์ของกาแฟดำได้อย่างสมบูรณ์ เหมาะสำหรับผู้ที่ควบคุมน้ำหนักเพราะมีน้ำตาลน้อย แต่ยังคงรสชาติอร่อย ดื่มได้ตลอดทั้งวันและเก็บไว้ได้นาน",
+    "roast": "คั่วกลาง (Medium Roast)",
+    "tests": "กลิ่นหอมอร่อย",
+    "tips": "กาแฟคั่วบดผสมกับนมสด กลิ่นหอมอร่อย ลดน้ำตาล 50%",
+    "price": "฿17",
+    "order": [
+    {"lazada": "https://www.lazada.co.th/products/birdy-black-low-sugar-180-ml-180-i2663367856-s9582957787.html?channelLpJumpArgs=&clickTrackInfo=query%253ABirdy%252BBlack%252BLow%252BSugar%253Bnid%253A2663367856%253Bsrc%253ALazadaMainSrp%253Brn%253A883bd0d951441abdff7210661b710e62%253Bregion%253Ath%253Bsku%253A2663367856_TH%253Bprice%253A17%253Bclient%253Adesktop%253Bsupplier_id%253A100183359328%253Bpromotion_biz%253A%253Basc_category_id%253A14587%253Bitem_id%253A2663367856%253Bsku_id%253A9582957787%253Bshop_id%253A1487009&fastshipping=0&freeshipping=0&fs_ab=2&fuse_fs=0&lang=th&location=%E0%B8%AA%E0%B8%A1%E0%B8%B8%E0%B8%97%E0%B8%A3%E0%B8%9B%E0%B8%A3%E0%B8%B2%E0%B8%81%E0%B8%B2%E0%B8%A3&price=17&priceCompare=&ratingscore=5.0&request_id=883bd0d951441abdff7210661b710e62&review=5&sale=282&search=1&source=search&spm=a2o4m.searchlist.list.i21.1b0d31e1RznGbz&stock=1&trafficFrom=17449020_21419788_303586&laz_trackid=2:mm_150141143_51502503_2010552501:clkgl3pc41imuoactgrsd4&mkttid=clkgl3pc41imuoactgrsd4"}]
+  },
+  {
+    "name": "กาแฟกระป๋อง เบอร์ดี้ ลาเต้ สูตรน้ำตาลน้อย",
+    "type": ["กาแฟพร้อมดื่ม"],
+    "img": "../public/bean/กาแฟกระป๋อง เบอร์ดี้ ลาเต้ สูตรน้ำตาลน้อย.webp",
+    "details": "Birdy สูตรนม เป็นกาแฟกระป๋องยอดนิยมในกลุ่มวัยรุ่นและวัยทำงาน ด้วยรสชาติที่นุ่มนวล กลมกล่อม มีส่วนผสมของนม ช่วยให้ดื่มง่าย แม้สำหรับผู้ที่ไม่เคยดื่มกาแฟมาก่อน ยิ่งดื่มแบบเย็นยิ่งเพิ่มความอร่อย แม้จะมีรสหวานละมุน แต่ปริมาณน้ำตาลไม่สูงมาก เหมาะสำหรับสายสุขภาพที่ดื่มอย่างพอเหมาะ รสชาติคล้ายลาเต้ ช่วยเพิ่มความสดชื่น เหมาะกับมือใหม่ที่เริ่มดื่มกาแฟหรือผู้ที่ชอบกาแฟรสนุ่มนวล",
+    "roast": "คั่วกลาง (Medium Roast)",
+    "tests": "กลิ่นหอมมัน รสชาติละมุน ",
+    "tips": "กาแฟลาเต้ น้ำตาลน้อย รสชาติละมุน ผสมผสานอย่างลงตัว",
+    "price": "฿17",
+    "order": [
+    {"shopee": "https://shopee.co.th/Birdy-%E0%B9%80%E0%B8%9A%E0%B8%AD%E0%B8%A3%E0%B9%8C%E0%B8%94%E0%B8%B5%E0%B9%89-%E0%B8%A5%E0%B8%B2%E0%B9%80%E0%B8%95%E0%B9%89-%E0%B8%AA%E0%B8%B9%E0%B8%95%E0%B8%A3%E0%B8%99%E0%B9%89%E0%B8%B3%E0%B8%95%E0%B8%B2%E0%B8%A5%E0%B8%99%E0%B9%89%E0%B8%AD%E0%B8%A2-%E0%B8%81%E0%B8%B2%E0%B9%81%E0%B8%9F%E0%B8%9B%E0%B8%A3%E0%B8%B8%E0%B8%87%E0%B8%AA%E0%B8%B3%E0%B9%80%E0%B8%A3%E0%B9%87%E0%B8%88%E0%B8%9E%E0%B8%A3%E0%B9%89%E0%B8%AD%E0%B8%A1%E0%B8%94%E0%B8%B7%E0%B9%88%E0%B8%A1-180-%E0%B8%A1%E0%B8%A5.-%E0%B9%81%E0%B8%9E%E0%B8%84-6-%E0%B8%81%E0%B8%A3%E0%B8%B0%E0%B8%9B%E0%B9%8B%E0%B8%AD%E0%B8%87-i.119189798.1876830838?sp_atk=5153ac70-8eef-43e7-87b5-6b9853937e2c&uls_trackid=529f81lf017o&utm_campaign=-&utm_content=thmybest_presses_26645&utm_medium=affiliates&utm_source=an_15297270000&utm_term=cqx5osxrff43&is_from_signup=true"}]
+  },
+  {
+    "name": "กาแฟแคปซูล Starbucks ",
+    "type": ["กาแฟแคปซูล"],
+    "img": "../public/bean/กาแฟแคปซูล Starbucks.webp",
+    "details": "กาแฟแคปซูล Starbucks โดย NESCAFE Dolce Gusto ใช้เมล็ดอาราบิก้าและโรบัสต้าคุณภาพ ผ่านการคั่วตามมาตรฐาน บรรจุใน Smart Capsule เพื่อคงกลิ่นและรสชาติให้สดใหม่ มีให้เลือกทั้ง Black Cup กาแฟดำเข้มข้น และ White Cup กาแฟผสมนมรสนุ่มละมุน ดื่มง่าย สะดวกทุกที่ทุกเวลา",
+    "roast": "คั่วกลาง (Medium Roast)",
+    "tests": "กลิ่นหอมมัน รสชาติละมุน ",
+    "tips": "-",
+    "price": "฿888",
+    "order": [
+    {"lazada": "https://www.lazada.co.th/starbucks-by-nescafe-dolce-gusto-starbucks-12-3-i399410242-s17576809623.html?dsource=share&laz_share_info=1677911874_1_9300_110161980994_1677913874_null&laz_token=d9229f0460882bfc975d34288bed3fcc&trafficFrom=17449020_303586&laz_trackid=2:mm_191861035_54752719_2013852736:clkgg5qhu1imup0ph7pia6&mkttid=clkgg5qhu1imup0ph7pia6"}]
+  },
+  {
+    "name": "กาแฟแคปซูล Alto Coffee ",
+    "type": ["กาแฟแคปซูล"],
+    "img": "../public/bean/กาแฟแคปซูล Alto Coffee.webp",
+    "details": "กาแฟแคปซูล Alto รังสรรค์รสชาติให้ใกล้เคียงกับการดื่มที่ร้านมากที่สุด โดยใช้เมล็ดอาราบิก้าเกรดพิเศษ บดละเอียดและบรรจุในแคปซูล มีให้เลือก 10 รสชาติ แบ่งเป็น 4 คอลเลกชัน ได้แก่ Best with Milk, Smooth & Balance, Fruity & Sweet และ DECAF ตอบโจทย์คอกาแฟทุกสไตล์",
+    "roast": "คั่วกลาง (Medium Roast)",
+    "tests": "กลิ่นหอมมัน รสชาติละมุน ",
+    "tips": "-",
+    "price": "฿250-300",
+    "order": [
+    {"lazada": "https://www.lazada.co.th/alto-coffee-1963-signature-blend-nespresso-10-i2479640477-s8730723126.html?dsource=share&laz_share_info=1677913864_1_9300_110161980994_1677915864_null&laz_token=9db605acc7d570a5e6e7848a9f2bde18&trafficFrom=17449020_303586&laz_trackid=2:mm_191861035_54752719_2013852736:clkgl3ono1imup3ql1po07&mkttid=clkgl3ono1imup3ql1po07"}]
   }
 ]

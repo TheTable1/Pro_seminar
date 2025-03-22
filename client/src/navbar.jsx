@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { auth } from "./firebase/firebase";
 import { signOut, onAuthStateChanged } from "firebase/auth";
 
@@ -15,6 +15,7 @@ export default function Navbar() {
   const profileMenuRef = useRef(null);
   const navbarRef = useRef(null);
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   // ดึง path ปัจจุบัน
   const location = useLocation();
@@ -97,43 +98,24 @@ export default function Navbar() {
               </span>
               {showKnowledgeMenu && (
                 <ul className="absolute left-0 z-10 bg-brown shadow-lg mt-2 rounded-md w-60 text-beige text-sm transition duration-300">
-                  {/* 
-                    เปลี่ยนจาก:
-                      <li className="p-3 hover:bg-dark-brown transition duration-200">
-                        <Link to="/history">ประวัติศาสตร์กาแฟ</Link>
-                      </li>
-                    เป็น:
-                      <li>
-                        <Link
-                          to="/history"
-                          className="block p-3 hover:bg-dark-brown transition duration-200"
-                        >
-                          ประวัติศาสตร์กาแฟ
-                        </Link>
-                      </li>
-                  */}
                   <li>
                     <Link
                       to="/history"
                       className="flex items-center p-3 hover:bg-dark-brown transition duration-200"
                     >
-                      {/* ไอคอนแบบรูปภาพ */}
                       <img
                         src="nav/icons8-history-80.png"
                         alt="history icon"
                         className="w-6 h-6 mr-2"
                       />
-                      {/* ข้อความ */}
                       <span>ประวัติศาสตร์กาแฟ</span>
                     </Link>
                   </li>
-
                   <li>
                     <Link
                       to="/geneCoffee"
                       className="flex items-center p-3 hover:bg-dark-brown transition duration-200"
                     >
-                      {/* ไอคอนแบบรูปภาพ */}
                       <img
                         src="nav/icons8-coffee-beans-48 (2).png"
                         alt="history icon"
@@ -147,7 +129,6 @@ export default function Navbar() {
                       to="/roasting"
                       className="flex items-center p-3 hover:bg-dark-brown transition duration-200"
                     >
-                      {/* ไอคอนแบบรูปภาพ */}
                       <img
                         src="nav/icons8-coffee-bag-50.png"
                         alt="history icon"
@@ -161,7 +142,6 @@ export default function Navbar() {
                       to="/extraction"
                       className="flex items-center p-3 hover:bg-dark-brown transition duration-200"
                     >
-                      {/* ไอคอนแบบรูปภาพ */}
                       <img
                         src="nav/icons8-vietnamese-coffee-50.png"
                         alt="history icon"
@@ -175,7 +155,6 @@ export default function Navbar() {
                       to="/process"
                       className="flex items-center p-3 hover:bg-dark-brown transition duration-200"
                     >
-                      {/* ไอคอนแบบรูปภาพ */}
                       <img
                         src="nav/icons8-coffee-cup-50.png"
                         alt="history icon"
@@ -189,7 +168,6 @@ export default function Navbar() {
                       to="/worldCoffee"
                       className="flex items-center p-3 hover:bg-dark-brown transition duration-200"
                     >
-                      {/* ไอคอนแบบรูปภาพ */}
                       <img
                         src="nav/icons8-map-80 (1).png"
                         alt="history icon"
@@ -203,7 +181,6 @@ export default function Navbar() {
                       to="/articles"
                       className="flex items-center p-3 hover:bg-dark-brown transition duration-200"
                     >
-                      {/* ไอคอนแบบรูปภาพ */}
                       <img
                         src="nav/icons8-article-50.png"
                         alt="history icon"
@@ -246,7 +223,7 @@ export default function Navbar() {
             {/* เมนูโปรไฟล์ */}
             <li className="relative group" ref={profileMenuRef}>
               <img
-                src={user?.photoURL || "/profile_defualt.jpg"}
+                src={user?.photoURL || "/coffeebean.png"}
                 alt="Profile"
                 className="w-10 h-10 rounded-full cursor-pointer hover:opacity-80 transition duration-300"
                 onClick={() => setShowProfileMenu((prev) => !prev)}
@@ -278,7 +255,7 @@ export default function Navbar() {
 
         {/* Mobile Menu Toggle Button */}
         <button
-          className="lg:hidden text-beige focus:outline-none"
+          className="lg:hidden text-beige focus:outline-none text-2xl"
           onClick={() => setShowMenu((prev) => !prev)}
         >
           ☰
@@ -293,7 +270,6 @@ export default function Navbar() {
                   คลังความรู้กาแฟ
                 </span>
                 <ul className="mt-2 bg-dark-brown rounded-lg shadow-inner divide-y divide-gray-700">
-                  {/* ทำให้คลิกได้ทั้งช่อง */}
                   <li>
                     <Link
                       to="/history"
@@ -359,25 +335,59 @@ export default function Navbar() {
                   </li>
                 </ul>
               </li>
-              <li className="hover:bg-brown pt-3 rounded transition duration-200">
+              <li className="hover:bg-brown text-lg pt-3 rounded transition duration-200 font-semibold">
                 <Link to="/coffee_bean" onClick={() => setShowMenu(false)}>
                   เมล็ดกาแฟ
                 </Link>
               </li>
-              <li className="hover:bg-brown pt-3 rounded transition duration-200">
+              <li className="hover:bg-brown text-lg pt-3 rounded transition duration-200 font-semibold">
                 <Link to="/coffee_menu" onClick={() => setShowMenu(false)}>
                   เมนูกาแฟ
                 </Link>
               </li>
-              <li className="hover:bg-brown pt-3 rounded transition duration-200 cursor-pointer">
+              <li className="hover:bg-brown text-lg pt-3 rounded transition duration-200 font-semibold">
                 <Link to="/quiz" onClick={() => setShowMenu(false)}>
                   แบบทดสอบ
                 </Link>
               </li>
-              <li className="hover:bg-brown pt-3 rounded transition duration-200 cursor-pointer">
-                <Link to="/profile" onClick={() => setShowMenu(false)}>
-                  โปรไฟล์
-                </Link>
+              {/* Mobile Profile Menu (Always Expanded) */}
+              <li>
+                <span className="block text-lg font-semibold">โปรไฟล์</span>
+                {/* เพิ่มคลาส bg-dark-brown และอื่น ๆ ให้เหมือนเมนู "คลังความรู้กาแฟ" */}
+                <ul className="mt-2 bg-dark-brown rounded-lg shadow-inner divide-y divide-gray-700">
+                  {user ? (
+                    <>
+                      <li>
+                        <Link
+                          to="/profile"
+                          onClick={() => setShowMenu(false)}
+                          className="block p-3 hover:bg-brown transition duration-200"
+                        >
+                          โปรไฟล์ของฉัน
+                        </Link>
+                      </li>
+                      <li
+                        className="cursor-pointer block p-3 hover:bg-red-500 transition duration-200"
+                        onClick={() => {
+                          handleLogout();
+                          setShowMenu(false);
+                        }}
+                      >
+                        ออกจากระบบ
+                      </li>
+                    </>
+                  ) : (
+                    <li>
+                      <Link
+                        to="/login"
+                        onClick={() => setShowMenu(false)}
+                        className="block p-3 hover:bg-brown transition duration-200"
+                      >
+                        เข้าสู่ระบบ
+                      </Link>
+                    </li>
+                  )}
+                </ul>
               </li>
             </ul>
           </div>

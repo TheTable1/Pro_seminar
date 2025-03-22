@@ -135,7 +135,7 @@ const Profile = () => {
               <div className="flex flex-col sm:flex-row items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <img
-                    src={profileData?.photoURL || "/profile_defualt.jpg"}
+                    src={profileData?.photoURL || "/coffeebean.png"}
                     alt="Profile"
                     className="w-20 h-20 rounded-full border-2 border-brown shadow-lg"
                   />

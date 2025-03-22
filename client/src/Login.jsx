@@ -78,13 +78,15 @@ function Login() {
       >
         <div className="row w-100">
           <div className="col-12 col-md-6 d-flex flex-column justify-content-center align-items-center">
-            <h2 className="text-white mb-5 text-3xl font-bold">Login</h2>
+            <h2 className="text-white mb-5 text-3xl font-bold text-4xl">
+              Login
+            </h2>
             <form onSubmit={handleSubmit} className="w-75">
               <div className="form-group mb-3">
                 <input
                   type="email"
                   placeholder="Email"
-                  className="form-control border-0 rounded-pill ps-4"
+                  className="form-control border-0 rounded-pill ps-4 text-lg"
                   style={{
                     backgroundColor: "rgba(224, 221, 223, 0.5)",
                     color: "white",
@@ -103,7 +105,7 @@ function Login() {
                 <input
                   type="password"
                   placeholder="Password"
-                  className="form-control border-0 rounded-pill w-100 ps-4"
+                  className="form-control border-0 rounded-pill w-100 ps-4 text-lg"
                   style={{
                     backgroundColor: "rgba(224, 221, 223, 0.5)",
                     color: "white",
@@ -117,28 +119,32 @@ function Login() {
                 <div className="alert alert-danger">{errorMessage}</div>
               )}
               {/* ปุ่มเข้าสู่ระบบด้วย Google และปุ่ม Login อยู่ในแถวเดียวกัน */}
-              <div className="d-flex justify-content-center mb-3" style={{ gap: "1rem" }}>
-                <button 
-                  type="button"
-                  className="btn btn-danger rounded-pill px-4 w-50"
-                  onClick={loginWithGoogle}
-                >
-                  Login Google
-                </button>
+              <div
+                className="d-flex justify-content-center mb-3"
+                style={{ gap: "1rem" }}
+              >
                 <button
                   type="submit"
-                  className="buttonHover btn btn-light rounded-pill px-4 w-50"
+                  className="buttonHover btn btn-light rounded-pill px-4 w-44 text-xl"
                 >
                   Login
                 </button>
               </div>
             </form>
-            <p className="text-white mt-4 mb-1">
-              You don’t have an account yet.{" "}
-              <Link to="/register" className="text-light">
+            <p className="text-white text-md mt-1 mb-5">
+              or{" "}
+              <Link to="/register" className="text-light underline">
                 Register
               </Link>
             </p>
+            <button
+              type="button"
+              className="btn bg-white rounded-pill w-52 flex items-center justify-center gap-2"
+              onClick={loginWithGoogle}
+            >
+              Login with
+              <img className="w-7" src="/Google.webp" alt="Google" />
+            </button>
           </div>
         </div>
       </div>

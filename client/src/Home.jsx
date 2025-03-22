@@ -97,7 +97,7 @@ const Home = () => {
               <img
                 src={`/home${index + 2}.jpg`}
                 alt={card.title}
-                className="w-full h-[150px] object-cover rounded-md shadow-md"
+                className="w-56 sm:w-full  h-[150px] object-cover rounded-md shadow-md"
               />
               <p className="mt-2 text-sm">{card.title}</p>
             </Link>
