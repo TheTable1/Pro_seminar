@@ -45,7 +45,7 @@ function ArticlesPage() {
         // ใช้ article.id ถ้ามี หรือ article.title เป็นตัวระบุ
         const achievementId = selectedArticle.id || selectedArticle.title;
         console.log("✅ บันทึกความสำเร็จบทความ:", achievementId);
-        updateArticleAchievement(userId, achievementId, true);
+        updateUserAchievement(userId, "knowledge", achievementId, true);   
       }
     };
 

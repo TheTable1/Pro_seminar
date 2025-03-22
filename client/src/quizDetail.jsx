@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Navbar from "./navbar";
 import Footer from "./footer";
+import BackToTop from "./BackToTop";
 import quiz from "./quiz.json";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "./firebase/firebase";
@@ -119,6 +120,7 @@ const QuizDetail = () => {
   return (
     <div>
       <Navbar />
+      <BackToTop />
       <div className="min-h-screen bg-[url('../public/background.jpg')] bg-cover bg-center bg-white/85 bg-blend-overlay flex flex-col items-center justify-center px-4">
         <div className="bg-beige-light backdrop-blur-sm rounded-3xl shadow-xl p-8 w-full max-w-4xl relative mt-4 mb-3">
           {!showScore ? (
@@ -254,12 +256,23 @@ const QuizDetail = () => {
                   );
                 })}
               </div>
-              <button
-                onClick={() => window.location.reload()}
-                className="mt-6 px-6 py-2 bg-light-brown text-beige font-semibold rounded-full shadow-lg hover:shadow-xl hover:bg-brown transition-all duration-300"
-              >
-                ทำแบบทดสอบอีกครั้ง
-              </button>
+              {/* ปุ่มแอคชั่นหลังแสดงคะแนนและเฉลย */}
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-6">
+                {/* ปุ่มทำแบบทดสอบอีกครั้ง */}
+                <button
+                  onClick={() => window.location.reload()}
+                  className="px-6 py-2 bg-light-brown text-beige font-semibold rounded-full shadow-lg hover:shadow-xl hover:bg-brown transition-all duration-300"
+                >
+                  ทำแบบทดสอบอีกครั้ง
+                </button>
+                {/* ปุ่มเสร็จสิ้น กลับหน้า /quiz */}
+                <button
+                  onClick={() => navigate("/quiz")}
+                  className="px-6 py-2 bg-dark-brown text-beige font-semibold rounded-full shadow-lg hover:shadow-xl hover:bg-brown transition-all duration-300"
+                >
+                  เสร็จสิ้น
+                </button>
+              </div>
             </div>
           )}
         </div>

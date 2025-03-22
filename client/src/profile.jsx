@@ -135,13 +135,13 @@ const Profile = () => {
               <div className="flex flex-col sm:flex-row items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <img
-                    src={profileData?.profilePic || "/profile_default.jpg"}
+                    src={profileData?.photoURL || "/profile_defualt.jpg"}
                     alt="Profile"
                     className="w-20 h-20 rounded-full border-2 border-brown shadow-lg"
                   />
                   <div>
                     <h2 className="text-2xl font-bold text-dark-brown">
-                      {profileData?.name}
+                      {profileData?.name || profileData?.displayName}
                     </h2>
                     <p className="text-lg text-dark-brown">
                       {profileData?.email}
@@ -259,7 +259,7 @@ const Profile = () => {
                   : 0;
                 percentage = (completed / total) * 100;
               } else if (category === "simulator") {
-                title = "ซิมมูเลเตอร์";
+                title = "แบบจำลองทำเมนูกาแฟ";
                 total = 1; // จำนวนเต็มคือ 1
                 completed =
                   achievements.simulator &&
@@ -268,7 +268,7 @@ const Profile = () => {
                     : 0;
                 percentage = (completed / total) * 100;
               } else if (category === "knowledge") {
-                title = "ความรู้";
+                title = "บทความน่ารู้";
                 total = articles.length; // จำนวนความรู้จากไฟล์ article.json
                 completed = achievements.knowledge
                   ? Object.keys(achievements.knowledge).length
