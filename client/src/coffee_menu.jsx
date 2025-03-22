@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "./navbar";
 import Footer from "./footer";
@@ -8,6 +8,7 @@ function CoffeeBeans() {
   const [activeFilter, setActiveFilter] = useState("กาแฟทั้งหมด");
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const mainRef = useRef(null);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -17,7 +18,9 @@ function CoffeeBeans() {
   useEffect(() => {
     if (location.state) {
       setSelectedItem(location.state);
-      window.scrollTo(0, 0); // เลื่อนหน้าไปบนสุด
+      if (mainRef.current) {
+        mainRef.current.scrollIntoView({ behavior: "smooth" });
+      }
     }
   }, [location.state]);
 
@@ -36,19 +39,23 @@ function CoffeeBeans() {
 
   const handleItemClick = (item) => {
     setSelectedItem(item);
-    window.scrollTo(0, 0);
+    if (mainRef.current) {
+      mainRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   const handleBack = () => {
     setSelectedItem(null);
+    if (mainRef.current) {
+      mainRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   const handleTryIt = () => {
-    // ส่งข้อมูล selectedItem ไปหน้า simulator (FinalStep) ถ้าต้องการ
     navigate("/simulator", { state: selectedItem });
   };
 
-  // รวมเงื่อนไข activeFilter และ searchTerm ในการค้นหา
+  // ค้นหาเมนูตามเงื่อนไข activeFilter และ searchTerm
   const filteredItems = menuItems.filter((item) => {
     const matchesFilter =
       activeFilter === "กาแฟทั้งหมด" ||
@@ -64,8 +71,7 @@ function CoffeeBeans() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <Navbar />
-      <main className="lg:p-6 sm:p-0">
-        {/* ถ้ามี selectedItem -> แสดงรายละเอียดเมนู */}
+      <main ref={mainRef} className="lg:p-6 sm:p-0">
         {selectedItem ? (
           <div className="bg-white rounded-lg shadow-md p-5">
             <button
@@ -74,9 +80,7 @@ function CoffeeBeans() {
             >
               ย้อนกลับ
             </button>
-            {/* Grid Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {/* รูปภาพ */}
               <div className="flex flex-col items-center">
                 <img
                   className="w-4/5 h-auto object-cover rounded-md shadow-lg"
@@ -84,7 +88,6 @@ function CoffeeBeans() {
                   alt={selectedItem.name}
                 />
               </div>
-              {/* ข้อมูลเมนู */}
               <div className="space-y-6">
                 <h2 className="text-3xl font-bold mb-4 text-brown">
                   {selectedItem.name}
@@ -137,10 +140,8 @@ function CoffeeBeans() {
             </div>
           </div>
         ) : (
-          // ถ้ายังไม่ได้เลือกเมนู -> แสดงรายการเมนู + ค้นหา + ฟิลเตอร์
           <section className="bg-white rounded-lg h-full shadow-md transition duration-200 ease-in-out hover:shadow-lg">
             <div className="p-2 md:p-3 lg:p-5 pb-5">
-              {/* Search Bar */}
               <div className="mb-6 flex justify-center">
                 <input
                   type="text"
@@ -151,7 +152,6 @@ function CoffeeBeans() {
                 />
               </div>
 
-              {/* Filter Buttons */}
               <div className="flex flex-wrap justify-center gap-2 md:gap-4 lg:gap-6 mb-6">
                 {filterButtons.map((filter) => (
                   <button
@@ -168,7 +168,6 @@ function CoffeeBeans() {
                 ))}
               </div>
 
-              {/* ปุ่มไปหน้า Suggestion */}
               <div className="flex justify-end me-3">
                 <button
                   className="bg-light-brown text-white px-4 py-2 rounded-3xl hover:bg-brown mb-4"
@@ -178,7 +177,6 @@ function CoffeeBeans() {
                 </button>
               </div>
 
-              {/* แสดงรายการเมนูเป็น Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 lg:gap-5">
                 {filteredItems.map((item, index) => (
                   <div
