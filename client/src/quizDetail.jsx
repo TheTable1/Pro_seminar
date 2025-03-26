@@ -7,6 +7,7 @@ import BackToTop from "./BackToTop";
 import quiz from "./quiz.json";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "./firebase/firebase";
+import { useNavigate } from 'react-router-dom';
 
 const quizData = quiz;
 
@@ -14,6 +15,7 @@ const QuizDetail = () => {
   const { id } = useParams();
   const quiz = quizData[id];
   const [userId, setUserId] = useState(null);
+  const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState(
     new Array(quiz?.questions.length).fill(null)
