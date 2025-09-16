@@ -241,3 +241,13 @@
     border-radius: 50%;
     animation: steam 2s infinite alternate ease-in-out;
   }
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.animate-blink {
+  animation: blink 1s infinite;
+}

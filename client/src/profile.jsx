@@ -73,7 +73,7 @@ const Profile = () => {
   const openEditPopup = () => {
     console.log("Edit button clicked");
     if (profileData) {
-      setEditedName(profileData.name || "");
+      setEditedName(profileData.name || profileData.displayName || "");
       setEditedEmail(profileData.email || "");
     }
     setIsEditing(true);

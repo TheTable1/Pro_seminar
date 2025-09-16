@@ -16,6 +16,8 @@ import Extraction from "./extraction";
 import Suggestion from "./suggestion";
 import Quiz from "./quiz";
 import QuizDetail from "./quizDetail";
+import Select from "./simulator/select";
+import Customcoffee from "./simulator/customcoffee";
 import { Helmet } from "react-helmet";
 
 function App() {
@@ -51,6 +53,10 @@ function App() {
         <Route path="/coffee_menu" element={<CoffeeMenu />} />
 
         <Route path="/simulator" element={<Simulator />} />
+
+        <Route path="/select" element={<Select/>}/>
+
+        <Route path="/customcoffee" element={<Customcoffee/>} />
 
         <Route path="/suggestion" element={<Suggestion />} />
 

@@ -57,7 +57,7 @@ function CoffeeBeans() {
   };
 
   const handleTryIt = () => {
-    navigate("/simulator", { state: selectedItem });
+    navigate("/select", { state: selectedItem });
   };
 
   const filteredItems = menuItems.filter((item) => {
