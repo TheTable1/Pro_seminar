@@ -1,14 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import Navbar from "./navbar";
 import Footer from "./footer";
 import BackToTop from "./BackToTop";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { updateUserAchievement } from "./firebase/firebaseAchievements";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 function Process() {
   const [selectedIcon, setSelectedIcon] = useState("cherry");
   const [userId, setUserId] = useState(null);
 
+  // ข้อมูลขั้นตอน (ของเดิม)
   const icons = [
     {
       id: 1,
@@ -48,87 +51,186 @@ function Process() {
     },
   ];
 
-  // ตรวจสอบว่าผู้ใช้ล็อกอินหรือไม่
+  // AOS
   useEffect(() => {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUserId(user.uid);
-      } else {
-        setUserId(null);
-      }
-    });
+    AOS.init({ duration: 800, once: true, easing: "ease-out" });
   }, []);
 
-  // เมื่อผู้ใช้เลื่อนดูเนื้อหา Process จนเกือบจบ → บันทึก achievement
+  // Auth
   useEffect(() => {
-    if (!userId) return; // ถ้าไม่ได้ล็อกอิน จะไม่บันทึก achievement
+    const auth = getAuth();
+    const unsub = onAuthStateChanged(auth, (user) => {
+      setUserId(user ? user.uid : null);
+    });
+    return () => unsub();
+  }, []);
 
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const contentHeight = document.body.scrollHeight;
-      const viewportHeight = window.innerHeight;
-
-      if (scrollY + viewportHeight >= contentHeight - 100) {
-        console.log("✅ บันทึกความสำเร็จสำหรับ process_coffee");
+  // Achievement เมื่อเลื่อนเกือบสุด
+  useEffect(() => {
+    if (!userId) return;
+    const onScroll = () => {
+      const H = document.documentElement.scrollHeight;
+      const vh = window.innerHeight;
+      if (window.scrollY + vh >= H - 100) {
         updateUserAchievement(userId, "content", "process_coffee", true);
       }
     };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, [userId]);
+
+  // ดัชนีขั้นตอนปัจจุบัน + ฟังก์ชันนำทาง
+  const currentIndex = useMemo(
+    () => Math.max(0, icons.findIndex((i) => i.name === selectedIcon)),
+    [selectedIcon]
+  );
+
+  const goStep = useCallback(
+    (dir) => {
+      const next = (currentIndex + dir + icons.length) % icons.length;
+      setSelectedIcon(icons[next].name);
+      // เลื่อนขึ้นให้เห็นการ์ดชัด (โดยเว้นเผื่อ navbar)
+      window.scrollTo({ top: 200, behavior: "smooth" });
+    },
+    [currentIndex, icons]
+  );
+
+  // รองรับคีย์บอร์ด ← →
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "ArrowRight") goStep(1);
+      if (e.key === "ArrowLeft") goStep(-1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [goStep]);
+
+  const active = icons[currentIndex];
 
   return (
     <div className="bg-[#f3f1ec]">
       <Navbar />
       <BackToTop />
-      <div className="container mx-auto p-6 ">
-        {/* Header with icons */}
-        <div className="flex justify-center items-center space-x-6 py-6">
-          {icons.map((icon) => (
-            <button
-              key={icon.id}
-              onClick={() => setSelectedIcon(icon.name)}
-              className={`relative w-20 h-20 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border-4 border-black bg-brown-300 flex justify-center items-center transition-transform duration-300 ${
-                selectedIcon === icon.name
-                  ? "ring-4 ring-brown scale-110"
-                  : "hover:scale-105"
-              }`}
-            >
-              <img
-                src={icon.image}
-                alt={icon.alt}
-                className="w-1/2 h-1/2 sm:w-10 sm:h-10"
-              />
-            </button>
-          ))}
+
+      {/* HERO */}
+      <header className="relative isolate overflow-hidden" data-aos="fade-up">
+        <img
+          src={active.img}
+          alt=""
+          className="absolute inset-0 h-[34vh] w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/35 to-black/0" />
+        <div className="relative mx-auto max-w-7xl px-4 md:px-8 h-[34vh] flex items-center">
+          <div className="text-white">
+            <p className="uppercase tracking-widest text-xs text-white/80">
+              Coffee • Process
+            </p>
+            <h1 className="text-3xl md:text-5xl font-extrabold leading-tight">
+              กระบวนการกาแฟ
+            </h1>
+            <p className="mt-1 text-white/90">
+              ไล่ดูทีละขั้น — ตั้งแต่เก็บผลเชอร์รี่ คั่ว บด จนถึงการสกัด
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <div className="mx-auto max-w-7xl px-4 md:px-8 py-8">
+        {/* STEP INDICATOR */}
+        <section className="relative mb-8" data-aos="fade-up">
+          {/* เส้นเชื่อม */}
+          <div className="absolute left-1/2 top-[30px] -translate-x-1/2 h-1 w-full max-w-3xl bg-black/10 rounded-full" />
+          {/* จุด (ปุ่ม) */}
+          <ul className="relative z-10 mx-auto flex w-full max-w-3xl items-center justify-between gap-3">
+            {icons.map((icon, idx) => {
+              const isActive = icon.name === selectedIcon;
+              return (
+                <li key={icon.id} className="flex flex-col items-center">
+                  <button
+                    onClick={() => setSelectedIcon(icon.name)}
+                    className={`grid place-items-center size-14 rounded-full border-2 transition
+                      ${
+                        isActive
+                          ? "bg-white border-[#6f4e37] ring-4 ring-[#6f4e37]/25"
+                          : "bg-white/90 border-black/10 hover:border-[#6f4e37]/40"
+                      }`}
+                    aria-current={isActive ? "step" : undefined}
+                    aria-label={icon.alt}
+                    title={icon.alt}
+                  >
+                    <img
+                      src={icon.image}
+                      alt=""
+                      className="h-8 w-8 object-contain"
+                    />
+                  </button>
+                  <span
+                    className={`mt-2 text-[11px] md:text-xs text-center ${
+                      isActive ? "text-[#6f4e37] font-semibold" : "text-black/60"
+                    }`}
+                  >
+                    {icon.alt}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+
+          {/* ป้ายสถานะขวาบน */}
+          <div className="mt-4 text-center text-xs text-black/60">
+            ขั้นตอน {currentIndex + 1} / {icons.length}
+          </div>
+        </section>
+
+        {/* ปุ่มนำทาง */}
+        <div className="mb-6 flex items-center justify-center gap-3" data-aos="fade-up">
+          <button
+            onClick={() => goStep(-1)}
+            className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm hover:bg-white/80"
+          >
+            ขั้นหน้า
+          </button>
+          <button
+            onClick={() => goStep(1)}
+            className="rounded-full bg-[#6f4e37] text-white px-4 py-2 text-sm hover:opacity-90 shadow"
+          >
+            ไปขั้นถัดไป
+          </button>
         </div>
 
-        {/* Content Section */}
-        <div className="mt-8 text-center">
-          {icons.map(
-            (content) =>
-              selectedIcon === content.name && (
-                <div key={content.id}>
-                  <img
-                    src={content.img}
-                    className="w-1/2 mx-auto mb-5"
-                    alt={content.alt}
-                  />
-                  <div className="bg-[#e5c1af] py-5 mb-3 rounded-2xl">
-                    <h2 className="text-lg md:text-2xl font-bold mb-4">
-                      {content.alt}
-                    </h2>
-                    <p className="text-gray-700 max-w-2xl mx-auto">
-                      {content.content}
-                    </p>
-                  </div>
-                </div>
-              )
-          )}
-        </div>
+        {/* การ์ดเนื้อหา (รูปซ้าย • ข้อความขวา ตลอด) */}
+        <section
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch"
+          data-aos="fade-up"
+        >
+          {/* รูป (ซ้าย) */}
+          <figure className="lg:col-span-6">
+            <div className="relative h-full w-full min-h-[300px] rounded-2xl overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.14)]">
+              <img
+                src={active.img}
+                alt={active.alt}
+                className="h-full w-full object-cover"
+              />
+              <span className="absolute bottom-3 left-3 rounded-full bg-white/85 px-3 py-1 text-[11px] text-neutral-700">
+                {active.alt}
+              </span>
+            </div>
+          </figure>
+
+          {/* ข้อความ (ขวา) */}
+          <article className="lg:col-span-6">
+            <div className="h-full bg-white rounded-2xl shadow p-6 flex flex-col">
+              <h2 className="text-xl md:text-2xl font-bold text-[#2a1c14]">
+                {active.alt}
+              </h2>
+              <p className="mt-3 leading-relaxed text-neutral-700">
+                {active.content}
+              </p>
+            </div>
+          </article>
+        </section>
       </div>
+
       <Footer />
     </div>
   );

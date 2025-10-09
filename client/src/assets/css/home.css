@@ -50,3 +50,9 @@
     transform : scale(1.05);
     transition: transform 0.3s ease;
 }
+
+.hover-but:hover{
+    transform : scale(1.05);
+    transition: transform 0.3s ease;
+    background-color: #FFE2B4;
+}

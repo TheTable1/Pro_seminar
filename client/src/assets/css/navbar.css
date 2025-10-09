@@ -1,0 +1,13 @@
+/* src/assets/css/fonts.css */
+@font-face {
+  font-family: "Mainfont";
+  src: url("../assets/font/AmericanoDemo.ttf") format("ttf");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ตั้งค่า global (จะใช้กับทั้งแอป) */
+html, body {
+  font-family: "Mainfont", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans";
+}

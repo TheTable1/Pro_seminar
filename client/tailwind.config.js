@@ -22,3 +22,15 @@ module.exports = {
     },
   },
 };
+
+export default {
+  content: ["./index.html","./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    extend: {
+      fontFamily: {
+        main: ['"Mainfont"', "system-ui", "sans-serif"], // << เพิ่มอันนี้
+      },
+    },
+  },
+  plugins: [],
+};
