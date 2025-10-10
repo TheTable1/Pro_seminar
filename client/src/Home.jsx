@@ -7,15 +7,18 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Footer from "./footer";
 import "./assets/css/home.css";
 
+const MENU_PATH = "/coffee_menu"; // เปลี่ยนให้ตรงกับ route จริงของคุณ
+
 const Home = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const scrollerRef = useRef(null);
 
+
   // ไปหน้าเมนู พร้อมพารามิเตอร์ระบุเมนูยอดนิยมที่เลือก
-  const goMenu = (name) => {
-    navigate(`/coffee_menu?item=${encodeURIComponent(name)}`);
+  const goMenuItem = (name) => {
+    navigate(MENU_PATH, { state: { name } });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -382,7 +385,7 @@ const Home = () => {
                   </div>
                 </div>
                 <button
-                  onClick={() => goMenu("Latte")}
+                  onClick={() => goMenuItem("ลาเต้")}
                   className="mt-4 w-full rounded-full border border-[#2a1c14]/20 bg-white px-3 py-2 text-sm font-medium text-[#2a1c14] hover:bg-white/90"
                 >
                   ดูเมนูนี้
@@ -399,7 +402,7 @@ const Home = () => {
                   </div>
                 </div>
                 <button
-                  onClick={() => goMenu("Americano")}
+                  onClick={() => goMenuItem("อเมริกาโน")}
                   className="mt-4 w-full rounded-full border border-[#2a1c14]/20 bg-white px-3 py-2 text-sm font-medium text-[#2a1c14] hover:bg-white/90"
                 >
                   ดูเมนูนี้
@@ -416,7 +419,7 @@ const Home = () => {
                   </div>
                 </div>
                 <button
-                  onClick={() => goMenu("Frappe")}
+                  onClick={() => goMenuItem("เฟรปเป้")}
                   className="mt-4 w-full rounded-full border border-[#2a1c14]/20 bg-white px-3 py-2 text-sm font-medium text-[#2a1c14] hover:bg-white/90"
                 >
                   ดูเมนูนี้
