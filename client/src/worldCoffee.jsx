@@ -279,6 +279,38 @@ function Home() {
     },
   });
 
+  function normalizeCountryName(name) {
+    if (!name) return "";                    
+    return name
+      .toString()
+      .normalize("NFKD")                     
+      .replace(/[\u0300-\u036f]/g, "")       
+      .replace(/&/g, "and")
+      .replace(/[^A-Za-z]/g, "")           
+      .toLowerCase();
+  }
+
+  const COUNTRY_ALIASES = {
+    // ตัวอย่างชื่อจาก GeoJSON -> key ใน coffeeData (แบบ normalize แล้ว)
+    "cotedivoire": "ivorycoast",
+    "laopeoplesdemocraticrepublic": "laos",
+    "unitedstatesofamerica": "usa",
+    "viet nam": "vietnam", // กันกรณีบางชุดข้อมูล
+    "korearepublicof": "southkorea",
+    "tanzani­aunitedrepublicof": "tanzania", // กัน whitespace แปลก ๆ
+    "tanzaniaunitedrepublicof": "tanzania",
+    "bolivarianrepublicofvenezuela": "venezuela",
+    "democraticrepublicofthecongo": "congo", // คุณมี "Congo" เดียว
+    "republicofthecongo": "congo",
+    "russianfederation": "russia", // (ถ้าไม่มี russia ก็ไม่ match)
+    "czechia": "czechrepublic",    // เผื่อจะเพิ่มข้อมูลภายหลัง
+  };
+
+  const coffeeIndex = {};
+  Object.keys(coffeeData).forEach((k) => {
+    coffeeIndex[normalizeCountryName(k)] = coffeeData[k];
+  });
+
   // useEffect สำหรับจัดการแผนที่และ GeoJSON
   useEffect(() => {
     if (mapRef.current !== null) return; // Prevent re-initializing the map
@@ -326,81 +358,85 @@ function Home() {
         layer.bringToFront();
       }
 
-      const countryName = layer.feature.properties.ADMIN;
+      const rawName = layer?.feature?.properties?.ADMIN || "";
+      const key = normalizeCountryName(rawName);
+      const aliasKey = COUNTRY_ALIASES[key] || key;
+      const info = coffeeIndex[aliasKey];
 
-      if (coffeeData[countryName]) {
-        document.getElementById("info").innerHTML = `
-<div class="p-6 bg-[#5c4033] border border-[#d2b48c] rounded-lg shadow-lg">
-  <h2 class="text-2xl font-bold text-[#f5f5dc] mb-4">${countryName}</h2>
+      const infoEl = document.getElementById("info");
+      if (!infoEl) return; // กัน element หาย
 
-  <!-- Card container -->
-  <div class="flex flex-wrap gap-4 justify-start">
-    <!-- ข้อมูลเพิ่มเติม -->
-    <div class="bg-[#6b4226] p-4 rounded-md shadow-md border border-[#d2b48c] w-full sm:w-full md:w-[calc(33.333%-16px)]">
-      <div class="flex items-center text-base text-[#f5f5dc] mb-2">
-        <img src="/world/info.png" alt="info icon" class="w-6 h-6 mr-3" />
-        <b class="mr-2">ข้อมูลเพิ่มเติม:</b>
-      </div>
-      <p class="text-[#f5f5dc]">${coffeeData[countryName].description}</p>
-    </div>
+      if (info) {
+        infoEl.innerHTML = `
+          <div class="p-6 bg-[#5c4033] border border-[#d2b48c] rounded-lg shadow-lg">
+            <h2 class="text-2xl font-bold text-[#f5f5dc] mb-4">${rawName}</h2>
 
-    <!-- ภูมิภาคที่ปลูกกาแฟ -->
-    <div class="bg-[#6b4226] p-4 rounded-md shadow-md border border-[#d2b48c] w-full sm:w-full md:w-[calc(33.333%-16px)]">
-      <div class="flex items-center text-base text-[#f5f5dc] mb-2">
-        <img src="/world/map.png" alt="map icon" class="w-6 h-6 mr-3" />
-        <b class="mr-2">ภูมิภาคที่ปลูกกาแฟ:</b>
-      </div>
-      <p class="text-[#f5f5dc]">${coffeeData[countryName].cultivation}</p>
-    </div>
+            <!-- Card container -->
+            <div class="flex flex-wrap gap-4 justify-start">
+              <!-- ข้อมูลเพิ่มเติม -->
+              <div class="bg-[#6b4226] p-4 rounded-md shadow-md border border-[#d2b48c] w-full sm:w-full md:w-[calc(33.333%-16px)]">
+                <div class="flex items-center text-base text-[#f5f5dc] mb-2">
+                  <img src="/world/info.png" alt="info icon" class="w-6 h-6 mr-3" />
+                  <b class="mr-2">ข้อมูลเพิ่มเติม:</b>
+                </div>
+                <p class="text-[#f5f5dc]">${info.description}</p>
+              </div>
 
-    <!-- กาแฟที่มีความโดดเด่น -->
-    <div class="bg-[#6b4226] p-4 rounded-md shadow-md border border-[#d2b48c] w-full sm:w-full md:w-[calc(33.333%-16px)]">
-      <div class="flex items-center text-base text-[#f5f5dc] mb-2">
-        <img src="/world/bean.png" alt="bean icon" class="w-6 h-6 mr-3" />
-        <b class="mr-2">กาแฟที่มีความโดดเด่น:</b>
-      </div>
-      <p class="text-[#f5f5dc]">${coffeeData[countryName].specialties.join(
-        ", "
-      )}</p>
-    </div>
-  </div>
-</div>
+              <!-- ภูมิภาคที่ปลูกกาแฟ -->
+              <div class="bg-[#6b4226] p-4 rounded-md shadow-md border border-[#d2b48c] w-full sm:w-full md:w-[calc(33.333%-16px)]">
+                <div class="flex items-center text-base text-[#f5f5dc] mb-2">
+                  <img src="/world/map.png" alt="map icon" class="w-6 h-6 mr-3" />
+                  <b class="mr-2">ภูมิภาคที่ปลูกกาแฟ:</b>
+                </div>
+                <p class="text-[#f5f5dc]">${info.cultivation}</p>
+              </div>
+
+              <!-- กาแฟที่มีความโดดเด่น -->
+              <div class="bg-[#6b4226] p-4 rounded-md shadow-md border border-[#d2b48c] w-full sm:w-full md:w-[calc(33.333%-16px)]">
+                <div class="flex items-center text-base text-[#f5f5dc] mb-2">
+                  <img src="/world/bean.png" alt="bean icon" class="w-6 h-6 mr-3" />
+                  <b class="mr-2">กาแฟที่มีความโดดเด่น:</b>
+                </div>
+                <p class="text-[#f5f5dc]">${(info.specialties || []).join(", ")}</p>
+              </div>
+            </div>
+          </div>
         `;
       } else {
-        document.getElementById("info").innerHTML = `
-<div class="p-6 bg-[#5c4033] border border-[#d2b48c] rounded-lg shadow-lg">
-  <h2 class="text-2xl font-bold text-[#f5f5dc] mb-4">${countryName}</h2>
+        infoEl.innerHTML = `
+          <div class="p-6 bg-[#5c4033] border border-[#d2b48c] rounded-lg shadow-lg">
+            <h2 class="text-2xl font-bold text-[#f5f5dc] mb-4">${rawName}</h2>
 
-  <!-- Card container -->
-  <div class="flex flex-wrap gap-4 justify-start">
-    <!-- ข้อมูลเพิ่มเติม -->
-    <div class="bg-[#6b4226] p-4 rounded-md shadow-md border border-[#d2b48c] w-full sm:w-full md:w-[calc(33.333%-16px)]">
-      <div class="flex items-center text-base text-[#f5f5dc] mb-2">
-        <img src="/world/info.png" alt="info icon" class="w-6 h-6 mr-3" />
-        <b class="mr-2">ข้อมูลเพิ่มเติม:</b>
-      </div>
-      <p class="text-[#f5f5dc]"> - </p>
-    </div>
+            <!-- Card container -->
+            <div class="flex flex-wrap gap-4 justify-start">
+              <!-- ข้อมูลเพิ่มเติม -->
+              <div class="bg-[#6b4226] p-4 rounded-md shadow-md border border-[#d2b48c] w-full sm:w-full md:w-[calc(33.333%-16px)]">
+                <div class="flex items-center text-base text-[#f5f5dc] mb-2">
+                  <img src="/world/info.png" alt="info icon" class="w-6 h-6 mr-3" />
+                  <b class="mr-2">ข้อมูลเพิ่มเติม:</b>
+                </div>
+                <p class="text-[#f5f5dc]"> - </p>
+              </div>
 
-    <!-- ภูมิภาคที่ปลูกกาแฟ -->
-    <div class="bg-[#6b4226] p-4 rounded-md shadow-md border border-[#d2b48c] w-full sm:w-full md:w-[calc(33.333%-16px)]">
-      <div class="flex items-center text-base text-[#f5f5dc] mb-2">
-        <img src="/world/map.png" alt="map icon" class="w-6 h-6 mr-3" />
-        <b class="mr-2">ภูมิภาคที่ปลูกกาแฟ:</b>
-      </div>
-      <p class="text-[#f5f5dc]"> - </p>
-    </div>
+              <!-- ภูมิภาคที่ปลูกกาแฟ -->
+              <div class="bg-[#6b4226] p-4 rounded-md shadow-md border border-[#d2b48c] w-full sm:w-full md:w-[calc(33.333%-16px)]">
+                <div class="flex items-center text-base text-[#f5f5dc] mb-2">
+                  <img src="/world/map.png" alt="map icon" class="w-6 h-6 mr-3" />
+                  <b class="mr-2">ภูมิภาคที่ปลูกกาแฟ:</b>
+                </div>
+                <p class="text-[#f5f5dc]"> - </p>
+              </div>
 
-    <!-- กาแฟที่มีความโดดเด่น -->
-    <div class="bg-[#6b4226] p-4 rounded-md shadow-md border border-[#d2b48c] w-full sm:w-full md:w-[calc(33.333%-16px)]">
-      <div class="flex items-center text-base text-[#f5f5dc] mb-2">
-        <img src="/world/bean.png" alt="bean icon" class="w-6 h-6 mr-3" />
-        <b class="mr-2">กาแฟที่มีความโดดเด่น:</b>
-      </div>
-      <p class="text-[#f5f5dc]"> - </p>
-    </div>
-  </div>
-</div>
+              <!-- กาแฟที่มีความโดดเด่น -->
+              <div class="bg-[#6b4226] p-4 rounded-md shadow-md border border-[#d2b48c] w-full sm:w-full md:w-[calc(33.333%-16px)]">
+                <div class="flex items-center text-base text-[#f5f5dc] mb-2">
+                  <img src="/world/bean.png" alt="bean icon" class="w-6 h-6 mr-3" />
+                  <b class="mr-2">กาแฟที่มีความโดดเด่น:</b>
+                </div>
+                <p class="text-[#f5f5dc]"> - </p>
+              </div>
+            </div>
+          </div>
         `;
       }
 
@@ -412,56 +448,66 @@ function Home() {
         click: highlightFeature, // When country is clicked
       });
     }
-
+    if (!mapContainerRef.current) return; // กัน container ยังไม่ขึ้น
     // Load GeoJSON data for country boundaries
     fetch(
       "https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson"
     )
       .then((response) => response.json())
       .then((data) => {
-        geojson = L.geoJson(data, {
-          style: {
-            fillColor: "#5B4C3B", // Default country color
-            weight: 2,
-            opacity: 1,
-            color: "white",
-            dashArray: "3",
-            fillOpacity: 0.5,
-          },
-          onEachFeature: onEachFeature,
-        }).addTo(map);
+        map.whenReady(() => {
+          try {
+            if (!map.getPane("overlayPane")) {
+              map.createPane("overlayPane");
+            }
+            const svgRenderer = L.svg();
+            geojson = L.geoJson(data, {
+              style: {
+                fillColor: "#5B4C3B", // Default country color
+                weight: 2,
+                opacity: 1,
+                color: "white",
+                dashArray: "3",
+                fillOpacity: 0.5,
+              },
+              onEachFeature,
+               renderer: svgRenderer,
+            });
+            geojson.addTo(map);
+          } catch (err) {
+            console.error("Error adding GeoJSON to map:", err);
+          }
+        });
       })
-      .catch((error) => {
-        console.error("Error loading GeoJSON:", error);
+      .catch((err) => {
+        console.error("Error loading GeoJSON file:", err);
       });
 
     // Search country by name
     function searchCountry() {
-      const searchInput = document
-        .getElementById("search-input")
-        .value.toLowerCase();
+      if (!geojson) return; // กัน null
+      const searchInput = document.getElementById("search-input").value.toLowerCase();
       let found = false;
 
       geojson.eachLayer(function (layer) {
-        const countryName = layer.feature.properties.ADMIN.toLowerCase();
-        if (countryName === searchInput) {
+        const cn = layer.feature?.properties?.ADMIN || "";
+        if (cn.toLowerCase() === searchInput) {
           found = true;
-          map.fitBounds(layer.getBounds()); // Zoom to the searched country
-          highlightFeature({ target: layer }); // Highlight the country
+          map.fitBounds(layer.getBounds());
+          highlightFeature({ target: layer });
         }
       });
 
-      if (!found) {
-        alert("Country not found. Please check the name and try again.");
-      }
+      if (!found) alert("Country not found. Please check the name and try again.");
     }
 
     // Display suggested country names while typing
     function suggestCountries() {
-      const searchInput = document
-        .getElementById("search-input")
-        .value.toLowerCase();
+      if (!geojson) return;
+      const inputEl = document.getElementById("search-input");
       const suggestionsList = document.getElementById("suggestions");
+      if (!inputEl || !suggestionsList) return;
+      const searchInput = (inputEl.value || "").toLowerCase();
       suggestionsList.innerHTML = ""; // Clear old suggestions
 
       if (searchInput === "") {

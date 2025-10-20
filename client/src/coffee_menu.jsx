@@ -19,10 +19,7 @@ function CoffeeBeans() {
   const scrollToTopWithOffset = () => {
     if (!mainRef.current) return;
     const offset = -70;
-    const y =
-      mainRef.current.getBoundingClientRect().top +
-      window.pageYOffset +
-      offset;
+    const y = mainRef.current.getBoundingClientRect().top + window.pageYOffset + offset;
     window.scrollTo({ top: y, behavior: "smooth" });
   };
 
@@ -88,17 +85,22 @@ function CoffeeBeans() {
     scrollToTopWithOffset();
   };
 
-  const handleTryIt = () => navigate("/select", { state: selectedItem });
+  // NEW: ส่ง recipe → หน้าเลือกวิธี พร้อม state
+  const handleTryIt = () => {
+    if (!selectedItem) return;
+    navigate("/select", {
+      state: {
+        recipeId: selectedItem.name,
+        recipe: selectedItem,   // แนบข้อมูลไปด้วย (กันกรณีเปิดแท็บใหม่)
+      },
+    });
+  };
 
   const filteredItems = menuItems.filter((item) => {
     const matchesFilter =
       activeFilter === "กาแฟทั้งหมด" ||
-      (Array.isArray(item.type)
-        ? item.type.includes(activeFilter)
-        : item.type === activeFilter);
-    const matchesSearch =
-      !searchTerm.trim() ||
-      item.name.toLowerCase().includes(searchTerm.toLowerCase());
+      (Array.isArray(item.type) ? item.type.includes(activeFilter) : item.type === activeFilter);
+    const matchesSearch = !searchTerm.trim() || item.name.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 

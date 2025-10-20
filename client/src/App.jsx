@@ -16,8 +16,8 @@ import Extraction from "./extraction";
 import Suggestion from "./suggestion";
 import Quiz from "./quiz";
 import QuizDetail from "./quizDetail";
-import Select from "./simulator/sim-es-moka";
-import Customcoffee from "./simulator/customcoffee";
+import Select from "./simulator/select";
+import Customcoffee from "./simulator/Espresso";
 import { Helmet } from "react-helmet";
 
 function App() {

@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Navbar from "./navbar";
 import Footer from "./footer";
 import { Link } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { updateProfile } from "firebase/auth";
 import { db } from "./firebase/firebase";
 import articles from "./article.json";
 
@@ -48,6 +50,42 @@ const Profile = () => {
   const [editedEmail, setEditedEmail] = useState("");
 
   const [activeTab, setActiveTab] = useState("overview"); // overview | achievements
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef(null);
+
+  const onPickFile = () => fileInputRef.current?.click();
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    setUploading(true);
+    try {
+      const storage = getStorage();
+      const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+      const path = `users/${user.uid}/avatar_${Date.now()}.${ext}`;
+      const storageRef = ref(storage, path);
+      await uploadBytes(storageRef, file, { contentType: file.type });
+      const url = await getDownloadURL(storageRef);
+
+      // อัปเดตโปรไฟล์ใน Auth
+      await updateProfile(user, { photoURL: url });
+
+      // อัปเดตใน Firestore
+      const refDoc = doc(db, "users", user.uid);
+      await updateDoc(refDoc, { photoURL: url });
+
+      // อัปเดต UI + cache
+      const updated = { ...profileData, photoURL: url };
+      setProfileData(updated);
+      localStorage.setItem("profileData", JSON.stringify(updated));
+    } catch (err) {
+      console.error("upload avatar error:", err);
+      alert("อัปโหลดรูปไม่สำเร็จ ลองใหม่อีกครั้ง");
+    } finally {
+      setUploading(false);
+      if (e.target) e.target.value = "";
+    }
+  };
 
   // load user & profile
   useEffect(() => {
@@ -383,6 +421,34 @@ const Profile = () => {
               <h3 className="text-lg font-bold text-[#2a1c14]">แก้ไขโปรไฟล์</h3>
             </div>
             <div className="p-5 space-y-4">
+              <div>
+                <label className="block text-sm text-neutral-700 mb-1">รูปโปรไฟล์</label>
+                <div className="flex items-center gap-3">
+                  <img
+                    src={profileData?.photoURL || "/coffeebean.png"}
+                    onError={(e) => (e.currentTarget.src = "/coffeebean.png")}
+                    className="h-12 w-12 rounded-full object-cover ring-2 ring-neutral-200"
+                    alt="avatar"
+                  />
+                  <button
+                    onClick={onPickFile}
+                    className="rounded-full bg-neutral-100 border px-3 py-1.5 text-sm hover:bg-neutral-200 disabled:opacity-60"
+                    disabled={uploading}
+                    type="button"
+                  >
+                    {uploading ? "กำลังอัปโหลด…" : "อัปโหลดรูปใหม่"}
+                  </button>
+                  {/* input ซ่อน (ย้ายมาไว้ใน modal) */}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+                </div>
+                <p className="text-xs text-neutral-500 mt-1">แนะนำไฟล์ JPG/PNG ≤ 5MB</p>
+              </div>
               <div>
                 <label className="block text-sm text-neutral-700 mb-1">ชื่อ</label>
                 <input
