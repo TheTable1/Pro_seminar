@@ -716,34 +716,25 @@ export default function BrewSimulator() {
             </h1>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center flex-wrap gap-2">
             <span className="text-xs text-[#3e2a1f]/70">แนวรสชาติ:</span>
-            <select
+
+            <FlavorSelect
               value={intent}
               onChange={(e) => {
                 setIntent(e.target.value);
                 localStorage.setItem("flavorIntent", e.target.value);
               }}
-              className="rounded-xl border px-2.5 py-1.5 bg-white"
-            >
-              {INTENT_OPTIONS.map((x) => (
-                <option key={x.id} value={x.id}>{x.label}</option>
-              ))}
-            </select>
+              options={INTENT_OPTIONS}
+            />
 
-            <button
-              onClick={() => setGuideOpen(true)}
-              className="ml-2 text-xs rounded-full border border-amber-300 px-2 py-1 bg-white hover:bg-amber-50"
-            >
-              คู่มือ
-            </button>
+            <HeaderChipButton onClick={() => setGuideOpen(true)}>
+              <span className="text-[#845f45]"></span> คู่มือ
+            </HeaderChipButton>
 
-            <button
-              onClick={() => setIsSummaryOpen(true)}
-              className="text-xs rounded-full border border-amber-300 px-2 py-1 bg-white hover:bg-amber-50"
-            >
-              ดูสรุปล่าสุด
-            </button>
+            <HeaderChipButton onClick={() => setIsSummaryOpen(true)}>
+              <span className="text-[#845f45]"></span> ดูสรุปล่าสุด
+            </HeaderChipButton>
           </div>
         </header>
 
@@ -887,23 +878,43 @@ export default function BrewSimulator() {
                 </div>
               }
             >
-              {/* ปุ่มเลือกระดับบด อยู่ในเนื้อหาเหมือนเดิม */}
-              <div className="flex gap-2 mt-1 flex-wrap">
-                {grindOptionsFor(method, mokaSpec).map((g) => (
-                  <button
-                    key={g}
-                    onClick={() => setGrind(g)}
-                    disabled={grind === g}
-                    className={
-                      "px-3 py-1.5 rounded-xl border transition disabled:opacity-60 " +
-                      (grind === g
-                        ? "bg-[#6f4e37]/10 border-[#6f4e37] text-[#6f4e37]"
-                        : "border-neutral-300 hover:border-neutral-400 text-[#2a1c14]")
-                    }
-                  >
-                    {grindLabel(g)}
-                  </button>
-                ))}
+              {/* ───── ความละเอียดบด (responsive + helper text) ───── */}
+              <div className="mt-1">
+                <div className="flex items-center justify-between gap-2">
+                  <Label>ความละเอียดบด</Label>
+                  <InfoTip title="ความละเอียดบดคืออะไร?">
+                    ยิ่งบด “ละเอียด” น้ำไหลยาก → เวลาไหลยาวขึ้น รสเข้ม/หนา<br/>
+                    ยิ่งบด “หยาบ”  น้ำไหลง่าย → เวลาไหลสั้น รสบาง/ใส<br/><br/>
+                    เริ่มจากค่าที่แนะนำของแต่ละวิธี แล้วค่อยปรับทีละครึ่งสเต็ปครับ
+                  </InfoTip>
+                </div>
+
+                {/* ปุ่มเลือก (responsive): 2 คอลัมน์บนจอเล็ก, 3 คอลัมน์ตั้งแต่ sm ขึ้นไป */}
+                <div
+                  role="radiogroup"
+                  aria-label="เลือกระดับความละเอียดของการบด"
+                  className="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-2"
+                >
+                  {grindOptionsFor(method, mokaSpec).map((g) => {
+                    const active = grind === g;
+                    return (
+                      <button
+                        key={g}
+                        role="radio"
+                        aria-checked={active}
+                        onClick={() => setGrind(g)}
+                        className={
+                          "w-full px-3 py-2 rounded-xl border text-sm transition " +
+                          (active
+                            ? "bg-[#6f4e37]/10 border-[#6f4e37] text-[#6f4e37] font-medium"
+                            : "border-neutral-300 hover:border-neutral-400 text-[#2a1c14]")
+                        }
+                      >
+                        {grindLabel(g)}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* ส่วนสไลเดอร์ + ปุ่ม ใส่ผงกาแฟ/แทมป์ แล้ว คงเดิม */}
@@ -1459,38 +1470,68 @@ function TooltipBubble({ anchorRef, title, children, placement = "auto" }) {
     const a = anchorRef.current, t = tipRef.current;
     if (!a || !t) return;
 
-    const r = a.getBoundingClientRect();
-    const vw = window.innerWidth, vh = window.innerHeight;
-    const gap = 10;
+    const r  = a.getBoundingClientRect();
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const gap = 10;           // เว้นขอบปุ่ม
+    const pad = 8;            // เว้นขอบจอ
 
-    // เลือกบน/ล่างอัตโนมัติถ้าไม่ได้กำหนด
-    let place = placement;
-    if (place === "auto") place = r.top > vh / 2 ? "top" : "bottom";
+    // จำกัดความกว้างตามขนาดหน้าจอ กันล้นขวา/ซ้าย
+    const maxW = Math.min(320, vw - pad * 2);
+    t.style.maxWidth = `${maxW}px`;
 
-    const tw = t.offsetWidth, th = t.offsetHeight;
+    // วัดอีกครั้งหลังตั้ง maxWidth
+    const tw = t.offsetWidth;
+    const th = t.offsetHeight;
 
-    // ค่าตั้งต้น
-    let top = 0;
-    let left = Math.min(vw - tw - 8, Math.max(8, r.left + r.width / 2 - tw / 2));
+    // เลือกวางบน/ล่างโดยอัตโนมัติเป็นค่าเริ่ม
+    let placeV = placement === "auto" ? (r.top > vh / 2 ? "top" : "bottom") : placement;
 
-    // พลิกถ้าล้น
-    if (place === "top" && r.top - th - gap < 8) place = "bottom";
-    if (place === "bottom" && r.bottom + th + gap > vh - 8) place = "top";
+    // เซ็นเตอร์แนวนอนก่อน แล้ว "หนีขอบ" หากจำเป็น
+    let left = r.left + r.width / 2 - tw / 2;
+    left = Math.min(vw - tw - pad, Math.max(pad, left));
 
-    if (place === "top") top = r.top - th - gap;
-    if (place === "bottom") top = r.bottom + gap;
+    // ถ้าใกล้ขวาหนักมาก ให้ชิดซ้ายของปุ่ม; ถ้าใกล้ซ้ายหนักมาก ให้ชิดขวาของปุ่ม
+    const tooRight = left + tw > vw - pad - 4;
+    const tooLeft  = left < pad + 4;
+    if (tooRight && r.left > vw * 0.60) {
+      left = Math.max(pad, r.right - tw);   // ชิดซ้ายของปุ่ม
+    } else if (tooLeft && r.right < vw * 0.40) {
+      left = Math.min(vw - tw - pad, r.left); // ชิดขวาของปุ่ม
+    }
 
-    // กันล้นแนวตั้ง
-    top = Math.min(vh - th - 8, Math.max(8, top));
+    // คำนวณ top พร้อมกันล้นแนวตั้ง
+    let top;
+    if (placeV === "top") {
+      top = r.top - th - gap;
+      if (top < pad) { placeV = "bottom"; top = r.bottom + gap; }
+    } else {
+      top = r.bottom + gap;
+      if (top + th > vh - pad) { placeV = "top"; top = r.top - th - gap; }
+    }
+    top = Math.min(vh - th - pad, Math.max(pad, top));
 
-    setStyle({ position: "fixed", top, left, opacity: 1, zIndex: 9999 });
+    setStyle({
+      position: "fixed",
+      top,
+      left,
+      opacity: 1,
+      zIndex: 99999,          // ดันให้อยู่บนสุด
+      pointerEvents: "auto",
+    });
   };
 
   useLayoutEffect(() => {
     compute();
     const obs = new ResizeObserver(compute);
     if (tipRef.current) obs.observe(tipRef.current);
-    return () => obs.disconnect();
+    window.addEventListener("scroll", compute, true);
+    window.addEventListener("resize", compute);
+    return () => {
+      obs.disconnect();
+      window.removeEventListener("scroll", compute, true);
+      window.removeEventListener("resize", compute);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -1498,7 +1539,7 @@ function TooltipBubble({ anchorRef, title, children, placement = "auto" }) {
     <div
       ref={tipRef}
       role="tooltip"
-      className="max-w-[320px] rounded-xl border border-neutral-200 bg-white p-3 text-xs text-[#2a1c14] shadow-xl"
+      className="rounded-xl border border-neutral-200 bg-white p-3 text-xs text-[#2a1c14] shadow-xl"
       style={style}
     >
       {title && <div className="mb-1 font-semibold">{title}</div>}
@@ -2179,5 +2220,43 @@ function CloseBtn({ onClick, className = "", label = "ปิด" }) {
     </button>
   );
 }
+function HeaderChipButton({ children, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className="inline-flex items-center gap-1 rounded-full border bg-white/90
+                 px-3 py-1.5 text-sm shadow-sm
+                 border-[#e6ddd5] hover:bg-[#fff8f2]
+                 hover:shadow transition
+                 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e4c9ad]"
+    >
+      {children}
+    </button>
+  );
+}
+
+function FlavorSelect({ value, onChange, options }) {
+  return (
+    <div className="relative">
+      <select
+        value={value}
+        onChange={onChange}
+        className="appearance-none rounded-full border bg-white/95 
+                   pl-3 pr-9 py-1.5 text-sm shadow-sm
+                   border-[#e6ddd5] hover:bg-[#fff8f2]
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e4c9ad]"
+      >
+        {options.map(o => <option key={o.id} value={o.id}>{o.label}</option>)}
+      </select>
+      {/* ไอคอนลูกศร */}
+      <svg
+        className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#845f45]"
+        viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.21 8.29a.75.75 0 0 1 .02-1.08z"/>
+      </svg>
+    </div>
+  );
+}
+
 
 

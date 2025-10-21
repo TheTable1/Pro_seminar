@@ -71,14 +71,15 @@ export const MOKA_SPEC = {
       explain: "ใช้อัตราส่วนสั้น (น้ำน้อยต่อกาแฟ) เพื่อบอดี้หนา กลิ่นช็อกโกแลต/นัตชัด และเข้มติดทนนาน",
     },
 
-      help: {
+      
+  },
+  help: {
     place_base:   { how: "ลากชิ้น 'ฐาน' จากซ้ายไปวางในภาพจำลอง", why: "เป็นฐานรองน้ำและเกิดแรงดัน" },
     fill_water:   { how: "เลื่อนสไลเดอร์ 'ปริมาณน้ำ' จากโซนน้ำให้ต่ำกว่าวาล์วนิรภัย", why: "ถ้าน้ำท่วมวาล์วอันตราย/ขมไหม้" },
     insert_funnel:{ how: "ลากชิ้น 'กรวย' ไปวางบนฐาน", why: "รองผงกาแฟและควบคุมทิศทางไหล" },
     add_coffee:   { how: "กดปุ่ม 'ใส่ผงกาแฟ' ในโซนกาแฟ (หรือปรับโดส)", why: "กำหนดความเข้ม/เวลาไหล" },
     attach_top:   { how: "ลากชิ้น 'ส่วนบน' ปิดให้ครบ", why: "ปิดระบบให้เกิดแรงดันดันกาแฟขึ้น" },
     },
-  },
 
   // ผลลัพธ์ที่เป็นไปได้ (เงื่อนไขแบบง่าย)
   outcomes: [
@@ -395,7 +396,7 @@ function StoveKnob({
   const wrapRef = useRef(null);
 
   // ขนาดใหม่: ศูนย์กลางอยู่ในเฟรม → ไม่ลวงตาเอียง
-  const W = 200, H = 80, P = 10, R = 72;
+  const W = 240, H = 120, P = 10, R = 72;
   const CX = W / 2, CY = R + P;
   const TRACK_W = 8;
   const KNOB_R  = 8;
@@ -492,7 +493,7 @@ function StoveKnob({
     <div
       ref={wrapRef}
       tabIndex={0}
-      className="w-[320px] mx-auto select-none rounded-xl border border-amber-200 bg-white/85 backdrop-blur px-2 py-1.5 shadow-[0_8px_24px_rgba(180,83,9,0.10)] focus:outline-none focus:ring-2 focus:ring-amber-300/70"
+      className="w-[320px] mx-auto select-none rounded-xl border border-amber-200 bg-white/85 backdrop-blur px-3 py-3 shadow-[0_8px_24px_rgba(180,83,9,0.10)] focus:outline-none focus:ring-2 focus:ring-amber-300/70"
       aria-label="ปรับความแรงของไฟ"
     >
       <svg
@@ -501,6 +502,7 @@ function StoveKnob({
         width="100%"
         height="auto"
         preserveAspectRatio="xMidYMid meet"
+        style={{ overflow: "visible" }}
         onMouseDown={onDown}
         onTouchStart={onDown}
         className={disabled ? "opacity-50 block mx-auto" : "cursor-pointer block mx-auto"}
