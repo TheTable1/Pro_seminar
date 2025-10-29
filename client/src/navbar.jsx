@@ -108,7 +108,7 @@ export default function Navbar() {
           className="fixed top-2 left-1/2 -translate-x-1/2 z-[9999] bg-white/70 backdrop-blur rounded-full p-1 shadow hover:scale-105 transition"
         >
           <img
-            src="../public/nav/icon-1.png" // วาง icon-1.png ใน public root หรือปรับพาธตามที่ใช้
+            src="./nav/icon-1.png" // วาง icon-1.png ใน public root หรือปรับพาธตามที่ใช้
             alt="Open Navbar"
             className="w-10 h-10"
           />
