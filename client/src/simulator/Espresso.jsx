@@ -1582,7 +1582,7 @@ function Fact({ icon, label, value, hint }) {
 
 /* === สรุปผล: เลย์เอาต์ 2 กล่องบน + 1 กล่องล่าง + ปุ่มอธิบายต่อหัวข้อ === */
 function SummaryModal({ data, onClose, imageUrl }) {
-  const img = imageUrl || data?.imageUrl || "./simulator/espresso-shot.png";
+  const img = imageUrl || data?.imageUrl || "simulator/espresso-shot.png";
   const { good, issues, next } = analyzeSummary(data || {});
 
   const tTarget = data?.targetTimeSec ?? null;
