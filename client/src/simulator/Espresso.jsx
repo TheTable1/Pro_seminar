@@ -1209,6 +1209,19 @@ function makeSummaryForUser(p, mokaSpec) {
   if (p.heat >= 9)           nextTimeTips.push("ไฟแรงไปนิด ลองลดลง 1 ระดับ");
   if (p.overpack)            nextTimeTips.push("แน่นไปหน่อย ลองอัดเบาลง");
 
+  let caffeineMg = 0;
+  let caloriesKcal = 0;
+
+  if (p.beanType === "robusta") {
+    caffeineMg = p.dose * 22;
+  } else {
+    caffeineMg = p.dose * 11;
+  }
+  caloriesKcal = (p.water / 100) * 2;
+
+  caffeineMg = Math.round(caffeineMg);
+  caloriesKcal = Math.round(caloriesKcal);
+
   return {
     // สำหรับหัวสรุป/ส่วนหลัก
     intent: intentLabel,
@@ -1232,6 +1245,9 @@ function makeSummaryForUser(p, mokaSpec) {
 
     beanType: p.beanType || "arabica",
     beanLabel: labelBeanType?.(p.beanType, mokaSpec),
+
+    caffeineMg,
+    caloriesKcal,
   };
 }
 
@@ -1598,225 +1614,144 @@ function SummaryModal({ data, onClose, imageUrl }) {
           animate={{ y: 0, opacity: 1, scale: 1 }}
           exit={{ y: 12, opacity: 0, scale: 0.98 }}
           transition={{ type: "spring", stiffness: 260, damping: 22 }}
-          className="relative z-[61] w-[min(1040px,96vw)] max-h-[90vh] overflow-hidden rounded-[24px] bg-white shadow-2xl ring-1 ring-black/5 flex flex-col"
+          className="relative z-[61] w-[min(1100px,96vw)] max-h-[90vh] overflow-hidden rounded-[24px] bg-white shadow-2xl ring-1 ring-black/5 flex flex-col"
         >
-          {/* Header sticky */}
+          {/* Header */}
           <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white/95 backdrop-blur px-4 py-3">
             <div id="summary-title" className="font-semibold">สรุปผล</div>
             <CloseBtn onClick={onClose} />
           </div>
 
-          {/* 👇 เพิ่ม wrapper นี้เพื่อให้เลื่อนภายในโมดัล (สำคัญ) */}
-          <div className="overflow-auto px-4 md:px-6 py-4">
-            {/* แถวบน: IMG | SUMMARY */}
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 min-w-0">
-              {/* IMG */}
-              <div className="rounded-[24px] border border-neutral-200 bg-white p-4">
-                {/* ใช้ aspect แทนกำหนดความสูงตายตัว → พอดีหน้าจอมากกว่า */}
-                <div className="relative w-full overflow-hidden rounded-2xl bg-gradient-to-b from-neutral-50 to-neutral-100 aspect-[4/3] sm:aspect-[16/10]">
-                  <img
-                    src={img}
-                    alt="ผลลัพธ์เครื่องดื่ม"
-                    className="absolute inset-0 m-auto max-h-[95%] max-w-[95%] object-contain p-2"
-                  />
+          {/* Content */}
+          <div className="overflow-auto px-4 md:px-6 py-5 space-y-6">
+
+            {/* SECTION: ภาพ + สรุปหัวข้อ */}
+            <section aria-label="ภาพรวม">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* ภาพ */}
+                <div className="rounded-[24px] border border-neutral-200 bg-white p-4">
+                  <div className="relative w-full overflow-hidden rounded-2xl bg-gradient-to-b from-neutral-50 to-neutral-100 aspect-[4/3] sm:aspect-[16/10]">
+                    <img
+                      src={img}
+                      alt="ผลลัพธ์เครื่องดื่ม"
+                      className="absolute inset-0 m-auto max-h-[95%] max-w-[95%] object-contain p-2"
+                    />
+                  </div>
+                  <div className="mt-3">
+                    <div className="text-2xl font-extrabold leading-tight">ชงสำเร็จ!</div>
+                    {data?.headline && <div className="text-[#2a1c14]/80">{data.headline}</div>}
+                    {data?.subline && <div className="text-xs text-[#2a1c14]/60">{data.subline}</div>}
+
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      <Pill>สไตล์ {data?.intent ?? "-"}</Pill>
+                      <Pill>ความเข้ม {data?.strength ?? "-"}</Pill>
+                      <Pill>สัดส่วน 1:{data?.ratio ?? "-"}</Pill>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="mt-3">
-                  <div className="text-2xl font-extrabold leading-tight">
-                   ชงสำเร็จ!
-                  </div>
-                  {data?.headline && (
-                    <div className="text-[#2a1c14]/80">{data.headline}</div>
-                  )}
-                  {data?.subline && (
-                    <div className="text-xs text-[#2a1c14]/60">{data.subline}</div>
-                  )}
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    <Pill>สไตล์ {data?.intent ?? "-"}</Pill>
-                    <Pill>ความเข้ม {data?.strength ?? "-"}</Pill>
-                    <Pill>สัดส่วน 1:{data?.ratio ?? "-"}</Pill>
+                {/* บัตรสรุปผลลัพธ์หลัก */}
+                <div className="rounded-[24px] border border-neutral-200 bg-white p-4 md:p-5">
+                  <h3 className="text-lg font-semibold text-[#7a4112] mb-3">ผลลัพธ์ที่ได้</h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    <Fact
+                      label={<>เวลา (วิ)<InfoTip title="เวลา">เวลาตั้งแต่เริ่มไหลจนกดหยุด</InfoTip></>}
+                      value={tActual != null ? `${tActual}` : "—"}
+                      hint={`เป้าหมาย ${tTarget ?? "—"} • ${data?.timing ?? tDeltaTxt}`}
+                    />
+                    <Fact
+                      label={<>สัดส่วน<InfoTip title="สัดส่วน (น้ำ:กาแฟ)">1:x ยิ่ง x มาก → ใส/เบา</InfoTip></>}
+                      value={`1:${data?.ratio ?? "-"}`}
+                    />
+                    <Fact
+                      label={<>ปริมาณ (มล.)<InfoTip title="ปริมาณ">ประมาณการผลลัพธ์ในถ้วย</InfoTip></>}
+                      value={data?.yieldMl != null ? `${data?.yieldMl}` : "—"}
+                    />
+                    <Fact
+                      label={<>TDS (ประมาณ)<InfoTip title="TDS">เปอร์เซ็นต์ของแข็งที่ละลาย</InfoTip></>}
+                      value={data?.tdsPct != null ? `~${data.tdsPct}%` : "—"}
+                    />
+                    <Fact
+                      label={<>การสกัด<InfoTip title="ระดับการสกัด">อ่อน/มาก/กำลังดี</InfoTip></>}
+                      value={data?.extraction ?? "-"}
+                    />
+                    <Fact
+                      label={<>คาเฟอีน<InfoTip title="คาเฟอีนโดยประมาณ">ขึ้นกับสายพันธุ์/โดส</InfoTip></>}
+                      value={`${data?.caffeineMg ?? "-"} มก.`}
+                    />
+                    <Fact
+                      label={<>แคลอรี<InfoTip title="แคลอรี">กาแฟดำ (ไม่ใส่น้ำตาล/นม)</InfoTip></>}
+                      value={`${data?.caloriesKcal ?? "-"} kcal`}
+                    />
+                    <Fact
+                      label={<>ไฟ (/10)<InfoTip title="ไฟ">เร่งอุณหภูมิ/แรงดัน</InfoTip></>}
+                      value={data?.heatLevel != null ? `${data.heatLevel}` : "—"}
+                    />
                   </div>
                 </div>
               </div>
+            </section>
 
-              {/* SUMMARY */}
-              <div className="rounded-[24px] border border-neutral-200 bg-white p-4 md:p-5">
-                <div className="grid grid-cols-2 gap-3">
-                  <Fact
-                    label={
-                      <>
-                        เวลา (วิ)
-                        <InfoTip title="เวลา">
-                          เวลาตั้งแต่เริ่มไหลจนกดหยุด (โมก้าพอตมัก 90–130 วิ, เอสเพรสโซ ~23–33 วิ)
-                        </InfoTip>
-                      </>
-                    }
-                    value={tActual != null ? `${tActual}` : "—"}
-                    hint={`เป้าหมาย ${tTarget ?? "—"} • ${data?.timing ?? tDeltaTxt}`}
-                  />
-                  <Fact
-                    label={
-                      <>
-                        สัดส่วน
-                        <InfoTip title="สัดส่วน (น้ำ:กาแฟ)">
-                          1:x ยิ่ง x มาก → ใส/เบา; x น้อย → เข้ม/หนา
-                        </InfoTip>
-                      </>
-                    }
-                    value={`1:${data?.ratio ?? "-"}`}
-                  />
-                  <Fact
-                    label={
-                      <>
-                        ปริมาณ (มล.)
-                        <InfoTip title="ปริมาณ">
-                          ประมาณการผลลัพธ์ในถ้วย (โมก้าพอต ~85% ของน้ำดิบ)
-                        </InfoTip>
-                      </>
-                    }
-                    value={data?.yieldMl != null ? `${data?.yieldMl}` : "—"}
-                  />
-                  <Fact
-                    label={
-                      <>
-                        ไฟ (/10)
-                        <InfoTip title="ไฟ">
-                          เร่งอุณหภูมิ/แรงดัน ถ้าขมไหม้ให้ลดลง 0.5–1 ระดับ
-                        </InfoTip>
-                      </>
-                    }
-                    value={data?.heatLevel != null ? `${data.heatLevel}` : "—"}
-                  />
-                </div>
+            <div className="h-px bg-neutral-200/80" />
 
-                <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
-                  <Fact
-                    label={<>กาแฟ<InfoTip title="โดสกาแฟ">น้ำหนักกาแฟในกรวย/พอร์ตา</InfoTip></>}
-                    value={`${data?.doseGram ?? "-"} กรัม`}
-                  />
-                  <Fact
-                    label={<>น้ำ<InfoTip title="ปริมาณน้ำ">แนะนำต่ำกว่าระดับวาล์ว (โมก้าพอต)</InfoTip></>}
-                    value={`${data?.waterMl ?? "-"} มล.`}
-                  />
-                  <Fact
-                    label={<>บด<InfoTip title="ความละเอียดบด">ละเอียด → ไหลช้า/เข้ม • หยาบ → ไหลเร็ว/ใส</InfoTip></>}
-                    value={labelGrind?.(data?.grind) ?? "-"}
-                  />
-                  <Fact
-                    label={<>การสกัด<InfoTip title="ระดับการสกัด">อ่อน/มาก/กำลังดี</InfoTip></>}
-                    value={data?.extraction ?? "-"}
-                  />
-                </div>
+            {/* SECTION: สิ่งที่ทำไป (การตั้งค่า) */}
+            <section aria-label="สิ่งที่ทำไป">
+              <h3 className="text-lg font-semibold text-[#7a4112] mb-3">ข้อมูลที่ทำไป</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <BadgeRow label="วิธีชง" value={
+                  data?.method === "espresso" ? "เอสเพรสโซ" :
+                  data?.method === "drip" ? "ดริป" :
+                  data?.method === "frenchpress" ? "เฟรนช์เพรส" : "โมก้าพอต"
+                }/>
+                <BadgeRow label="ชนิดเมล็ด" value={data?.beanLabel || data?.beanType || "-"} />
+                <BadgeRow label="เป้าหมายเวลา" value={tTarget != null ? `${tTarget} วิ` : "—"} />
               </div>
-            </div>
+              <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <BadgeRow label="ปริมาณผงกาแฟ" value={`${data?.doseGram ?? "-"} กรัม`} />
+                <BadgeRow label="น้ำ" value={`${data?.waterMl ?? "-"} มล.`} />
+                <BadgeRow label="บด" value={labelGrind?.(data?.grind) ?? "-"} />
+                <BadgeRow label="ไฟ" value={data?.heatLevel != null ? `${data.heatLevel}/10` : "—"} />
+              </div>
+            </section>
 
-            {/* กล่องใหญ่เต็มกว้าง */}
-            <div className="mt-4 rounded-[24px] border border-neutral-200 bg-white p-4 md:p-5">
-              <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
-                <div>
-                  <div className="mb-1 font-semibold inline-flex items-center">
-                    สิ่งที่ทำได้ดี
-                    <InfoTip title="ทำได้ดี">เก็บไว้เป็น baseline</InfoTip>
-                  </div>
+            <div className="h-px bg-neutral-200/80" />
+
+            {/* SECTION: คำแนะนำ */}
+            <section aria-label="คำแนะนำ">
+              <h3 className="text-lg font-semibold text-[#7a4112] mb-3">คำแนะนำ</h3>
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                <SectionCard title="สิ่งที่ทำได้ดี">
                   {good?.length ? (
                     <ul className="list-inside list-disc space-y-1 text-sm">
-                      {good.map((t, i) => (<li key={i}> {t}</li>))}
+                      {good.map((t, i) => <li key={i}>{t}</li>)}
                     </ul>
-                  ) : (<div className="text-sm text-[#2a1c14]/60">—</div>)}
-                </div>
+                  ) : <EmptyLine/>}
+                </SectionCard>
 
-                <div className="md:border-x md:px-4">
-                  <div className="mb-1 font-semibold inline-flex items-center">
-                    จุดที่น่าปรับ
-                    <InfoTip title="จุดที่น่าปรับ">ใช้แก้ในช็อตถัดไป</InfoTip>
-                  </div>
+                <SectionCard title="จุดที่น่าปรับ" tone="warn">
                   {issues?.length ? (
                     <ul className="list-inside list-disc space-y-1 text-sm">
-                      {issues.map((t, i) => (<li key={i}> {t}</li>))}
+                      {issues.map((t, i) => <li key={i}>{t}</li>)}
                     </ul>
-                  ) : (<div className="text-sm text-[#2a1c14]/60">—</div>)}
-                </div>
+                  ) : <EmptyLine/>}
+                </SectionCard>
 
-                <div>
-                  <div className="mb-1 font-semibold inline-flex items-center">
-                    แผนช็อตถัดไป
-                    <InfoTip title="แผนช็อตถัดไป">ทำทีละข้อ</InfoTip>
-                  </div>
+                <SectionCard title="แผนช็อตถัดไป">
                   {next?.length ? (
                     <ol className="list-inside list-decimal space-y-1 text-sm">
-                      {next.map((t, i) => (<li key={i}>{t}</li>))}
+                      {next.map((t, i) => <li key={i}>{t}</li>)}
                     </ol>
-                  ) : (<div className="text-sm text-[#2a1c14]/60">—</div>)}
-                </div>
+                  ) : <EmptyLine/>}
+                </SectionCard>
               </div>
-
-              <div className="my-4 h-px bg-neutral-200/80" />
-
-              <div className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-3">
-                <BadgeRow
-                  label={<span className="inline-flex items-center">สัดส่วน (น้ำ:กาแฟ)<InfoTip title="สัดส่วน (น้ำ:กาแฟ)">1:x ยิ่ง x มาก → ใส/เบา</InfoTip></span>}
-                  value={`1:${data?.ratio ?? "-"}`}
-                />
-                <BadgeRow
-                  label={<span className="inline-flex items-center">TDS (ประมาณ)<InfoTip title="TDS (Total Dissolved Solids)">
-                    <div className="space-y-2 text-sm leading-relaxed">
-                      <p>
-                        เปอร์เซ็นต์ของแข็งที่ละลายในถ้วยกาแฟ ยิ่ง % สูง รสยิ่งเข้ม/หนาแน่น
-                        วัดด้วย refractometer แสดงเป็นค่า % ของเครื่องดื่มทั้งหมด
-                      </p>
-                      <ul className="list-disc list-inside">
-                        <li>ดริป: ~1.15–1.55% (นิยม ~1.3–1.4%)</li>
-                        <li>เอสเพรสโซ: ~8–12%</li>
-                        <li>โมก้าพอต: ~2–5% (แล้วแต่สัดส่วน/ไฟ/บด)</li>
-                      </ul>
-                      <p>
-                        ถ้าต่ำไปจะบาง/ใส ถ้าสูงไปอาจหนา/ขม ปรับสัดส่วน (น้ำ:กาแฟ) ความละเอียดบด เวลา
-                        และความร้อน/แรงดันเพื่อจูนค่าให้เหมาะ
-                      </p>
-                      <p className="text-xs text-neutral-500">
-                        EY (การสกัด) เกี่ยวข้องกับ TDS โดยคร่าว ๆ:
-                        EY% ≈ (TDS% × น้ำหนักเครื่องดื่ม) / น้ำหนักกาแฟบด
-                      </p>
-                    </div>
-                  </InfoTip>
-                  </span>}
-                  value={`~${data?.tdsPct ?? "-"}%`}
-                />
-                <BadgeRow
-                  label={<span className="inline-flex items-center">ระดับการสกัด<InfoTip title="ระดับการสกัด">อ่อน/มาก/กำลังดี</InfoTip></span>}
-                  value={data?.extraction ?? "-"}
-                />
-              </div>
-
-              <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
-                <div>
-                  <div className="mb-1 font-semibold inline-flex items-center">
-                    โน้ตรสที่ได้
-                    <InfoTip title="โน้ตรส">โทนกลิ่น/รสเด่น</InfoTip>
-                  </div>
-                  {Array.isArray(data?.flavorTags) && data.flavorTags.length ? (
-                    <div className="flex flex-wrap gap-1.5">
-                      {data.flavorTags.map((t, i) => (<Chip key={i}>{t}</Chip>))}
-                    </div>
-                  ) : (<div className="text-sm text-[#2a1c14]/60">—</div>)}
-                </div>
-
-                <div>
-                  <div className="mb-1 font-semibold inline-flex items-center">
-                    เสิร์ฟยังไงให้อร่อย
-                    <InfoTip title="คำแนะนำการเสิร์ฟ">เดี่ยว/ใส่นม</InfoTip>
-                  </div>
-                  <p className="text-sm">{data?.serve || "ดื่มเดี่ยว ๆ หรือเติมนมเล็กน้อย"}</p>
-                </div>
-              </div>
-            </div>
+            </section>
           </div>
-          {/* 👆 end scroll wrapper */}
         </motion.div>
       </motion.div>
     </AnimatePresence>
   );
 }
+
 
 function Pill({ children }) {
   return (
